@@ -1,0 +1,2 @@
+# Image exports land here (gitignored in real projects)
+# deploy/scripts/build.sh writes timestamped .tar files per app
