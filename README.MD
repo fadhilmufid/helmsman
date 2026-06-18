@@ -19,7 +19,7 @@ Reusable AI agent instructions for any project. Copy the entire `AI INSTRUCTION/
 | [`DESIGN.MD`](DESIGN.MD) | Design system template — mobile-first layout, component library first for web (tokens in PROJECT) |
 | [`HISTORY.MD`](HISTORY.MD) | How to write change log entries |
 | [`DOCUMENT.MD`](DOCUMENT.MD) | How to write feature reference documentation |
-| [`GREENFIELD.MD`](GREENFIELD.MD) | Greenfield defaults — opinionated stack, bootstrap playbook, Definition of Done |
+| [`GREENFIELD.MD`](GREENFIELD.MD) | Greenfield **recommendations** for clarify-before-build (Go api, Next.js web, playbook, deploy examples) — always ask first; does not ship `deploy/` |
 | [`PROJECT/`](PROJECT/) | This project's stack, layout, design, history, and feature docs |
 
 ## New Project Setup
@@ -44,7 +44,7 @@ AI INSTRUCTION/
 ├── DESIGN.MD          ← general template (read-only)
 ├── HISTORY.MD         ← general rules (read-only)
 ├── DOCUMENT.MD        ← general rules (read-only)
-├── GREENFIELD.MD      ← greenfield defaults (read-only)
+├── GREENFIELD.MD      ← greenfield recommendations (read-only; no deploy/ folder)
 └── PROJECT/           ← per-project config (agents MAY edit)
     ├── OVERVIEW.MD
     ├── AGENTS.MD
@@ -71,7 +71,7 @@ Every project must cover four concerns. Runnable apps always live under `{root}/
 |-------------|--------|
 | **App** | Application source code under `platforms/` |
 | **Docker** | Every runnable platform app must be dockerizable — scaffold Docker or `platforms/<app>/docker/` when added |
-| **Deploy / Build** | Build, compose, deployment, backup/restore |
+| **Deploy / Build** | Build, compose, deployment, backup/restore — created in the **built project** (`deploy/`); examples in [`GREENFIELD.MD`](GREENFIELD.MD) section 8 |
 | **DB** | DB infra (run PostgreSQL) and migrations (default in backend; standalone migration app only when user requests) |
 
 See [`AGENTS.MD`](AGENTS.MD) for the DB infra vs migrations split.
@@ -80,7 +80,7 @@ See [`AGENTS.MD`](AGENTS.MD) for the DB infra vs migrations split.
 
 1. This file (`README.MD`)
 2. General rules: `AGENTS.MD` → `CODE.MD` → `DESIGN.MD` → `HISTORY.MD` → `DOCUMENT.MD`
-3. **Greenfield tasks:** [`GREENFIELD.MD`](GREENFIELD.MD) — before first `platforms/` code
+3. **Greenfield tasks:** [`GREENFIELD.MD`](GREENFIELD.MD) — read for **Recommended:** answers; clarify before first `platforms/` code
 4. Project config: `PROJECT/OVERVIEW.MD` → `PROJECT/AGENTS.MD` → `PROJECT/DESIGN.MD`
 5. Recent context: `PROJECT/HISTORY/` sorted by filename **descending** (newest first)
 6. Feature context: `PROJECT/DOCUMENT/{feature}/` when working on a known feature
@@ -105,7 +105,7 @@ Before starting:
 3. Scan `PROJECT/HISTORY/` newest first
 4. Scan `PROJECT/DOCUMENT/{feature}/` when working on a known feature
 5. Resolve unspecified decisions per [`AGENTS.MD`](AGENTS.MD) section 2 before writing code
-6. Greenfield bootstrap: read [`GREENFIELD.MD`](GREENFIELD.MD) and follow bootstrap playbook order
+6. Greenfield: read [`GREENFIELD.MD`](GREENFIELD.MD) for recommendations; clarify first; then follow bootstrap playbook after user confirms
 
 After completing work:
 

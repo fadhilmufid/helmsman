@@ -486,6 +486,9 @@ sequenceDiagram
 | Rails | `rails new` | `rails new platforms/api --api` |
 | Next.js | `create-next-app` | `npx create-next-app@latest platforms/web` |
 | NestJS | `nest new` | `nest new platforms/api` |
+| Go (Gin) | `go mod init` + Gin layout | `platforms/api/` per [`GREENFIELD.MD`](GREENFIELD.MD) |
+| golang-migrate | `migrate` CLI | `migrate create -ext sql -dir platforms/api/migrations` |
+| GORM | official docs | Postgres driver + models in `internal/models/` |
 | Express (Node) | `express-generator` or framework docs | per PROJECT |
 | Laravel | `laravel new` | `laravel new platforms/api` |
 
@@ -515,6 +518,7 @@ Applies to **both** `platforms/web` (frontend) and `platforms/api` (backend). Au
 |-------|-----------|
 | Next.js (App Router) | Auth.js / NextAuth.js scaffold |
 | NestJS | `@nestjs/passport` + official auth module patterns |
+| Go (Gin) | JWT middleware (`golang-jwt/jwt`) + bcrypt — search Gin auth patterns |
 | Express | Passport.js or framework-adjacent starter |
 | Rails API | Devise / devise-jwt |
 | Laravel | Breeze, Fortify, or Sanctum per use case |
@@ -732,13 +736,13 @@ Minimum security and ops bar for every greenfield API per [`GREENFIELD.MD`](GREE
 
 | Concern | Rule |
 |---------|------|
-| **Validation** | Zod (or stack equivalent) on all request bodies and path/query params |
+| **Validation** | Zod (Node/web) or `go-playground/validator` (Go) on all request bodies and path/query params |
 | **Auth** | Protect all routes except `GET /health` and auth endpoints |
 | **CORS** | Explicit allowlist from `CORS_ORIGIN` env — no wildcard in production |
 | **Errors** | Central error handler → `{ success: false, error: { code, message } }` with correct HTTP status |
 | **Logging** | Structured request logging — method, path, status, duration |
 | **Health** | `GET /health` returns `200` with `{ success: true, code: 'HEALTH_OK', data: { db: 'ok' } }` when DB reachable |
-| **Seeds** | Dev seed script creates sample user + domain data (`prisma db seed` or equivalent) |
+| **Seeds** | Dev seed script creates sample user + domain data (`go run cmd/seed`, `prisma db seed`, or equivalent) |
 | **Pagination** | Index list endpoints: default `page=1`, `limit=20`; support `search`, `sort`, `filter` query params |
 
 ### Do

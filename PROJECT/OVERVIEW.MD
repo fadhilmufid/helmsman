@@ -1,14 +1,14 @@
 # Project Overview
 
-Editable per-project config. Defaults below match [`GREENFIELD.MD`](../GREENFIELD.MD) — customize when starting a real project.
+Editable per-project config. Example values below — **confirm via clarify-before-build** per [`AGENTS.MD`](../AGENTS.MD) section 2 before building.
 
 ## Identity
 
-| Field | Value |
-|-------|-------|
+| Field | Value (example) |
+|-------|-----------------|
 | **Project slug** (`{project}`) | `todo-app` |
 | **Name** | Todo App |
-| **Domain / purpose** | Personal task manager: authenticated users create, complete, edit, and soft-delete their own todos. Mobile-first web UI with REST API backend. |
+| **Domain / purpose** | Personal task manager: authenticated users create, complete, edit, and soft-delete their own todos. Mobile-first web UI with Go REST API. |
 
 ## Goals
 
@@ -17,10 +17,10 @@ Editable per-project config. Defaults below match [`GREENFIELD.MD`](../GREENFIEL
 
 ## Feature documentation
 
-- Reference spec: [`DOCUMENT/todo-management/`](DOCUMENT/todo-management/) — adapt when building todo features
-- Greenfield playbook: [`GREENFIELD.MD`](../GREENFIELD.MD)
+- Reference spec: [`DOCUMENT/todo-management/`](DOCUMENT/todo-management/)
+- Greenfield recommendations: [`GREENFIELD.MD`](../GREENFIELD.MD) (ask first — not auto-applied)
 
 ## Notes
 
-- Update after clarify-before-build decisions per [`AGENTS.MD`](../AGENTS.MD) section 2
-- Replace placeholder slug/name when copying template to a different project
+- Replace example slug/name after clarify
+- Do not treat this file as confirmed stack until user approves or delegates to recommendations

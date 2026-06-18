@@ -1,22 +1,22 @@
 # Project Agent Config
 
-Editable per-project mapping. Defaults below match [`GREENFIELD.MD`](../GREENFIELD.MD) opinionated stack.
+Editable per-project mapping. Values below are **GREENFIELD recommendations** — confirm via clarify-before-build per [`AGENTS.MD`](../AGENTS.MD) section 2 before treating as final.
 
 ## Stack
 
-| App | Path | Framework | Dev port |
-|-----|------|-----------|----------|
+| App | Path | Framework (recommended) | Dev port |
+|-----|------|-------------------------|----------|
 | Web | `platforms/web/` | Next.js (App Router) + TypeScript + Tailwind + shadcn/ui | `3000` |
-| API | `platforms/api/` | NestJS + TypeScript + Prisma | `3001` |
+| API | `platforms/api/` | Go 1.22+ + Gin + GORM + golang-migrate | `3001` |
 | DB | `platforms/db/` | PostgreSQL 16 | `5432` |
 
-Auth: Auth.js (web) + NestJS Passport/JWT (api) — scaffold-first per [`CODE.MD`](../CODE.MD) section 9.
+Auth (recommended): Auth.js (web) + JWT middleware on Gin (api) — scaffold-first per [`CODE.MD`](../CODE.MD) section 9.
 
 ## Migrations
 
-- **Path:** `platforms/api/prisma/`
-- **Tool:** Prisma
-- **Seed:** `npx prisma db seed` (demo user + sample todos)
+- **Path:** `platforms/api/migrations/`
+- **Tool:** golang-migrate (SQL files)
+- **Seed:** `go run cmd/seed` or `make seed` (demo user + sample todos)
 
 ## Docker
 
@@ -26,18 +26,16 @@ Auth: Auth.js (web) + NestJS Passport/JWT (api) — scaffold-first per [`CODE.MD
 | api | `platforms/api/docker/Dockerfile` | `platforms/api/` | `{project}-api` |
 | db | `platforms/db/docker/Dockerfile` | `platforms/db/` | `{project}-db` |
 
-Use scaffold-provided Docker paths when present; document actual paths above.
+## Deploy (created at bootstrap — not in instruction template)
 
-## Deploy
+Agents create in the **target project**; examples in [`GREENFIELD.MD`](../GREENFIELD.MD) section 8:
 
 - Compose: `deploy/docker-compose.yml`
-- Compose env: `deploy/.env` (copy from `deploy/.env.example`)
+- Compose env: `deploy/.env` (from `deploy/.env.example`)
 - Image exports: `deploy/platforms/<app>/` (gitignored)
-- Build script: `deploy/scripts/build.sh`
-- Backup: `deploy/scripts/backup-db.sh` → `backups/`
-- Restore: `deploy/scripts/restore-db.sh <file.sql>`
+- Scripts: `deploy/scripts/build.sh`, `backup-db.sh`, `restore-db.sh`
 
-Startup sequence: db healthy → `prisma migrate deploy` → api healthy → web
+Startup sequence: db healthy → golang-migrate up → api healthy → web
 
 ## Environment files
 
@@ -51,7 +49,7 @@ Startup sequence: db healthy → `prisma migrate deploy` → api healthy → web
 | App | Install | Dev | Lint / verify | Test |
 |-----|---------|-----|---------------|------|
 | web | `npm install` | `npm run dev` | `npm run lint` | `npm test` |
-| api | `npm install` | `npm run start:dev` | `npm run lint` | `npm test` |
+| api | `go mod download` | `go run cmd/server` | `golangci-lint run` | `go test ./...` |
 
 ## PR title format
 
@@ -65,28 +63,19 @@ Startup sequence: db healthy → `prisma migrate deploy` → api healthy → web
 
 ```
 {root}/
-├── README.md                    # user-facing setup (from PROJECT/README.template.md)
+├── README.md
 ├── .gitignore
 ├── platforms/
 │   ├── web/
-│   │   ├── .env.example
-│   │   └── docker/Dockerfile
 │   ├── api/
-│   │   ├── prisma/
-│   │   ├── .env.example
-│   │   └── docker/Dockerfile
+│   │   ├── migrations/
+│   │   ├── cmd/server/
+│   │   ├── cmd/seed/
+│   │   └── internal/
 │   └── db/
-│       └── docker/Dockerfile
-├── deploy/
-│   ├── docker-compose.yml
-│   ├── .env.example
-│   ├── scripts/
-│   │   ├── build.sh
-│   │   ├── backup-db.sh
-│   │   └── restore-db.sh
-│   └── platforms/               # image .tar exports (gitignored)
-├── backups/                     # db dumps (gitignored)
+├── deploy/                      # created at bootstrap (see GREENFIELD.MD §8)
+├── backups/
 └── PROJECT/
 ```
 
-Expand with actual paths as the project grows.
+Expand with actual paths after clarify and bootstrap.

@@ -17,7 +17,9 @@ Project-specific stack, folder layout, and config: [`PROJECT/`](PROJECT/). Start
 
 **Ask first, code second.** On every task, scan what the user request and existing `PROJECT/*` files do **not** specify. Do not write or edit files under `platforms/`, `deploy/`, or `PROJECT/` config (except to record answers) until every unspecified decision needed for the task is resolved.
 
-If the user says *"use your recommendations"*, *"you decide"*, or similar — apply documented defaults from this instruction set, record them in `PROJECT/*`, then proceed.
+If the user says *"use your recommendations"*, *"you decide"*, or similar — apply documented defaults from this instruction set (including [`GREENFIELD.MD`](GREENFIELD.MD) when greenfield), record them in `PROJECT/*`, then proceed.
+
+**`GREENFIELD.MD` does not bypass clarify.** Even when greenfield recommendations exist, agents must still ask (one batch) and wait for confirmation or explicit delegation before writing `platforms/` code. Pre-filled `PROJECT/*` stubs are examples, not locked decisions.
 
 ### How to ask
 
@@ -31,16 +33,16 @@ Ask only what is still unspecified for this task:
 
 | Area | What to resolve | Typical recommendation |
 |------|-----------------|------------------------|
-| Greenfield | New app from scratch? Default stack and playbook | Per [`GREENFIELD.MD`](GREENFIELD.MD) — offer defaults in one batch; proceed on *"use recommendations"* |
+| Greenfield | New app from scratch? Stack and playbook | [`GREENFIELD.MD`](GREENFIELD.MD) — **always ask**; use as **Recommended:** answers; never skip clarify; proceed only after user confirms or says *"use recommendations"* |
 | Purpose and scope | What the app/feature does, MVP boundaries | Smallest useful MVP; todo app → authenticated CRUD per GREENFIELD |
 | Project slug | `{project}` name | Derived from app name, kebab-case (e.g. `todo-app`) |
 | Platform apps | `web`, `api`, `db`, etc. | `web` + `api` + `db` for full-stack |
-| Stack | Framework per app | Per [`GREENFIELD.MD`](GREENFIELD.MD) unless user overrides |
+| Stack | Framework per app | **Ask every greenfield task** — Recommended: Go Gin+GORM api, Next.js web per [`GREENFIELD.MD`](GREENFIELD.MD) unless `PROJECT/*` already locked |
 | Auth | Needed? Type? | **Required** for multi-user apps (e.g. todos); auth scaffold per [`CODE.MD`](CODE.MD) section 9 |
 | Database | Engine, hosting | PostgreSQL in `platforms/db/` |
 | Migrations | Path | Inside backend (default per section 3) |
 | Docker | Dockerfile location | Scaffold Docker if present; else `platforms/<app>/docker/` |
-| Deploy | Target environment | Local `deploy/docker-compose.yml` first |
+| Deploy | Target environment | Create `deploy/` in target project per [`GREENFIELD.MD`](GREENFIELD.MD) section 8 examples |
 | Design | Theme, density, accent, component library | Document in `PROJECT/DESIGN.MD` — dark, content-first, mobile-first; popular UI library for web |
 | Layout (web) | Mobile-first responsive | Per [`DESIGN.MD`](DESIGN.MD) — mobile default, enhance for desktop; document breakpoints in `PROJECT/DESIGN.MD` |
 | UI components | Component library for web | Per [`DESIGN.MD`](DESIGN.MD) — popular npm/GitHub library; document in `PROJECT/DESIGN.MD` |
@@ -69,14 +71,14 @@ Every project must address these four concerns. Runnable apps always live under 
 | **App** | Application source code — frontend, backend, migration runner, or monolith | `platforms/web`, `platforms/api`, `src/` |
 | **Docker** | Every runnable platform app must be dockerizable (working container build) — path from scaffold or `platforms/<app>/docker/` when added manually | `platforms/web/docker/`, `platforms/api/Dockerfile` |
 | **Deploy / Build** | Build, export, compose, deployment, backup/restore | `deploy/`, `scripts/`, `ops/` |
-| **DB** | Database infrastructure, schema migrations, seeds, backup strategy | `platforms/db/`, `platforms/api/prisma/` (migrations default in backend) |
+| **DB** | Database infrastructure, schema migrations, seeds, backup strategy | `platforms/db/`, `platforms/api/migrations/` or `platforms/api/prisma/` (migrations default in backend) |
 
 The **DB** requirement covers two separate concerns — do not conflate them:
 
 | Sub-concern | Purpose | Example paths |
 |-------------|---------|---------------|
 | **DB infra** | Run/build PostgreSQL (compose, version, volumes, init SQL) | `platforms/db/` |
-| **Migrations** | Schema changes and seeds | Inside backend by default (`platforms/api/prisma/`, etc.); standalone `platforms/migration/` only when user explicitly requests it |
+| **Migrations** | Schema changes and seeds | Inside backend by default (`platforms/api/migrations/`, `platforms/api/prisma/`, etc.); standalone `platforms/migration/` only when user explicitly requests it |
 
 Migrations do **not** belong in the DB infra folder. Document the exact migration path in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD). If using a standalone migration app, note the user request in `PROJECT/HISTORY/`.
 
@@ -245,8 +247,8 @@ After work:
 
 When bootstrapping per [`GREENFIELD.MD`](GREENFIELD.MD), also verify Definition of Done (GREENFIELD section 5):
 
-16. `docker compose -f deploy/docker-compose.yml up` — all services healthy?
-17. Migrations + dev seeds applied?
+16. `deploy/docker-compose.yml` exists in the **built project** and `docker compose up` — all services healthy?
+17. golang-migrate applied; dev seeds load?
 18. Auth and full CRUD work at mobile viewport?
-19. `deploy/scripts/build.sh` and `backup-db.sh` run successfully?
+19. `deploy/scripts/build.sh` and `backup-db.sh` exist in the project and run successfully?
 20. Root `README.md` (user-facing) created from [`PROJECT/README.template.md`](PROJECT/README.template.md)?

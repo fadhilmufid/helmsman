@@ -2,7 +2,7 @@
 
 Rules for living feature reference documentation. **Read-only template** — content lives in [`PROJECT/DOCUMENT/`](PROJECT/DOCUMENT/).
 
-Related: [`README.MD`](README.MD), [`AGENTS.MD`](AGENTS.MD), [`CODE.MD`](CODE.MD), [`DESIGN.MD`](DESIGN.MD), [`HISTORY.MD`](HISTORY.MD).
+Related: [`README.MD`](README.MD), [`AGENTS.MD`](AGENTS.MD), [`CODE.MD`](CODE.MD), [`DESIGN.MD`](DESIGN.MD), [`HISTORY.MD`](HISTORY.MD), [`GREENFIELD.MD`](GREENFIELD.MD) (greenfield feature specs).
 
 ## 1. Purpose
 

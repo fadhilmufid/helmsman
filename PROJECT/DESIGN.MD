@@ -1,6 +1,6 @@
 # Project Design System
 
-Editable per-project tokens and UI specs. Defaults below match [`GREENFIELD.MD`](../GREENFIELD.MD).
+Editable per-project tokens and UI specs. Example values from [`GREENFIELD.MD`](../GREENFIELD.MD) — confirm via clarify-before-build.
 
 ## Component library
 
