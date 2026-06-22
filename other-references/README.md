@@ -13,7 +13,7 @@ Optional folder for **user-provided reference material** — anything you want a
 
 - Application source code (paths per `project/INFRASTRUCTURE.md`)
 - Deploy scripts (`deploy/`)
-- Instruction templates (`instructions/`, root `AGENTS.md`)
+- Instruction templates (`instructions/`, pack `AGENTS.md` inside `helmsman/`)
 - Project workflow files (`project/OVERVIEW.md`, `project/INFRASTRUCTURE.md`, `project/histories/`, etc.)
 
 ## For agents

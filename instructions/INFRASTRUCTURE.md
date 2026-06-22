@@ -32,36 +32,41 @@ Per [`RULES.md`](RULES.md) §5 — infrastructure targets **production deployabi
 
 ## Part A — Documentation architecture
 
-### Two-tier system
+### Two-tier system (app + helmsman pack)
+
+When installed in an app, documentation spans **`{root}`** (app) and **`{pack}`** (`helmsman/`):
 
 ```
-{root}/
-├── README.md              ← user (GitHub)
-├── LICENSE
-├── AGENTS.md              ← agent gate
-├── instructions/          ← rule templates (this folder)
+{root}/                           ← app repository
+├── helmsman/                     ← {pack} — cloned instruction repo (use in place)
+│   ├── AGENTS.md                 ← agent gate
 │   ├── README.md
-│   ├── RULES.md
-│   ├── PLAN.md
-│   ├── INFRASTRUCTURE.md
-│   ├── GREENFIELD.md
-│   ├── BROWNFIELD.md
-│   ├── TASK.md
-│   ├── CODE.md
-│   ├── DESIGN.md
-│   ├── HISTORY.md
-│   └── DOCUMENT.md
-├── other-references/         ← user reference dumps (README tracked; contents gitignored)
-└── project/               ← local workspace (agents read/write; mostly gitignored)
-    ├── OVERVIEW.md        ← gitignored
-    ├── AGENTS.md          ← gitignored
-    ├── INFRASTRUCTURE.md  ← gitignored
-    ├── DESIGN.md          ← gitignored
-    ├── histories/         ← README.md tracked; entries gitignored
-    ├── documents/        ← README.md tracked; feature folders gitignored
-    ├── design/           ← README.md tracked; design specs gitignored
-    ├── plans/            ← README.md tracked; blueprint plans gitignored
-    └── tasks/            ← README.md tracked; entries gitignored
+│   ├── LICENSE
+│   ├── .gitignore
+│   ├── instructions/             ← rule templates
+│   │   ├── README.md
+│   │   ├── RULES.md
+│   │   └── …
+│   ├── other-references/
+│   └── project/                  ← agent workspace (mostly gitignored)
+│       ├── OVERVIEW.md
+│       ├── plans/
+│       ├── tasks/
+│       └── …
+├── platforms/                    ← greenfield app (at {root}, not in helmsman/)
+└── deploy/
+```
+
+**Hard rule:** never copy `{pack}` contents to `{root}`. See [`../AGENTS.md`](../AGENTS.md) §0.
+
+When this repo **is** `{pack}` (paths relative to pack root):
+
+```
+{pack}/
+├── AGENTS.md
+├── instructions/
+├── project/
+└── other-references/
 ```
 
 ### Folder naming
@@ -72,7 +77,7 @@ Per [`RULES.md`](RULES.md) §5 — infrastructure targets **production deployabi
 | App folders (greenfield) | lowercase kebab-case under `platforms/` | `web`, `api`, `postgresql`, `minio` — per [`GREENFIELD.md`](GREENFIELD.md) |
 | App folders (brownfield) | whatever the repo uses | `src/`, `backend/`, `apps/web/` — per [`BROWNFIELD.md`](BROWNFIELD.md) |
 | Instruction templates | `CAPITAL.md` in `instructions/` | `instructions/CODE.md`, `instructions/TASK.md` |
-| Agent gate | root `AGENTS.md` | `AGENTS.md` |
+| Agent gate | `{pack}/AGENTS.md` (e.g. `helmsman/AGENTS.md`) | `AGENTS.md` inside pack |
 | Project config files | `CAPITAL.md` in `project/` | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md` |
 | Generated entries | `{timestamp}_{slug}.md` | `project/histories/20260622_143052_bootstrap.md` |
 
@@ -88,14 +93,14 @@ Per [`RULES.md`](RULES.md) §5 — infrastructure targets **production deployabi
 | `project/tasks/` | `README.md` only | Exhaustive standalone task plans |
 | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md`, `project/DESIGN.md` | None (gitignored) | Per-project config agents create locally |
 
-Agents **read and write** all `project/` paths during work. Instruction templates in `instructions/` and root `AGENTS.md` are version-controlled.
+Agents **read and write** all `project/` paths inside `{pack}` during work. Instruction templates in `instructions/` and pack `AGENTS.md` are version-controlled — **never copy them to `{root}`**.
 
 ### Read-only vs editable
 
 | Tier | Location | Git |
 |------|----------|-----|
 | Instruction templates | `instructions/*.md` | Tracked — edit only when user requests template updates |
-| Agent gate | `AGENTS.md` (root) | Tracked |
+| Agent gate | `AGENTS.md` (inside `{pack}`) | Tracked |
 | Folder READMEs | `other-references/README.md`, `project/histories|documents|tasks|plans|design/README.md`, `instructions/README.md` | Tracked |
 | Project workspace | All other `project/` and `other-references/` content | Gitignored — local only |
 
@@ -106,8 +111,8 @@ Rule templates and project config files use **`CAPITAL.md`**: uppercase basename
 | Location | Examples |
 |----------|----------|
 | Instruction templates (`instructions/`) | `instructions/CODE.md`, `instructions/TASK.md`, `instructions/GREENFIELD.md` |
-| Agent gate (root) | `AGENTS.md` |
-| User README (root) | `README.md` |
+| Agent gate (`{pack}`) | `AGENTS.md` |
+| Pack README | `README.md` (inside `{pack}`) |
 | Project config (`project/`) | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md`, `project/DESIGN.md` |
 | Generated entries | `project/histories/{timestamp}_{slug}.md`, `project/plans/{timestamp}_{slug}.md`, `project/tasks/{timestamp}_{slug}.md` |
 
@@ -120,7 +125,7 @@ Rule templates and project config files use **`CAPITAL.md`**: uppercase basename
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
 | `project/DESIGN.md` | UI design index — links to `project/design/` |
 
-Write **mode** to `project/OVERVIEW.md` first — from [`../AGENTS.md`](../AGENTS.md) §0 clarify (greenfield) or BROWNFIELD discovery (brownfield).
+Write **mode** to `project/OVERVIEW.md` first — from [`../AGENTS.md`](../AGENTS.md) §3 clarify (greenfield) or BROWNFIELD discovery (brownfield).
 
 **Source of content:**
 
@@ -180,8 +185,8 @@ Top-level [`instructions/INFRASTRUCTURE.md`](INFRASTRUCTURE.md) explains **how t
 
 ## Agent checklist
 
-1. AGENTS §0.5 execution gates understood and followed?
-2. Mode resolved per [`../AGENTS.md`](../AGENTS.md) §0 (greenfield vs brownfield)?
+1. AGENTS §1.5 execution gates understood and followed?
+2. Mode resolved per [`../AGENTS.md`](../AGENTS.md) §1 (greenfield vs brownfield)?
 3. `project/INFRASTRUCTURE.md` populated from clarify (greenfield) or discovery (brownfield)?
 4. Specs (`documents/`, `design/`) → plan → task → code; E2E verify per [`RULES.md`](RULES.md) §6; changes in `project/histories/`?
 5. Greenfield technical gates verified per [`GREENFIELD.md`](GREENFIELD.md) when building new apps?

@@ -2,7 +2,7 @@
 
 Local **feature reference documentation** for this project. Rules: [`DOCUMENT.md`](../../instructions/DOCUMENT.md) in `instructions/`.
 
-**Required before application code** — per AGENTS §0.5 Gate C and DOCUMENT.md.
+**Required before application code** — per AGENTS §1.5 Gate C and DOCUMENT.md.
 
 For UI depth (tokens, components, screens), see [`project/design/`](../design/). Platform inventory lives in [`project/plans/`](../plans/) and `project/INFRASTRUCTURE.md`.
 

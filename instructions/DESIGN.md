@@ -54,7 +54,7 @@ project/
 
 Each file must include: token values, states (default/hover/focus/disabled/error), mobile + desktop notes, and component library mapping.
 
-**Hard gate:** No UI application code until required `project/design/` files exist — per AGENTS §0.5 Gate C.
+**Hard gate:** No UI application code until required `project/design/` files exist — per AGENTS §1.5 Gate C.
 
 ## 2. project/DESIGN.md (index only)
 

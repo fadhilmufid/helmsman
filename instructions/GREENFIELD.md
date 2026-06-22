@@ -16,7 +16,7 @@ For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 
 | Rule | Detail |
 |------|--------|
-| **Always ask first** | Per [`AGENTS.md`](AGENTS.md) section 2 — including **stack** and **layout**, even for short prompts |
+| **Always ask first** | Per [`AGENTS.md`](../AGENTS.md) section 3 — including **stack** and **layout**, even for short prompts |
 | **Recommended:** labels | Propose defaults in the clarify batch; user confirms or delegates |
 | **Wait for confirmation** | Proceed only after the user confirms or says *"use your recommendations"* / *"you decide"* |
 | **Record then build** | Write `project/*`, create `project/plans/` then `project/tasks/` per [`PLAN.md`](PLAN.md) and [`TASK.md`](TASK.md) before scaffold/code |
@@ -28,7 +28,9 @@ For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 
 **Applies only to greenfield** — not when adopting an existing repo ([`BROWNFIELD.md`](BROWNFIELD.md)).
 
-Everything runnable or deployable lives under `{root}/platforms/` (fixed parent name, always plural). Child slugs are **kebab-case** — document every slug in `project/INFRASTRUCTURE.md` and the Gate D plan **platform inventory**.
+Everything runnable or deployable lives under `{root}/platforms/` (fixed parent name, always plural). **`{root}` is the app repo root** — parent of `helmsman/` when the pack is installed. **Never** put `platforms/` inside `{pack}`.
+
+Child slugs are **kebab-case** — document every slug in `project/INFRASTRUCTURE.md` and the Gate D plan **platform inventory**.
 
 ### Platform kinds
 
@@ -91,12 +93,15 @@ Migrations do **not** live in the service platform folder.
 - Use vague `platforms/db/` when the engine is PostgreSQL — prefer `platforms/postgresql/`
 - Create `platforms/migration/` unless user asks
 - Commit `.tar` files, backup dumps, or `.env`
+- Copy or hoist `{pack}` (`helmsman/`) contents to `{root}` — see [`AGENTS.md`](../AGENTS.md) §0
+- Scaffold `instructions/`, `project/`, or `AGENTS.md` at `{root}`
+- Put app code inside `{pack}`
 
 ---
 
 ## 2. Clarify topics (greenfield)
 
-Ask in one batch per AGENTS §2. **Recommended:** values are proposals — not locked until written to `project/*`.
+Ask in one batch per AGENTS §3. **Recommended:** values are proposals — not locked until written to `project/*`.
 
 | Topic | What to resolve |
 |-------|-----------------|
@@ -271,11 +276,11 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 12 | `project/design/` complete when web UI in scope |
 | 13 | `project/plans/` and `project/tasks/` marked complete; E2E results recorded |
 | 14 | `project/histories/` bootstrap entry links plan, task, E2E |
-| 15 | Root `README.md` has setup instructions |
+| 15 | `{root}/README.md` (app readme) has setup instructions — not `{pack}/README.md` |
 
 ### Testing standard
 
-Per AGENTS §4: integration tests for critical endpoints/features; lint/typecheck green per app; E2E smoke test when web is in scope. **Do not mark bootstrap complete with failing or missing critical tests.**
+Per AGENTS §5: integration tests for critical endpoints/features; lint/typecheck green per app; E2E smoke test when web is in scope. **Do not mark bootstrap complete with failing or missing critical tests.**
 
 ---
 
@@ -423,8 +428,8 @@ other-references/     # Optional user reference dumps (local only)
 
 **Do:**
 
-- Confirm greenfield mode per AGENTS §0
-- Pass AGENTS §0.5 execution gates before any platform code
+- Confirm greenfield mode per AGENTS §1
+- Pass AGENTS §1.5 execution gates before any platform code
 - Ask stack and delivery scope even when you have recommendations
 - Follow bootstrap playbook **after** user confirms or delegates
 - Create `project/plans/` per Phase A step 4 before platform code

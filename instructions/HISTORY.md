@@ -148,7 +148,7 @@ date +%Y%m%d_%H%M%S
 ### Don't
 - Don't delete, rename, or rewrite past entries
 - Don't write entries outside `project/histories/`
-- Don't edit instruction templates (`instructions/*.md`, root `AGENTS.md`) when a history entry suffices
+- Don't edit instruction templates (`instructions/*.md`, pack `AGENTS.md`) when a history entry suffices
 - Don't put step-by-step plans in HISTORY — use `project/tasks/` per [`TASK.md`](TASK.md)
 - Don't mark work complete in history without stating production verification results when infra/UI/API were in scope
 

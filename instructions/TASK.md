@@ -28,7 +28,7 @@ Forward-looking **change plan** for a single user request — distinct from othe
 - Spend Gate E drafting **maximum detail** — 50, 100, or 200+ steps is expected for large bootstrap; more steps is better
 - `Status: planning` until steps are written; `in_progress` only after Gates A–D
 - **Change-oriented steps** — every step names files/paths and describes the change, not vague goals
-- **Ask when blocked** — one batch with **Recommended:** default per [`AGENTS.md`](../AGENTS.md) section 2
+- **Ask when blocked** — one batch with **Recommended:** default per [`AGENTS.md`](../AGENTS.md) section 3
 
 ## 1.5 Task step format (required)
 
@@ -54,7 +54,7 @@ List paths in scope from `project/INFRASTRUCTURE.md` (e.g. `platforms/api/` gree
 
 ## 1.6 Execution gates (hard STOP)
 
-Mirror [`AGENTS.md`](../AGENTS.md) §0.5 and [`RULES.md`](RULES.md) §2.
+Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
 
 | Forbidden until gate passes | Requirement |
 |----------------------------|-------------|

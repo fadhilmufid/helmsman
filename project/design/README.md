@@ -2,7 +2,7 @@
 
 Detailed **design system specifications** for this project. Rules: [`DESIGN.md`](../../instructions/DESIGN.md) in `instructions/`.
 
-**Required before UI code** — per AGENTS §0.5 Gate C and DESIGN.md §1.
+**Required before UI code** — per AGENTS §1.5 Gate C and DESIGN.md §1.
 
 The **index** (philosophy, library choice, links) lives in `project/DESIGN.md` (gitignored). All token, component, and screen detail lives here in `project/design/`.
 

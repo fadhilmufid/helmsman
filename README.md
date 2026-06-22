@@ -1,6 +1,6 @@
 # Instruction Pack
 
-Reusable **agent guidance** — one **integrated system**. Agents read [`AGENTS.md`](AGENTS.md) then [`instructions/RULES.md`](instructions/RULES.md). Default: **production-grade** unless you ask for MVP.
+Reusable **agent guidance** — one **integrated system**. In an app: clone as `helmsman/`, then agents read [`helmsman/AGENTS.md`](AGENTS.md) and [`helmsman/instructions/RULES.md`](instructions/RULES.md). Default: **production-grade** unless you ask for MVP.
 
 ## What this is
 
@@ -18,12 +18,17 @@ Developers using **Cursor** (or similar tools) who want consistent **agent** beh
 
 ## How to use it
 
-1. Copy this entire folder into your repository root (`{root}`).
-2. Configure Cursor (or your tool) to read **[`AGENTS.md`](AGENTS.md)** at repo root — **not** this README.
-3. Agents resolve **greenfield** vs **brownfield** and populate `project/*` per the mode guides in [`instructions/`](instructions/).
-4. Optionally drop reference material (specs, wireframes, notes) into [`other-references/`](other-references/).
+1. Inside your app repo (`{root}`): `git clone <this-repo-url> helmsman` — folder name **`helmsman`**.
+2. Configure Cursor (or your tool) to read **[`helmsman/AGENTS.md`](AGENTS.md)** — **not** this README, and **not** a root-level copy.
+3. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. They must **not** copy `instructions/`, `project/`, or `AGENTS.md` to `{root}`.
+4. Greenfield app code (`platforms/`, `deploy/`, etc.) is created as a **sibling** of `helmsman/` at `{root}`.
+5. Optionally drop reference material into [`other-references/`](other-references/) inside `helmsman/`.
+
+**Do not** copy this entire folder into `{root}` — that causes agents to hoist the pack. Clone as `helmsman/` and leave it there.
 
 ## Folder overview
+
+Paths below are **inside `{pack}`** (`helmsman/` when installed in an app). See [`AGENTS.md`](AGENTS.md) §0.
 
 | Path | Purpose |
 |------|---------|

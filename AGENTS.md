@@ -6,7 +6,53 @@
 
 ---
 
-## 0. Choose mode (first)
+## 0. Helmsman pack (use in place — hard STOP)
+
+When this repo is cloned into an app as **`helmsman/`**, agents **use it in place**. Do **not** copy, move, or flatten its contents to the app repository root.
+
+| Term | Meaning |
+|------|---------|
+| **`{pack}`** | This folder — e.g. `{root}/helmsman/` after `git clone <url> helmsman` |
+| **`{root}`** | App repository root — parent of `{pack}` |
+
+**Typical app layout:**
+
+```
+{root}/
+├── helmsman/          ← {pack} — this instruction repo (use in place)
+│   ├── AGENTS.md
+│   ├── README.md
+│   ├── LICENSE
+│   ├── .gitignore
+│   ├── instructions/
+│   ├── project/       ← write plans, tasks, config HERE
+│   └── other-references/
+├── platforms/         ← greenfield app (sibling of helmsman/, not inside it)
+└── deploy/
+```
+
+**Do (use in place):**
+
+- Read `{pack}/AGENTS.md` — this file when inside `helmsman/`
+- Read templates from `{pack}/instructions/`
+- Write plans, tasks, histories, and project config to `{pack}/project/`
+
+**Don't (never copy to `{root}`):**
+
+- Do **not** create `{root}/instructions/`, `{root}/project/`, `{root}/AGENTS.md`, or `{root}/other-references/`
+- Do **not** copy `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
+- Do **not** move, duplicate, symlink, or flatten `helmsman/` — it stays one folder under `{root}`
+- Do **not** put app code (`platforms/`, `deploy/`, application source) inside `{pack}`
+
+**Pack discovery:** workspace is `{root}` → `{pack}` = `{root}/helmsman/`. Workspace is `{pack}` → `{root}` = parent of `helmsman/`.
+
+Paths like `project/`, `instructions/` in this instruction set mean **inside `{pack}`** unless explicitly prefixed with `{root}/`.
+
+Detail: [`instructions/RULES.md`](instructions/RULES.md) §1.1.
+
+---
+
+## 1. Choose mode (first)
 
 | Mode | When | Guide |
 |------|------|-------|
@@ -25,24 +71,24 @@ Record mode in `project/OVERVIEW.md`.
 
 ---
 
-## 0.5 Execution gates (hard STOP)
+## 1.5 Execution gates (hard STOP)
 
 Sequential — detail in [`instructions/RULES.md`](instructions/RULES.md) §2.
 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
-| **A — Read-first** | AGENTS §1 checklist — full read | `platforms/`, `deploy/`, app source, Dockerfiles |
-| **B — Clarify and record** | §2; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation |
+| **A — Read-first** | AGENTS §2 checklist — full read | `platforms/`, `deploy/`, app source, Dockerfiles |
+| **B — Clarify and record** | §3; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation |
 | **C — Documents and design** | `project/documents/`; `project/design/` when web UI | Scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/` per [`instructions/PLAN.md`](instructions/PLAN.md) | TASK, implementation |
 | **E — Task before code** | One **exhaustive standalone** `project/tasks/` file; re-read [`CODE.md`](instructions/CODE.md) when touching app source; `in_progress` after A–D | Application edits |
 | **F — Quality + E2E** | Production bar + compose/deploy verify per RULES §6 | Marking complete |
 
-**Exceptions:** Instruction-pack maintenance (`instructions/`, root `AGENTS.md`, tracked `project/*/README.md`).
+**Exceptions:** Instruction-pack maintenance (`instructions/`, pack `AGENTS.md`, tracked `project/*/README.md`).
 
 ---
 
-## 1. Before You Start (Gate A checklist)
+## 2. Before You Start (Gate A checklist)
 
 Read each file **in full** before Gate B.
 
@@ -60,7 +106,7 @@ Read each file **in full** before Gate B.
 
 ---
 
-## 2. Clarify Before Build
+## 3. Clarify Before Build
 
 **Ask first, code second.** Do not edit application code until unspecified decisions are resolved.
 
@@ -99,7 +145,7 @@ If user says *"use your recommendations"* — apply mode-guide defaults, record 
 
 ---
 
-## 3. Plan and task (Gates D–E)
+## 4. Plan and task (Gates D–E)
 
 Per [`instructions/PLAN.md`](instructions/PLAN.md) then [`instructions/TASK.md`](instructions/TASK.md):
 
@@ -112,9 +158,9 @@ Per [`instructions/PLAN.md`](instructions/PLAN.md) then [`instructions/TASK.md`]
 
 ---
 
-## 4. Testing and E2E
+## 5. Testing and E2E
 
-Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`GREENFIELD.md`](instructions/GREENFIELD.md) §5:
+Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) §5:
 
 - Lint and test per `project/AGENTS.md`
 - **Local:** `docker compose up` → health → smoke → `compose down`
@@ -123,7 +169,7 @@ Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`GREENFIELD.md`](i
 
 ---
 
-## 5. PR and completion
+## 6. PR and completion
 
 - PR title: `project/AGENTS.md` — typically `[{project}] <Title>`
 - Lint/test green; E2E when infra touched
@@ -133,7 +179,7 @@ Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`GREENFIELD.md`](i
 
 ---
 
-## 6. Agent checklist
+## 7. Agent checklist
 
 **Before:** Gate A read complete? B clarify? C docs/design? D plan? E **exhaustive standalone** task drafted (every file as a step)?
 

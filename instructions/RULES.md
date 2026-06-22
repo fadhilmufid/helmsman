@@ -25,25 +25,49 @@ flowchart TD
 
 | Layer | Path | Role |
 |-------|------|------|
-| Entry | `AGENTS.md` | Mode + gate order |
+| Entry | `AGENTS.md` (inside `{pack}`) | Mode + gate order |
 | Map | `instructions/RULES.md` | This file — hard rules + links |
-| Specs | `project/documents/`, `project/design/` | What to build |
+| Specs | `project/documents/`, `project/design/` | What to build (inside `{pack}`) |
 | Blueprint | `project/plans/*.md` | Platform inventory, phases, E2E matrix → feeds TASK |
 | Execution | `project/tasks/*.md` | **One standalone exhaustive** task per request — unlimited steps |
-| Config | `project/OVERVIEW.md`, `INFRASTRUCTURE.md`, `AGENTS.md`, `DESIGN.md` | Project-specific map |
+| Config | `project/OVERVIEW.md`, `INFRASTRUCTURE.md`, `AGENTS.md`, `DESIGN.md` | Project-specific map (inside `{pack}`) |
 | Record | `project/histories/` | What was done + verify results |
+| App runtime | `{root}/platforms/`, `{root}/deploy/` | Greenfield scaffold — **not** inside `{pack}` |
 
 **Integration rule:** Every TASK step needs **Plan ref**, **Spec ref**, and **Code ref** (when touching application source). Every HISTORY entry links plan, task, specs, and CODE compliance when applicable.
+
+### 1.1 Pack isolation (helmsman — use in place)
+
+When this instruction repo lives at `{root}/helmsman/` (folder name **`helmsman`**), treat it as **`{pack}`**. See [`../AGENTS.md`](../AGENTS.md) §0.
+
+| Layer | Path (in app) | Role |
+|-------|---------------|------|
+| Pack entry | `helmsman/AGENTS.md` | Mode + gate order |
+| Map | `helmsman/instructions/RULES.md` | This file |
+| Templates | `helmsman/instructions/` | Read-only rules |
+| Agent workspace | `helmsman/project/` | Plans, tasks, histories, config |
+| App runtime | `{root}/platforms/`, `{root}/deploy/` | Greenfield scaffold — **not** inside `{pack}` |
+
+**Do:** read and write inside `{pack}`; build app at `{root}`.
+
+**Don't:**
+
+- Copy, move, symlink, or flatten `{pack}` to `{root}`
+- Create `{root}/instructions/`, `{root}/project/`, `{root}/AGENTS.md`, or `{root}/other-references/`
+- Copy `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
+- Put `platforms/`, `deploy/`, or application source inside `{pack}`
+
+Paths `project/`, `instructions/` in this instruction set mean inside `{pack}` unless prefixed with `{root}/`.
 
 ---
 
 ## 2. Execution gates (A–F)
 
-Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) §0.5.
+Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) §1.5.
 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
-| **A — Read-first** | Read every file in AGENTS §1 checklist (full read) | Any `platforms/`, `deploy/`, app source, Dockerfiles |
+| **A — Read-first** | Read every file in AGENTS §2 checklist (full read) | Any `platforms/`, `deploy/`, app source, Dockerfiles |
 | **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
@@ -132,6 +156,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 
 | You need… | Read |
 |-----------|------|
+| Pack isolation (`helmsman/` use in place) | [`../AGENTS.md`](../AGENTS.md) §0, [`RULES.md`](RULES.md) §1.1 |
 | Mode, clarify, gate order | [`../AGENTS.md`](../AGENTS.md) |
 | Integrated rules (this file) | [`RULES.md`](RULES.md) |
 | Bootstrap blueprint | [`PLAN.md`](PLAN.md) → `project/plans/` |

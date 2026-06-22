@@ -14,7 +14,8 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 
 | Rule | Detail |
 |------|--------|
-| **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §0.5 — read-first, documents/design, plan, exhaustive task, then code |
+| **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §1.5 — read-first, documents/design, plan, exhaustive task, then code |
+| **Helmsman pack** | If `helmsman/` exists at `{root}`, it is `{pack}` — use in place; never copy to `{root}` — per AGENTS §0 |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |
 | **Adapt to conventions** | Follow existing folder layout, stack, and patterns unless the user asks to change them |
@@ -30,13 +31,14 @@ Run discovery **before** meaningful code or config edits when `project/*` is mis
 
 ### 1.1 Scan order (adapt to repo)
 
-1. **Root manifests** — `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`, `docker-compose.yml`, `Makefile`, root `README`, CI configs (`.github/workflows/`, etc.)
-2. **Application layout** — entrypoints, apps/packages, API routes, frontend roots, shared libraries
-3. **Data layer** — DB config, ORM, migration folders, seed scripts
-4. **Deploy / runtime** — Docker, Kubernetes, serverless, PaaS configs, env examples
-5. **Dev workflow** — install, run, test, lint, typecheck commands per app or package
-6. **UI** — component library, CSS framework, theme tokens, responsive patterns (if applicable)
-7. **`other-references/`** — user-provided specs, wireframes, notes (see [`other-references/README.md`](other-references/README.md))
+1. **Root manifests** — `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`, `docker-compose.yml`, `Makefile`, app `README`, CI configs (`.github/workflows/`, etc.) — at `{root}`, not inside `helmsman/`
+2. **`helmsman/` pack** — if present, this is `{pack}` (`AGENTS.md`, `instructions/`, `project/`) — read for agent rules; do not treat as app source; do not copy to `{root}`
+3. **Application layout** — entrypoints, apps/packages, API routes, frontend roots, shared libraries
+4. **Data layer** — DB config, ORM, migration folders, seed scripts
+5. **Deploy / runtime** — Docker, Kubernetes, serverless, PaaS configs, env examples
+6. **Dev workflow** — install, run, test, lint, typecheck commands per app or package
+7. **UI** — component library, CSS framework, theme tokens, responsive patterns (if applicable)
+8. **`other-references/`** — inside `{pack}` if `helmsman/` exists; user-provided specs, wireframes, notes (see [`other-references/README.md`](../other-references/README.md))
 
 ### 1.2 Discovery output
 
@@ -88,7 +90,7 @@ When the repo has a web UI, discovery also populates **`project/design/`** from 
 
 ## 3. Document before change
 
-**Hard gate:** Non-trivial work requires `project/plans/` (Gate D), `project/tasks/` (Gate E), and `project/documents/{feature}/` when building features — per AGENTS §0.5 and [`RULES.md`](RULES.md).
+**Hard gate:** Non-trivial work requires `project/plans/` (Gate D), `project/tasks/` (Gate E), and `project/documents/{feature}/` when building features — per AGENTS §1.5 and [`RULES.md`](RULES.md).
 
 | Need | Use |
 |------|-----|
@@ -147,8 +149,8 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 
 **Do:**
 
-- Resolve brownfield mode per AGENTS §0 before assuming greenfield layout
-- Pass AGENTS §0.5 execution gates before non-trivial application edits
+- Resolve brownfield mode per AGENTS §1 before assuming greenfield layout
+- Pass AGENTS §1.5 execution gates before non-trivial application edits
 - Run discovery when `project/*` is empty or contradicts the repo
 - Record actual paths in `project/INFRASTRUCTURE.md`
 - Create `project/plans/`, one exhaustive standalone `project/tasks/` file, and `project/documents/{feature}/` before non-trivial edits

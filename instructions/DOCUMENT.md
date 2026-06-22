@@ -71,9 +71,9 @@ Use these when applicable — add others with full descriptive names when useful
 
 ## 3. When to Create or Update
 
-**Hard gate:** No application source edits until required DOCUMENT files exist for the feature. Per [`AGENTS.md`](../AGENTS.md) §0.5 Gate C.
+**Hard gate:** No application source edits until required DOCUMENT files exist for the feature. Per [`AGENTS.md`](../AGENTS.md) §1.5 Gate C.
 
-**Required** when the user asks to build or significantly change a feature — after clarification per [`AGENTS.md`](../AGENTS.md) section 2 is complete:
+**Required** when the user asks to build or significantly change a feature — after clarification per [`AGENTS.md`](../AGENTS.md) section 3 is complete:
 
 ### Greenfield bootstrap required documents
 
@@ -138,7 +138,7 @@ One paragraph.
 ### Before feature work
 
 1. Read this file
-2. Confirm feature scope and open decisions were clarified per [`AGENTS.md`](../AGENTS.md) section 2
+2. Confirm feature scope and open decisions were clarified per [`AGENTS.md`](../AGENTS.md) section 3
 3. Create or open task plan per [`TASK.md`](TASK.md)
 4. If `project/documents/{feature-slug}/` exists, read all files in that folder
 5. Read recent `project/histories/` entries for the same feature
@@ -174,12 +174,12 @@ One paragraph.
 - Don't write happy-path-only specs that justify stub implementations
 - Don't use abbreviated doc filenames (`brd.md`, `fsd.md`, etc.)
 - Don't let DOCUMENT files drift from the implemented code
-- Don't edit instruction templates (`instructions/*.md`, root `AGENTS.md`) when a `project/documents/` update suffices
+- Don't edit instruction templates (`instructions/*.md`, pack `AGENTS.md`) when a `project/documents/` update suffices
 
 ## 7. Agent Checklist
 
 1. AGENTS Gate C passed — required DOCUMENT files exist before application code?
-2. Feature scope clarified per [`AGENTS.md`](../AGENTS.md) section 2 before coding?
+2. Feature scope clarified per [`AGENTS.md`](../AGENTS.md) section 3 before coding?
 3. Task plan created per [`TASK.md`](TASK.md)?
 4. Feature slug folder exists at `project/documents/{feature-slug}/` when building a feature?
 5. Filenames use full names only (no abbreviations)?

@@ -6,11 +6,12 @@ Agent guidance index — **one integrated system**. **Agents:** start at [`../AG
 
 | Term | Meaning |
 |------|---------|
-| `{root}` | Repository root — layout in `project/INFRASTRUCTURE.md` |
-| `{project}` | Project slug — `project/OVERVIEW.md` |
-| `platforms/` | **Greenfield** — service + application platforms (`postgresql`, `web`, `api`, …) |
-| `project/plans/` | Blueprint before tasks — platform inventory, E2E matrix |
-| `project/tasks/` | **Exhaustive standalone** execution steps — one file per request, unlimited steps |
+| `{root}` | App repository root — parent of `helmsman/`; greenfield `platforms/` and `deploy/` live here |
+| `{pack}` | `helmsman/` — cloned instruction repo; `AGENTS.md`, `instructions/`, `project/` live here |
+| `{project}` | Project slug — `project/OVERVIEW.md` (inside `{pack}`) |
+| `platforms/` | **Greenfield** — `{root}/platforms/` — service + application platforms |
+| `project/plans/` | Inside `{pack}` — blueprint before tasks |
+| `project/tasks/` | Inside `{pack}` — **exhaustive standalone** execution steps |
 
 ## Integrated flow
 
@@ -41,21 +42,19 @@ flowchart LR
 | [`CODE.md`](CODE.md) | Code style, API, CRUD — **re-read every coding task** (all languages, §0) |
 | [`HISTORY.md`](HISTORY.md) | Change log |
 
-## Two-tier system
+## Two-tier system (app + helmsman)
 
 ```
-{root}/
-├── AGENTS.md              ← agent entry
-├── instructions/
-│   ├── RULES.md           ← integrated map (read second)
-│   ├── PLAN.md, TASK.md, …
-└── project/
-    ├── plans/README.md    ← blueprint layer
-    ├── tasks/README.md
-    ├── documents/README.md
-    ├── design/README.md
-    └── histories/README.md
+{root}/                    ← app repository
+├── helmsman/              ← {pack} — use in place (never copy to {root})
+│   ├── AGENTS.md
+│   ├── instructions/
+│   └── project/
+├── platforms/             ← greenfield app
+└── deploy/
 ```
+
+Paths `project/`, `instructions/` are inside `{pack}` unless prefixed with `{root}/`. See [`../AGENTS.md`](../AGENTS.md) §0.
 
 ## Agent read order
 
