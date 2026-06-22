@@ -1,10 +1,14 @@
 # Design System Template
 
-General guide for defining a project design system. **Read-only template** — actual tokens and components for this project live in [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD).
+Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md), [`CODE.md`](CODE.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`TASK.md`](TASK.md), [`DOCUMENT.md`](DOCUMENT.md), [`HISTORY.md`](HISTORY.md).
+
+General guide for defining a project design system. **Read-only template** — actual tokens and components for this project live in [`project/DESIGN.md`](project/DESIGN.md).
+
+**Brownfield:** document existing UI library and tokens in `project/DESIGN.md` before imposing new patterns. **Greenfield:** define tokens and library choice at clarify per [`GREENFIELD.md`](GREENFIELD.md).
 
 ## 1. Visual Theme & Atmosphere
 
-Define in `PROJECT/DESIGN.MD`:
+Define in `project/DESIGN.md`:
 
 - Overall mood (dark/light, professional/casual, dense/spacious)
 - Design philosophy in one sentence (e.g. "content-first darkness")
@@ -14,7 +18,7 @@ Define in `PROJECT/DESIGN.MD`:
 
 ## 2. Color Palette & Roles
 
-Document these token groups in `PROJECT/DESIGN.MD`:
+Document these token groups in `project/DESIGN.md`:
 
 | Group | Examples |
 |-------|----------|
@@ -29,7 +33,7 @@ Use CSS custom property names (e.g. `--bg-base`, `--accent-primary`) consistentl
 
 ## 3. Typography Rules
 
-Define in `PROJECT/DESIGN.MD`:
+Define in `project/DESIGN.md`:
 
 - Font families (title, body, mono if needed)
 - Type scale table: role, size, weight, line-height, letter-spacing
@@ -37,7 +41,7 @@ Define in `PROJECT/DESIGN.MD`:
 
 ## 4. Component Stylings
 
-Document each component variant in `PROJECT/DESIGN.MD`:
+Document each component variant in `project/DESIGN.md`:
 
 - Buttons (primary, secondary, outlined, icon)
 - Cards and containers
@@ -45,21 +49,23 @@ Document each component variant in `PROJECT/DESIGN.MD`:
 - Navigation patterns
 - Badges and status indicators
 - **Confirmation modal** — destructive actions (delete); title, body, cancel/confirm buttons; uses dialog elevation tokens from section 6
-- **Index/list page** — search bar, filter controls, sortable table headers, pagination footer (per [`CODE.MD`](CODE.MD) section 11)
+- **Index/list page** — search bar, filter controls, sortable table headers, pagination footer (per [`CODE.md`](CODE.md) section 11)
 - **Form pages** — create/edit layout, validation error placement, submit/cancel actions
 
-### Component library first (platforms/web)
+### Component library first (web / frontend apps)
 
-**Never hand-roll solved UI primitives.** Before creating custom `Button`, `Modal`, `Dialog`, `Table`, `Select`, `Dropdown`, `Toast`, etc., search for a popular component library that fits the stack.
+**Greenfield or new UI work:** never hand-roll solved UI primitives. Before creating custom `Button`, `Modal`, `Dialog`, `Table`, etc., search for a popular component library that fits the stack.
+
+**Brownfield:** prefer the library already in the codebase; document it in `project/DESIGN.md`.
 
 #### Workflow
 
-1. Read stack from [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) and any library already chosen in [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD)
+1. Read stack from [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) and any library already chosen in [`project/DESIGN.md`](project/DESIGN.md)
 2. **Search** npm, GitHub, and framework docs — prefer libraries with high stars/downloads and recent releases
 3. **Evaluate** using criteria below
-4. **Install** in `platforms/web` per [`CODE.MD`](CODE.MD) section 10 (install before import)
-5. **Theme** components with project tokens from `PROJECT/DESIGN.MD` — customize, don't reimplement
-6. **Document** the library choice in `PROJECT/DESIGN.MD` and `PROJECT/HISTORY/` when first adopted
+4. **Install** in the frontend app path per `project/INFRASTRUCTURE.md` and [`CODE.md`](CODE.md) section 10 (install before import)
+5. **Theme** components with project tokens from `project/DESIGN.md` — customize, don't reimplement
+6. **Document** the library choice in `project/DESIGN.md` and `project/history/` when first adopted
 
 #### Evaluation criteria
 
@@ -67,7 +73,7 @@ Document each component variant in `PROJECT/DESIGN.MD`:
 |-----------|----------|
 | Popularity | High npm weekly downloads and/or GitHub stars |
 | Maintenance | Recent releases, active issues/PRs |
-| Stack fit | React/Next.js/Vue/etc. per PROJECT |
+| Stack fit | React/Next.js/Vue/etc. per project |
 | Mobile-first | Works on small viewports; touch-friendly (section 8) |
 | Accessibility | Keyboard focus, ARIA patterns built-in |
 | Theming | Supports design tokens / CSS variables / Tailwind |
@@ -79,22 +85,22 @@ Document each component variant in `PROJECT/DESIGN.MD`:
 | React + Tailwind | shadcn/ui (Radix primitives), Headless UI |
 | Full component suite | MUI, Chakra UI, Mantine |
 | Headless primitives only | Radix UI, React Aria |
-| Icons | lucide-react, react-icons (per [`CODE.MD`](CODE.MD)) |
+| Icons | lucide-react, react-icons (per [`CODE.md`](CODE.md)) |
 
 #### When custom components are allowed
 
-- No suitable library after documented search — note why in `PROJECT/DESIGN.MD` or history
+- No suitable library after documented search — note why in `project/DESIGN.md` or history
 - Thin wrappers around installed library components (preferred)
 - Project-specific composite layouts built **from** library primitives
 - Brand-new pattern no generic library covers
 
-#### Relationship to PROJECT/DESIGN.MD
+#### Relationship to project/DESIGN.md
 
-`PROJECT/DESIGN.MD` must record:
+`project/DESIGN.md` must record:
 
 - Chosen component library (or headless + styling approach)
 - How project tokens map to library theme variables
-- Which shared components live in `platforms/web` (e.g. `@/components/ui/*` from shadcn)
+- Which shared UI components live in the frontend app (path per `project/INFRASTRUCTURE.md`)
 
 Include: background, text color, radius, padding, hover/focus states, and usage notes.
 
@@ -114,26 +120,26 @@ Shadow philosophy: opacity, blur, and when to use each level.
 
 ## 7. Do's and Don'ts
 
-Project-specific do's and don'ts belong in `PROJECT/DESIGN.MD`. General guidance:
+Project-specific do's and don'ts belong in `project/DESIGN.md`. General guidance:
 
 - Do define accent color roles clearly (functional vs decorative)
 - Do keep semantic colors separate from brand accents
 - Do use a styled confirmation modal for delete actions — not browser dialogs
-- Do design and build `platforms/web` mobile-first; ensure every page works on phone and desktop
+- Do design and build frontend apps **mobile-first** when web UI is in scope; ensure pages work on phone and desktop
 - Do use a popular component library for buttons, modals, tables, forms, and navigation before hand-rolling
-- Do install UI packages in `platforms/web` before importing (see [`CODE.MD`](CODE.MD) section 10)
+- Do install UI packages in the frontend app path (per `project/INFRASTRUCTURE.md`) before importing (see [`CODE.md`](CODE.md) section 10)
 - Don't add ad-hoc colors outside the defined palette
 - Don't skip hover/focus states on interactive elements
 - Don't use browser `window.confirm` or `window.alert` for delete or API feedback
 - Don't ship desktop-only layouts, fixed widths that overflow mobile, or hover-only interactions with no touch equivalent
 - Don't rebuild accessible modal/table/select primitives when a maintained library exists
-- Don't mix multiple full component suites without documenting why in PROJECT
+- Don't mix multiple full component suites without documenting why in project
 
 ## 8. Responsive Behavior
 
-**Hard rule:** `platforms/web` is always **mobile-first** — design and implement for small screens first, then enhance for tablet and desktop.
+**Greenfield / new UI work:** frontend apps are **mobile-first** — design and implement for small screens first, then enhance for tablet and desktop. **Brownfield:** document existing responsive behavior in `project/DESIGN.md` before changing breakpoints.
 
-Document in `PROJECT/DESIGN.MD`:
+Document in `project/DESIGN.md`:
 
 | Item | What to define |
 |------|----------------|
@@ -147,11 +153,11 @@ Document in `PROJECT/DESIGN.MD`:
 
 - Write base CSS/Tailwind for mobile; add `sm:` / `md:` / `lg:` (or `@media (min-width: ...)`) for larger screens
 - Test layout at mobile width before considering desktop polish
-- CRUD index pages (per [`CODE.MD`](CODE.MD) section 11) must remain usable on mobile — filters/search may collapse into a drawer or accordion
+- CRUD index pages (per [`CODE.md`](CODE.md) section 11) must remain usable on mobile — filters/search may collapse into a drawer or accordion
 
 ## 9. Agent Prompt Guide
 
-`PROJECT/DESIGN.MD` should include:
+`project/DESIGN.md` should include:
 
 - Quick color reference (hex values)
 - Example component prompts agents can copy
@@ -162,8 +168,8 @@ Document in `PROJECT/DESIGN.MD`:
 Before UI work:
 
 1. Read this template for structure
-2. Read [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD) for actual tokens and specs
+2. Read [`project/DESIGN.md`](project/DESIGN.md) for actual tokens and specs (**brownfield:** document existing UI first if missing)
 3. Use hex/CSS vars from project file — not invented colors
 4. CRUD index pages include filter, search, sort, pagination per project spec; delete uses confirmation modal
-5. Web UI built mobile-first with responsive breakpoints documented in `PROJECT/DESIGN.MD`?
+5. Web UI built mobile-first with responsive breakpoints documented in `project/DESIGN.md`?
 6. UI primitives sourced from a popular component library (or documented reason custom)?

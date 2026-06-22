@@ -1,254 +1,207 @@
 # Agent Instructions
 
-General agent workflow for any project using this instruction set. **Read-only template** — do not edit during normal project work.
+**System: read this file first.** Users: see [`README.md`](README.md).
 
-Project-specific stack, folder layout, and config: [`PROJECT/`](PROJECT/). Start with [`README.MD`](README.MD).
+General system workflow for any project using this instruction set. **Read-only gate** — do not edit during normal project work. Rule templates live in [`instructions/`](instructions/). Project-specific config: [`project/`](project/).
+
+---
+
+## 0. Choose mode (first)
+
+Resolve **greenfield** vs **brownfield** before clarify, scaffold, or large edits.
+
+| Mode | When | Primary guide |
+|------|------|---------------|
+| **Greenfield** | User wants a **new** app or full greenfield bootstrap | [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) |
+| **Brownfield** | Instructions dropped into an **existing** codebase; understand, document, or change what exists | [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) |
+
+### When mode is already clear
+
+| User signal | Mode |
+|-------------|------|
+| *"Create … app"*, *"build from scratch"*, empty repo + new product | Greenfield |
+| *"Understand this repo"*, *"document the codebase"*, substantial existing app code | Brownfield |
+| Feature work in repo with populated `project/*` | Use recorded mode in `project/OVERVIEW.md` or infer from context |
+
+### When ambiguous — ask once
+
+Use structured questions (e.g. Cursor `AskQuestion`) in **one batch**:
+
+| Question | Options | Recommended |
+|----------|---------|-------------|
+| Project mode | Greenfield (new app) / Brownfield (existing codebase) | **Brownfield** if substantial app code exists and user did not ask to create a new app; **Greenfield** if repo is empty or user explicitly wants a new app |
+
+After mode is known:
+
+- **Greenfield** → read [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md); `platforms/` layout applies; full greenfield clarify checklist
+- **Brownfield** → read [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md); discovery first; do **not** assume `platforms/` or instruction layout
+
+Record mode in `project/OVERVIEW.md` when writing project config.
+
+---
 
 ## 1. Before You Start
 
-1. Read [`README.MD`](README.MD) — two-tier system and `{root}` terminology
-2. Read this file, [`CODE.MD`](CODE.MD), [`DESIGN.MD`](DESIGN.MD), [`HISTORY.MD`](HISTORY.MD), [`DOCUMENT.MD`](DOCUMENT.MD)
-3. For greenfield tasks, read [`GREENFIELD.MD`](GREENFIELD.MD) — default stack, bootstrap playbook, Definition of Done
-4. Read [`PROJECT/OVERVIEW.MD`](PROJECT/OVERVIEW.MD) → [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) → [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD)
-5. Scan [`PROJECT/HISTORY/`](PROJECT/HISTORY/) newest first for recent context
-6. When working on a known feature, scan [`PROJECT/DOCUMENT/{feature}/`](PROJECT/DOCUMENT/) for existing specs
+1. Resolve mode per **§0**; read [`instructions/README.md`](instructions/README.md) for index and terminology
+2. Read active mode guide: [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) or [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
+3. Read [`instructions/INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`instructions/TASK.md`](instructions/TASK.md), [`instructions/CODE.md`](instructions/CODE.md), [`instructions/DESIGN.md`](instructions/DESIGN.md), [`instructions/HISTORY.md`](instructions/HISTORY.md), [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)
+4. Scan [`ai_references/`](ai_references/) when it has user-provided content (see [`ai_references/README.md`](ai_references/README.md))
+5. Read [`project/OVERVIEW.md`](project/OVERVIEW.md) → [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) → [`project/AGENTS.md`](project/AGENTS.md) → [`project/DESIGN.md`](project/DESIGN.md) when those files exist locally
+6. **Brownfield:** if `project/*` is missing or stale, run discovery per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) before large edits
+7. Scan [`project/history/`](project/history/) newest first for recent context
+8. Scan [`project/task/`](project/task/) for active or blocked tasks (`planning`, `blocked`, `in_progress`)
+9. When working on a known feature, scan [`project/document/{feature}/`](project/document/) for existing specs
+
+---
 
 ## 2. Clarify Before Build
 
-**Ask first, code second.** On every task, scan what the user request and existing `PROJECT/*` files do **not** specify. Do not write or edit files under `platforms/`, `deploy/`, or `PROJECT/` config (except to record answers) until every unspecified decision needed for the task is resolved.
+**Ask first, code second.** On every task, scan what the user request and existing `project/*` files do **not** specify. Do not write or edit application code, deploy config, or `project/` config (except to record answers and task plans) until every unspecified decision needed for the task is resolved.
 
-If the user says *"use your recommendations"*, *"you decide"*, or similar — apply documented defaults from this instruction set (including [`GREENFIELD.MD`](GREENFIELD.MD) when greenfield), record them in `PROJECT/*`, then proceed.
+If the user says *"use your recommendations"*, *"you decide"*, or similar — apply documented defaults from the **active mode guide**, record them in `project/*`, then proceed.
 
-**`GREENFIELD.MD` does not bypass clarify.** Even when greenfield recommendations exist, agents must still ask (one batch) and wait for confirmation or explicit delegation before writing `platforms/` code. Pre-filled `PROJECT/*` stubs are examples, not locked decisions.
+**Mode guides do not bypass clarify.** Wait for confirmation or explicit delegation before meaningful implementation.
 
 ### How to ask
 
-- Use structured questions (e.g. Cursor `AskQuestion`) when multiple valid options exist
+- Use structured questions when multiple valid options exist
 - Send **one batch** of related questions per turn — do not drip-feed across many turns unless the user answers partially
 - Every question must state: what is missing, why it matters (which rule or file it affects), and a **Recommended:** default
 
-### Clarification checklist
+### Clarification checklist — shared (both modes)
 
-Ask only what is still unspecified for this task:
+| Area | What to resolve |
+|------|-----------------|
+| Purpose and scope | What the app/feature does; MVP or change boundaries |
+| Feature docs | Which `project/document/` files per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) — when building or changing features |
+| Data conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 11 when writing new domain entities |
+| API conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 8 when adding or changing APIs |
+| CRUD scope | Per CODE §11 when adding entity management UI/API |
+
+### Clarification checklist — greenfield only
 
 | Area | What to resolve | Typical recommendation |
 |------|-----------------|------------------------|
-| Greenfield | New app from scratch? Stack and playbook | [`GREENFIELD.MD`](GREENFIELD.MD) — **always ask**; use as **Recommended:** answers; never skip clarify; proceed only after user confirms or says *"use recommendations"* |
-| Purpose and scope | What the app/feature does, MVP boundaries | Smallest useful MVP; todo app → authenticated CRUD per GREENFIELD |
-| Project slug | `{project}` name | Derived from app name, kebab-case (e.g. `todo-app`) |
-| Platform apps | `web`, `api`, `db`, etc. | `web` + `api` + `db` for full-stack |
-| Stack | Framework per app | **Ask every greenfield task** — Recommended: Go Gin+GORM api, Next.js web per [`GREENFIELD.MD`](GREENFIELD.MD) unless `PROJECT/*` already locked |
-| Auth | Needed? Type? | **Required** for multi-user apps (e.g. todos); auth scaffold per [`CODE.MD`](CODE.MD) section 9 |
-| Database | Engine, hosting | PostgreSQL in `platforms/db/` |
-| Migrations | Path | Inside backend (default per section 3) |
-| Docker | Dockerfile location | Scaffold Docker if present; else `platforms/<app>/docker/` |
-| Deploy | Target environment | Create `deploy/` in target project per [`GREENFIELD.MD`](GREENFIELD.MD) section 8 examples |
-| Design | Theme, density, accent, component library | Document in `PROJECT/DESIGN.MD` — dark, content-first, mobile-first; popular UI library for web |
-| Layout (web) | Mobile-first responsive | Per [`DESIGN.MD`](DESIGN.MD) — mobile default, enhance for desktop; document breakpoints in `PROJECT/DESIGN.MD` |
-| UI components | Component library for web | Per [`DESIGN.MD`](DESIGN.MD) — popular npm/GitHub library; document in `PROJECT/DESIGN.MD` |
-| Feature docs | Which DOCUMENT files | Per [`DOCUMENT.MD`](DOCUMENT.MD) complexity table; todo app → adapt [`PROJECT/DOCUMENT/todo-management/`](PROJECT/DOCUMENT/todo-management/) |
-| Data conventions | UUID PKs, soft delete | Per [`CODE.MD`](CODE.MD) section 11 — UUID + `deleted_at` on all entities |
-| CRUD scope | Full page/API surface for entity features | Per [`CODE.MD`](CODE.MD) section 11 — index, create, edit, detail, delete modal |
-| API conventions | Response codes + scenarios | Per [`CODE.MD`](CODE.MD) section 8 — `code` on every response; frontend scenario matrix |
+| Project slug | `{project}` name | Kebab-case from app name |
+| Platform apps | `platforms/<app>/` slugs and roles | Per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) §1 — user-chosen stack |
+| Stack | Framework per app | **Ask every greenfield task** — user choice; scaffold per CODE §9 |
+| Auth | Needed? Type? | Required for multi-user apps; per CODE §9 |
+| Database | Engine, hosting, path | User choice; document in `project/INFRASTRUCTURE.md` |
+| Migrations | Path | Inside backend (GREENFIELD default) unless user requests standalone runner |
+| Docker | Dockerfile location per app | Scaffold path or `platforms/<app>/docker/` |
+| Deploy | Target environment | `deploy/` per GREENFIELD after clarify |
+| Design | Theme, component library | `project/DESIGN.md` per [`instructions/DESIGN.md`](instructions/DESIGN.md) |
+
+### Clarification checklist — brownfield only
+
+| Area | What to resolve | Typical recommendation |
+|------|-----------------|------------------------|
+| Onboarding needed? | Is `project/*` populated and trustworthy? | Run discovery if missing or contradicts repo |
+| Change scope | Which apps/paths are in scope for this task? | From `project/INFRASTRUCTURE.md` or discovery |
+| Conventions | Follow existing patterns or align to CODE/DESIGN? | **Adapt** by default; align only if user requests |
+| Restructure? | Impose `platforms/` or new layout? | **No** unless user explicitly asks |
 
 ### After answers
 
-1. Write decisions to the right `PROJECT/*` files (`OVERVIEW`, `AGENTS`, `DESIGN`) and `PROJECT/DOCUMENT/{feature}/` when building a feature
-2. Then proceed to scaffold and code per existing rules
+1. Write decisions to the right `project/*` files (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`) and `project/document/{feature}/` when building a feature
+2. Record answers in the active `project/task/` file Clarification log
+3. Then proceed per active mode guide
 
 ### When clarification can be skipped
 
 - The user already specified the detail in the current message or a prior turn
-- `PROJECT/*` already documents it and the task does not change it
+- `project/*` already documents it and the task does not change it
 - Truly trivial typo or format-only edits with zero behavioral or config impact
 
-## 3. Minimum App Requirements
+---
 
-Every project must address these four concerns. Runnable apps always live under `{root}/platforms/` (fixed name, always plural). Which child apps exist (`web`, `api`, `migration`, `db`, etc.) and where docker/deploy paths live are per-project — document them in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD).
+## 3. Task Before Build
 
-| Requirement | What every project must have | Examples only (not prescriptive) |
-|-------------|------------------------------|----------------------------------|
-| **App** | Application source code — frontend, backend, migration runner, or monolith | `platforms/web`, `platforms/api`, `src/` |
-| **Docker** | Every runnable platform app must be dockerizable (working container build) — path from scaffold or `platforms/<app>/docker/` when added manually | `platforms/web/docker/`, `platforms/api/Dockerfile` |
-| **Deploy / Build** | Build, export, compose, deployment, backup/restore | `deploy/`, `scripts/`, `ops/` |
-| **DB** | Database infrastructure, schema migrations, seeds, backup strategy | `platforms/db/`, `platforms/api/migrations/` or `platforms/api/prisma/` (migrations default in backend) |
+Create and maintain a **plan-mode** task file per [`instructions/TASK.md`](instructions/TASK.md) for every non-trivial user request.
 
-The **DB** requirement covers two separate concerns — do not conflate them:
+1. **Before** first meaningful code or config edit: create or open `project/task/{timestamp}_{task-slug}.md` with `Status: planning`
+2. **Draft** Approach, change-oriented steps (what/where/why per file), paths in scope, and Files expected to change
+3. **Confirm** — for large or ambiguous scope, present plan summary and wait for user approval (per section 2)
+4. **Execute** — set `Status: in_progress`; check off steps one at a time; update `Status` when blocked
+5. **After** work: set `Status: complete`; append `project/history/` entry linking back to the task file
 
-| Sub-concern | Purpose | Example paths |
-|-------------|---------|---------------|
-| **DB infra** | Run/build PostgreSQL (compose, version, volumes, init SQL) | `platforms/db/` |
-| **Migrations** | Schema changes and seeds | Inside backend by default (`platforms/api/migrations/`, `platforms/api/prisma/`, etc.); standalone `platforms/migration/` only when user explicitly requests it |
+Do not rewrite completed task files — append a new task or HISTORY entry to correct mistakes.
 
-Migrations do **not** belong in the DB infra folder. Document the exact migration path in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD). If using a standalone migration app, note the user request in `PROJECT/HISTORY/`.
+---
 
-### Platforms layout
+## 4. Testing Instructions
 
-Runnable apps always live under `{root}/platforms/` — **fixed name, always plural**, not derived from the project or app slug. Child folders (`web`, `api`, `migration`, etc.) are per-project — document them in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD):
-
-- `platforms/web`, `platforms/api`, `platforms/db`, etc. are **standalone applications** — each runnable on its own without depending on sibling folders or a root workspace
-- `platforms/migration/` is **optional** — only when the user explicitly requests a separate migration runner; otherwise migrations live in the backend app
-- Each app is **fully isolated**: its own dependencies, config, and secrets (e.g. `package.json` + `node_modules`, `.env` + `.env.example`, lockfile, or whatever that stack uses — not every app is Node/npm). Each app has its own `.env` inside its folder — never a shared root `.env` for app config
-- No assumed monorepo root workspace — do not require a single shared install at `{root}`
-- **Every** runnable app under `platforms/<app>/` must be dockerizable; if the scaffold includes Docker config, keep it and document the path — otherwise add container build files (default: `platforms/<app>/docker/`)
-- Stack-specific bootstrap, scaffolds, and package manager commands are defined per project in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-
-### Hard rules
-
-**Do:**
-- Verify all four requirements (app, docker, deploy/build, db) are covered before considering the project complete
-- Read exact paths, stack, ports, and naming from [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) — app subfolders under `platforms/` are per-project
-- Ensure every runnable `platforms/<app>/` can be built as a container
-- Prefer scaffold-provided Docker config; document actual Dockerfile path in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- When scaffold has no Docker, add `platforms/<app>/docker/Dockerfile` — co-located with the app, never a shared root `docker/` folder
-- Keep schema migrations inside the backend app unless the user explicitly requested a standalone migration runner
-- Export built images to `deploy/platforms/<app>/` (gitignored) — see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- Document the full repo tree in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-
-**Don't:**
-- Don't assume user-defined folder names for docker, deploy, etc. — but runnable apps always live under `platforms/`
-- Don't leave a runnable platform app without a working container build
-- Don't force `platforms/<app>/docker/` when the scaffold already provides Docker at a different path
-- Don't create a standalone `platforms/migration/` app unless the user explicitly asks for one
-- Don't hardcode tech stack or app subfolder layout in general docs
-- Don't commit `.tar` files, database backup dumps, or `.env`
-
-## 4. Dev Environment
-
-### Prerequisites
-
-See [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) for runtime, package manager, and dev commands for this project.
-
-### Environment variables
-
-- Each app under `platforms/` documents vars in its own `.env.example` (e.g. `platforms/api/.env.example`)
-- Copy to `.env` in the same app folder before running that app — never commit `.env`
-- Docker compose may reference per-app `env_file` paths — see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-
-## 5. Docker Conventions
-
-- **Every** runnable app under `platforms/<app>/` has container build config documented in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- **Default** when scaffold provides none: `platforms/<app>/docker/Dockerfile`, build context `platforms/<app>/`
-- **Scaffold-provided:** use the scaffold's Dockerfile/compose paths as-is; record them in PROJECT
-- Build context is the parent app folder (`platforms/<app>/`), not `{root}` — unless PROJECT documents otherwise for scaffold paths
-- Runtime orchestration compose lives in `deploy/` — see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- Wire services with explicit `depends_on` and healthchecks
-- Database must be healthy before dependent services run migrations
-- Named volumes and image tags — defined in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- Pass env vars via per-app `env_file` or `environment` in compose (paths per PROJECT)
-
-## 6. Build & Deployment
-
-Every production build follows a **three-phase pipeline**. Paths are defined in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD).
-
-| Phase | What | Where |
-|-------|------|-------|
-| **1. Build** | `docker build` per platform app | Dockerfile path per [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) (default: `platforms/<app>/docker/Dockerfile`, context `platforms/<app>/`) |
-| **2. Export** | `docker save` timestamped `.tar` + `latest.tar` | `deploy/platforms/<app>/` (gitignored) |
-| **3. Run** | `docker load` then `docker compose up` | `deploy/docker-compose.yml` — startup sequence via `depends_on` / healthchecks |
-
-Startup sequence (typical): db healthy → migrations complete → api → web — per PROJECT compose.
-
-### Build script behavior
-
-Build scripts (paths in PROJECT) must:
-
-1. Build each image from the Dockerfile path documented in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) for that app (default: `platforms/<app>/docker/Dockerfile`, context `platforms/<app>/`)
-2. Tag images per [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-3. Export timestamped `.tar` files to `deploy/platforms/<app>/`
-4. Write a `latest.tar` copy of the most recent export per app
-
-### Load on target server
-
-```bash
-docker load -i deploy/platforms/api/latest.tar
-docker load -i deploy/platforms/web/latest.tar
-docker load -i deploy/platforms/db/latest.tar
-docker compose -f deploy/docker-compose.yml up -d
-```
-
-### Agent rules
-
-- Timestamp all image exports for rollback
-- Never commit `.tar` files
-- Verify compose build after Dockerfile changes
-
-## 7. Backup & Restore
-
-Backup and restore scripts (paths in PROJECT) must:
-
-- Run database dump against the running db container
-- Write to a gitignored backup location — see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) for `{project}` slug and paths
-
-Restore scripts accept a backup file path, stop dependent services, restore, restart, and verify health.
-
-### Agent rules
-
-- Backup before schema migrations in production
-- Never commit backup files
-
-## 8. Testing Instructions
-
-- Run lint and test per app under `platforms/` — see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-- Run migrations against a test DB before integration tests
+- Run lint and test per app — commands in [`project/AGENTS.md`](project/AGENTS.md)
+- Run migrations against a test DB before integration tests (when DB in scope)
 - All tests green before merge
 - Add or update tests for code you change
-- Verify compose build after Docker or deploy changes
+- **Greenfield:** verify compose/build per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) after Docker or deploy changes
 
 ### Greenfield minimum
 
-When bootstrapping a new app per [`GREENFIELD.MD`](GREENFIELD.MD), do not mark complete without:
+When bootstrapping per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md), do not mark complete without:
 
-- API integration tests for each CRUD endpoint — happy path, `NOT_FOUND`, `VALIDATION_FAILED`
-- Lint + typecheck green per app (see [`CODE.MD`](CODE.MD) section 15)
-- Optional but recommended: one Playwright smoke test (login → create → delete)
+- Integration tests for critical endpoints/features
+- Lint + typecheck green per app (see [`instructions/CODE.md`](instructions/CODE.md) section 15)
+- Optional E2E smoke test when web is in scope
 
-CI: add `.github/workflows/ci.yml` at `{root}` when ready; document path in `PROJECT/AGENTS.MD`.
+CI: add `.github/workflows/ci.yml` at `{root}` when ready; document path in `project/AGENTS.md`.
 
-## 9. PR Instructions
+---
 
-- Title format: see [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD) — typically `[{project}] <Title>`
+## 5. PR Instructions
+
+- Title format: see [`project/AGENTS.md`](project/AGENTS.md) — typically `[{project}] <Title>`
 - Run lint and test before committing
-- Docker/deploy changes: verify compose build locally
-- DB schema changes: migration in backend path (default) or standalone migration app (only when user requested) + backup note in PR
-- New env vars: update the relevant `platforms/<app>/.env.example` and compose file (paths per PROJECT)
-- UI: comply with [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD)
-- Code: comply with [`CODE.MD`](CODE.MD)
-- Feature work: update `PROJECT/DOCUMENT/{feature}/` per [`DOCUMENT.MD`](DOCUMENT.MD) when applicable
-- AI changes: include `PROJECT/HISTORY/{timestamp}_{title}.md` in same commit
+- Docker/deploy changes: verify build locally per project docs
+- DB schema changes: migration in documented path + backup note in PR
+- New env vars: update relevant `.env.example` and compose/config files
+- UI: comply with [`project/DESIGN.md`](project/DESIGN.md)
+- Code: comply with [`instructions/CODE.md`](instructions/CODE.md)
+- Feature work: update `project/document/{feature}/` per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) when applicable
+- `project/` workflow files are local and gitignored — do not commit `project/history/`, `project/task/`, or `project/document/` entries
 
-## 10. Agent Checklist
+---
+
+## 6. System checklist
 
 Before starting:
 
-1. Read [`README.MD`](README.MD) and all `PROJECT/*` files
-2. Scan `PROJECT/HISTORY/` newest first
-3. Read [`CODE.MD`](CODE.MD) before writing code; [`PROJECT/DESIGN.MD`](PROJECT/DESIGN.MD) before UI work
-4. Unspecified decisions identified and resolved per section 2 (or user delegated to recommendations)?
-5. Answers recorded in `PROJECT/*` / `PROJECT/DOCUMENT/` before first `platforms/` code?
+1. Mode resolved per §0 (or recorded in `project/OVERVIEW.md`)?
+2. Read [`instructions/README.md`](instructions/README.md) and active mode guide
+3. Read local `project/*` if present; **brownfield:** run discovery if missing
+4. Scan `project/task/`, `project/history/`, `project/document/{feature}/`
+5. Read [`instructions/CODE.md`](instructions/CODE.md) before writing code; [`project/DESIGN.md`](project/DESIGN.md) before UI work
+6. Unspecified decisions resolved per section 2?
+7. Task file created or opened per section 3?
 
 During work:
 
-6. Confirm all four minimum requirements are covered (app, docker, deploy/build, db)
-7. Follow paths and stack exactly as defined in [`PROJECT/AGENTS.MD`](PROJECT/AGENTS.MD)
-8. New env vars → update paths listed in PROJECT
-9. Migration path is inside backend unless user explicitly opted into standalone `platforms/migration/`
+8. Follow paths and stack from [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md)
+9. **Greenfield:** four concerns per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md); **brownfield:** adapt existing conventions per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
+10. New env vars → update paths listed in project
+11. Task file steps checked off and `Status` kept current
 
 After work:
 
-10. Followed [`CODE.MD`](CODE.MD) and [`DESIGN.MD`](DESIGN.MD) — block comments, scaffold/package/auth rules, API codes + scenarios, entity/CRUD, component library, mobile-first?
-11. Post-edit verification per [`CODE.MD`](CODE.MD) section 15 — zero errors on all changed files/apps?
-12. [`PROJECT/DOCUMENT/`](PROJECT/DOCUMENT/) updated for feature work, or consciously skipped per [`DOCUMENT.MD`](DOCUMENT.MD)?
-13. Append `PROJECT/HISTORY/{timestamp}_{title}.md` per [`HISTORY.MD`](HISTORY.MD)
-14. Update `PROJECT/*` only if project requirements changed — never edit general rule files unless user asks
-15. Never commit `.env`, `.tar` files, or backup dumps
+12. Followed [`instructions/CODE.md`](instructions/CODE.md) (block comments + inline journal per §1–2) and [`instructions/DESIGN.md`](instructions/DESIGN.md) on touched code?
+13. Post-edit verification per [`instructions/CODE.md`](instructions/CODE.md) section 15 — zero errors on changed files/apps?
+14. [`project/document/`](project/document/) updated for feature work, or consciously skipped per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)?
+15. Task file `Status: complete` with verification checklist done?
+16. Append `project/history/{timestamp}_{title}.md` per [`instructions/HISTORY.md`](instructions/HISTORY.md)
+17. Update `project/*` only if project requirements changed — never edit `instructions/` templates unless user asks
+18. Never commit `.env`, `.tar` files, or backup dumps
 
-### Greenfield tasks only
+### Greenfield bootstrap only
 
-When bootstrapping per [`GREENFIELD.MD`](GREENFIELD.MD), also verify Definition of Done (GREENFIELD section 5):
+When bootstrapping per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md), also verify Definition of Done (GREENFIELD §5):
 
-16. `deploy/docker-compose.yml` exists in the **built project** and `docker compose up` — all services healthy?
-17. golang-migrate applied; dev seeds load?
-18. Auth and full CRUD work at mobile viewport?
-19. `deploy/scripts/build.sh` and `backup-db.sh` exist in the project and run successfully?
-20. Root `README.md` (user-facing) created from [`PROJECT/README.template.md`](PROJECT/README.template.md)?
+19. Deploy path works — services healthy
+20. Migrations and seeds (when applicable)
+21. MVP features work; auth when required
+22. Build/backup scripts (when using GREENFIELD pipeline)
+23. Root `README.md` per GREENFIELD §7 (or equivalent) — user-facing app description
+
+### Brownfield onboarding only
+
+When adopting an existing repo per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md), verify BROWNFIELD §5 onboarding gates.
