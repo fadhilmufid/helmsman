@@ -1,15 +1,16 @@
 # Instruction Pack
 
-Reusable **agent guidance** for software projects — greenfield (new apps) and brownfield (existing codebases). Agents default to **production-grade** delivery unless you explicitly ask for MVP. Copy this folder into your repo root and point **agents** at **`AGENTS.md`**.
+Reusable **agent guidance** — one **integrated system**. Agents read [`AGENTS.md`](AGENTS.md) then [`instructions/RULES.md`](instructions/RULES.md). Default: **production-grade** unless you ask for MVP.
 
 ## What this is
 
 A structured instruction set that helps **agents**:
 
-- **Plan** work with task files and clarification before coding
-- **Build** new apps with consistent layout, Docker, and deploy patterns
+- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding
+- **Build** greenfield apps with `platforms/` (postgresql, minio, web, api, …) and E2E Docker verify
 - **Understand** existing repos through discovery and local documentation
 - **Document** features, changes, and project config in a local `project/` workspace
+- **Write code** per [`instructions/CODE.md`](instructions/CODE.md) — all languages with comments; agents **re-read CODE.md at every coding task**
 
 ## Who it's for
 
@@ -26,8 +27,10 @@ Developers using **Cursor** (or similar tools) who want consistent **agent** beh
 
 | Path | Purpose |
 |------|---------|
-| [`AGENTS.md`](AGENTS.md) | **Agent entry gate** — mode, workflow, read order |
-| [`instructions/`](instructions/) | Rule templates (CODE, DESIGN, GREENFIELD, etc.) |
+| [`AGENTS.md`](AGENTS.md) | **Agent entry** — mode, gates A–F |
+| [`instructions/RULES.md`](instructions/RULES.md) | **Integrated rulebook** — read second |
+| [`instructions/`](instructions/) | Domain templates (PLAN, TASK, CODE, …) |
+| [`project/plans/`](project/plans/) | Blueprint plans (gitignored except README) |
 | [`project/`](project/) | Local agent workspace — config, tasks, histories, feature docs (mostly gitignored) |
 | [`other-references/`](other-references/) | Optional user reference dumps (gitignored except README) |
 

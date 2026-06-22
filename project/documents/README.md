@@ -4,6 +4,8 @@ Local **feature reference documentation** for this project. Rules: [`DOCUMENT.md
 
 **Required before application code** — per AGENTS §0.5 Gate C and DOCUMENT.md.
 
+For UI depth (tokens, components, screens), see [`project/design/`](../design/). Platform inventory lives in [`project/plans/`](../plans/) and `project/INFRASTRUCTURE.md`.
+
 ## Folder layout
 
 ```
@@ -21,9 +23,9 @@ project/documents/
 
 ## Distinction from other layers
 
-| | tasks | documents | histories |
-|---|-------|-----------|-----------|
-| **Purpose** | Step plan for one request | Persistent feature specs | Change log after work |
+| | plans | tasks | documents | histories | design |
+|---|-------|-------|-----------|-----------|--------|
+| **Purpose** | Blueprint (platforms, E2E) | **Exhaustive standalone** step-by-step execution | Feature specs | Change log | Design system |
 
 ## Git
 

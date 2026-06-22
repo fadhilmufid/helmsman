@@ -1,8 +1,8 @@
 # Brownfield Guide
 
-**Read-only template** — how to **understand**, **document**, and **safely change** an **existing** codebase when this instruction set is dropped into a repo that already has application code.
+**Integration:** Discovery feeds `project/plans/` (Gate D) then `project/tasks/` (Gate E). Platform paths may differ from greenfield — document actual layout. See [`RULES.md`](RULES.md).
 
-Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md) section 0 (mode gate), [`GREENFIELD.md`](GREENFIELD.md), [`TASK.md`](TASK.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`DOCUMENT.md`](DOCUMENT.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`HISTORY.md`](HISTORY.md).
+**Read-only template** — understand, document, and safely change an **existing** codebase.
 
 For building a **new** app from scratch, use [`GREENFIELD.md`](GREENFIELD.md) instead.
 
@@ -14,19 +14,19 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 
 | Rule | Detail |
 |------|--------|
-| **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §0.5 — read-first, documents, task, then code |
+| **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §0.5 — read-first, documents/design, plan, exhaustive task, then code |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |
 | **Adapt to conventions** | Follow existing folder layout, stack, and patterns unless the user asks to change them |
 | **No silent restructure** | Do not auto-scaffold `platforms/` or `deploy/` unless the user explicitly wants greenfield-style layout |
-| **Plan before change** | Non-trivial work uses [`TASK.md`](TASK.md); feature specs use [`DOCUMENT.md`](DOCUMENT.md) |
-| **Production on touched work** | New or changed code, UI, and infra meet production bar per AGENTS §2.5 — adapt legacy patterns, don't ship stubs on surfaces you touch |
+| **Plan before change** | Non-trivial work uses [`PLAN.md`](PLAN.md) (`project/plans/`, Gate D) and [`TASK.md`](TASK.md) (`project/tasks/`, Gate E); feature specs use [`DOCUMENT.md`](DOCUMENT.md) |
+| **Production on touched work** | New or changed code, UI, and infra meet production bar per [`RULES.md`](RULES.md) §5 — adapt legacy patterns, don't ship stubs on surfaces you touch |
 
 ---
 
 ## 1. Discovery workflow
 
-Run discovery **before** meaningful code or config edits when `project/*` is missing or stale. Discovery satisfies AGENTS Gate A — it does **not** replace Gates C–D (documents and task before code).
+Run discovery **before** meaningful code or config edits when `project/*` is missing or stale. Discovery satisfies AGENTS Gate A — it does **not** replace Gates C–E (documents/design, blueprint plan, exhaustive task) before code.
 
 ### 1.1 Scan order (adapt to repo)
 
@@ -67,7 +67,7 @@ Write or **merge** into local config files (gitignored). Do not overwrite existi
 | `project/OVERVIEW.md` | Inferred purpose, slug (or repo name), scope notes, known gaps |
 | `project/INFRASTRUCTURE.md` | **Actual** paths: apps, docker, deploy, db, migrations, ports, env file locations |
 | `project/AGENTS.md` | Discovered dev, lint, test, and CI commands — verify they run |
-| `project/DESIGN.md` | Existing UI library, theme, breakpoints — or note that UI is N/A |
+| `project/DESIGN.md` | Design index — existing UI library, theme, breakpoints; links to `project/design/` — or note that UI is N/A |
 
 ### `project/INFRASTRUCTURE.md` in brownfield
 
@@ -82,17 +82,20 @@ Record the **real** layout. Examples (not prescriptions):
 
 Include whatever containerization, deploy, and data tooling **already exists** — or note absence as a gap.
 
+When the repo has a web UI, discovery also populates **`project/design/`** from existing styles, components, and screens per [`DESIGN.md`](DESIGN.md) §1 — update only files that match what exists; do not invent a new design system unless the user requests alignment.
+
 ---
 
 ## 3. Document before change
 
-**Hard gate:** Non-trivial implementation requires `project/documents/{feature}/` (when building or changing features) and `project/tasks/` **before** application edits — per AGENTS §0.5.
+**Hard gate:** Non-trivial work requires `project/plans/` (Gate D), `project/tasks/` (Gate E), and `project/documents/{feature}/` when building features — per AGENTS §0.5 and [`RULES.md`](RULES.md).
 
 | Need | Use |
 |------|-----|
-| Non-trivial implementation | [`TASK.md`](TASK.md) — plan-mode task in `project/tasks/` |
-| New or changed feature behavior | [`DOCUMENT.md`](DOCUMENT.md) — `project/documents/{feature-slug}/` |
-| After work completes | [`HISTORY.md`](HISTORY.md) — `project/histories/` entry |
+| Blueprint | [`PLAN.md`](PLAN.md) — `project/plans/` |
+| Exhaustive standalone steps | [`TASK.md`](TASK.md) — `project/tasks/` |
+| Feature behavior | [`DOCUMENT.md`](DOCUMENT.md) — `project/documents/` |
+| After work | [`HISTORY.md`](HISTORY.md) — link plan, task, E2E results |
 
 Discovery findings feed:
 
@@ -113,7 +116,7 @@ when documenting architecture or onboarding.
 
 ### Align (only when user requests)
 
-Gradually apply [`CODE.md`](CODE.md) and [`DESIGN.md`](DESIGN.md) conventions on **new or touched** code — e.g. API `code` field, UUID PKs, mobile-first UI. Never silent mass refactors.
+Gradually apply [`CODE.md`](CODE.md) and [`DESIGN.md`](DESIGN.md) conventions on **new or touched** code — **§1–2 comment discipline applies in any language** (§0), even when legacy files lack it; plus API `code` field, UUID PKs, mobile-first UI. Re-read CODE.md at each coding task start per [`RULES.md`](RULES.md) §8. Never silent mass refactors.
 
 ### Do not
 
@@ -132,7 +135,7 @@ Onboarding is complete when **all** pass:
 | 1 | `project/INFRASTRUCTURE.md` reflects the **actual** repo layout and infra — note when discovered infra is **not** production-ready (missing health, backup, env examples) as a documented gap |
 | 2 | `project/AGENTS.md` lists dev/lint/test commands that were verified |
 | 3 | `project/OVERVIEW.md` states purpose, slug, and notable gaps or risks |
-| 4 | `project/DESIGN.md` exists or N/A is explicitly noted |
+| 4 | `project/DESIGN.md` index exists; `project/design/` populated from existing UI or N/A is explicitly noted |
 | 5 | Onboarding task (if used) is `Status: complete` |
 | 6 | `project/histories/{timestamp}_brownfield-onboarding.md` appended — links task file |
 
@@ -148,8 +151,8 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 - Pass AGENTS §0.5 execution gates before non-trivial application edits
 - Run discovery when `project/*` is empty or contradicts the repo
 - Record actual paths in `project/INFRASTRUCTURE.md`
-- Create `project/documents/{feature}/` and a task plan before non-trivial edits
-- Build at full production quality per AGENTS §2.5 — not bare minimum
+- Create `project/plans/`, one exhaustive standalone `project/tasks/` file, and `project/documents/{feature}/` before non-trivial edits
+- Build at full production quality per [`RULES.md`](RULES.md) §5 — not bare minimum
 - Update `project/documents/` when building or significantly changing features
 
 **Don't:**

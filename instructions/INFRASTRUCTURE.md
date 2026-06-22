@@ -1,5 +1,7 @@
 # Infrastructure
 
+**Integration:** Doc-layer rules connect via [`RULES.md`](RULES.md). Platform model (service + application) in RULES §3 and [`GREENFIELD.md`](GREENFIELD.md) §1. Blueprints in `project/plans/` ([`PLAN.md`](PLAN.md)).
+
 Documentation architecture for this instruction set. **Read-only template** — how to organize project docs and what to record in [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md).
 
 **Mode-specific technical rules:**
@@ -15,7 +17,7 @@ UI design system rules remain in [`DESIGN.md`](DESIGN.md) — not duplicated her
 
 ## 0. Production-grade infrastructure (hard default)
 
-Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production deployability**, not "works on my machine" only.
+Per [`RULES.md`](RULES.md) §5 — infrastructure targets **production deployability**, not "works on my machine" only.
 
 | Rule | Detail |
 |------|--------|
@@ -39,6 +41,8 @@ Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production de
 ├── AGENTS.md              ← agent gate
 ├── instructions/          ← rule templates (this folder)
 │   ├── README.md
+│   ├── RULES.md
+│   ├── PLAN.md
 │   ├── INFRASTRUCTURE.md
 │   ├── GREENFIELD.md
 │   ├── BROWNFIELD.md
@@ -55,6 +59,8 @@ Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production de
     ├── DESIGN.md          ← gitignored
     ├── histories/         ← README.md tracked; entries gitignored
     ├── documents/        ← README.md tracked; feature folders gitignored
+    ├── design/           ← README.md tracked; design specs gitignored
+    ├── plans/            ← README.md tracked; blueprint plans gitignored
     └── tasks/            ← README.md tracked; entries gitignored
 ```
 
@@ -62,8 +68,8 @@ Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production de
 
 | Kind | Convention | Examples |
 |------|------------|----------|
-| Folders | lowercase | `project`, `histories`, `documents`, `tasks`, `other-references` |
-| App folders (greenfield) | lowercase kebab-case under `platforms/` | `web`, `orders-api`, `app` — per [`GREENFIELD.md`](GREENFIELD.md) |
+| Folders | lowercase | `project`, `histories`, `documents`, `tasks`, `plans`, `design`, `other-references` |
+| App folders (greenfield) | lowercase kebab-case under `platforms/` | `web`, `api`, `postgresql`, `minio` — per [`GREENFIELD.md`](GREENFIELD.md) |
 | App folders (brownfield) | whatever the repo uses | `src/`, `backend/`, `apps/web/` — per [`BROWNFIELD.md`](BROWNFIELD.md) |
 | Instruction templates | `CAPITAL.md` in `instructions/` | `instructions/CODE.md`, `instructions/TASK.md` |
 | Agent gate | root `AGENTS.md` | `AGENTS.md` |
@@ -77,7 +83,9 @@ Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production de
 | `other-references/` | `README.md` only | User-provided reference dumps (PDFs, specs, notes) |
 | `project/histories/` | `README.md` only | Change log entries |
 | `project/documents/` | `README.md` only | Feature reference specs |
-| `project/tasks/` | `README.md` only | Step-by-step task plans |
+| `project/design/` | `README.md` only | Detailed design system specs |
+| `project/plans/` | `README.md` only | Blueprint plans (platform inventory, E2E) |
+| `project/tasks/` | `README.md` only | Exhaustive standalone task plans |
 | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md`, `project/DESIGN.md` | None (gitignored) | Per-project config agents create locally |
 
 Agents **read and write** all `project/` paths during work. Instruction templates in `instructions/` and root `AGENTS.md` are version-controlled.
@@ -88,7 +96,7 @@ Agents **read and write** all `project/` paths during work. Instruction template
 |------|----------|-----|
 | Instruction templates | `instructions/*.md` | Tracked — edit only when user requests template updates |
 | Agent gate | `AGENTS.md` (root) | Tracked |
-| Folder READMEs | `other-references/README.md`, `project/histories|documents|tasks/README.md`, `instructions/README.md` | Tracked |
+| Folder READMEs | `other-references/README.md`, `project/histories|documents|tasks|plans|design/README.md`, `instructions/README.md` | Tracked |
 | Project workspace | All other `project/` and `other-references/` content | Gitignored — local only |
 
 ### File naming convention
@@ -101,16 +109,16 @@ Rule templates and project config files use **`CAPITAL.md`**: uppercase basename
 | Agent gate (root) | `AGENTS.md` |
 | User README (root) | `README.md` |
 | Project config (`project/`) | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md`, `project/DESIGN.md` |
-| Generated entries | `project/histories/{timestamp}_{slug}.md`, `project/tasks/{timestamp}_{slug}.md` |
+| Generated entries | `project/histories/{timestamp}_{slug}.md`, `project/plans/{timestamp}_{slug}.md`, `project/tasks/{timestamp}_{slug}.md` |
 
 ### Project config files
 
 | File | Purpose |
 |------|---------|
 | `project/OVERVIEW.md` | Mode (greenfield/brownfield), slug, purpose, delivery scope, gaps |
-| `project/INFRASTRUCTURE.md` | **Project-specific map**: apps, paths, docker, deploy, db, migrations, build/backup |
+| `project/INFRASTRUCTURE.md` | **Project-specific map**: platform inventory (service + app), docker, deploy, migrations, build/backup |
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
-| `project/DESIGN.md` | UI tokens, component library, breakpoints |
+| `project/DESIGN.md` | UI design index — links to `project/design/` |
 
 Write **mode** to `project/OVERVIEW.md` first — from [`../AGENTS.md`](../AGENTS.md) §0 clarify (greenfield) or BROWNFIELD discovery (brownfield).
 
@@ -125,22 +133,26 @@ Write **mode** to `project/OVERVIEW.md` first — from [`../AGENTS.md`](../AGENT
 
 | Layer | Path | Timing | Purpose |
 |-------|------|--------|---------|
-| **TASK** | `project/tasks/{timestamp}_{task-slug}.md` | Before/during a user request | Executable step plan |
-| **DOCUMENT** | `project/documents/{feature-slug}/` | Before/during feature work | Persistent feature specs |
+| **PLAN** | `project/plans/{timestamp}_{slug}.md` | After specs, before TASK (Gate D) | Blueprint: platforms, phases, E2E matrix |
+| **TASK** | `project/tasks/{timestamp}_{task-slug}.md` | After plan (Gate E) | File-level execution steps |
+| **DOCUMENT** | `project/documents/{feature-slug}/` | Before code (Gate C) | Persistent feature specs |
+| **DESIGN** | `project/design/*.md` (+ optional `screens/`) | Before UI code | Design system specs |
 | **HISTORY** | `project/histories/{timestamp}_{title}.md` | After work | Change log |
 
-See [`TASK.md`](TASK.md), [`DOCUMENT.md`](DOCUMENT.md), and [`HISTORY.md`](HISTORY.md) for rules on each layer.
+See [`PLAN.md`](PLAN.md), [`TASK.md`](TASK.md), [`DOCUMENT.md`](DOCUMENT.md), and [`HISTORY.md`](HISTORY.md).
 
 ### Read/write matrix
 
 | Action | Where |
 |--------|-------|
+| Create/update blueprint plan | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) |
 | Create/update task plan | `project/tasks/{timestamp}_{task-slug}.md` per [`TASK.md`](TASK.md) |
 | Append change log entry | `project/histories/{timestamp}_{title}.md` per [`HISTORY.md`](HISTORY.md) |
 | Create or update feature documentation | `project/documents/{feature-slug}/` per [`DOCUMENT.md`](DOCUMENT.md) |
+| Create or update design system specs | `project/design/` per [`DESIGN.md`](DESIGN.md); index in `project/DESIGN.md` |
 | Update app paths, Docker, deploy, db, migrations, build/backup | `project/INFRASTRUCTURE.md` |
 | Update dev commands, lint/test, PR/CI | `project/AGENTS.md` |
-| Update colors, UI tokens, components | `project/DESIGN.md` |
+| Update design index (tokens cheat sheet, links) | `project/DESIGN.md` |
 | Update project purpose and goals | `project/OVERVIEW.md` |
 | Update instruction templates | `instructions/*.md` — only when user explicitly requests |
 
@@ -152,8 +164,8 @@ Every software project involves these concerns. **This tier does not prescribe f
 
 | Concern | What agents document |
 |---------|---------------------|
-| **App** | Where application source lives; runnable units; stack per unit |
-| **Containerization** | How apps are built and run in containers (if applicable) |
+| **App** | Application platforms under `platforms/` (e.g. `web`, `api`) |
+| **Containerization** | Service platforms (`postgresql`, `minio`, …) + app Dockerfiles |
 | **Deploy / Build** | How artifacts are built, composed, deployed, and rolled back |
 | **Data** | Database or persistence; migrations; seeds; backup strategy |
 
@@ -171,7 +183,7 @@ Top-level [`instructions/INFRASTRUCTURE.md`](INFRASTRUCTURE.md) explains **how t
 1. AGENTS §0.5 execution gates understood and followed?
 2. Mode resolved per [`../AGENTS.md`](../AGENTS.md) §0 (greenfield vs brownfield)?
 3. `project/INFRASTRUCTURE.md` populated from clarify (greenfield) or discovery (brownfield)?
-4. Feature work uses `project/documents/` **before** code; tasks use `project/tasks/` **before** code; changes logged in `project/histories/`?
+4. Specs (`documents/`, `design/`) → plan → task → code; E2E verify per [`RULES.md`](RULES.md) §6; changes in `project/histories/`?
 5. Greenfield technical gates verified per [`GREENFIELD.md`](GREENFIELD.md) when building new apps?
 6. Brownfield onboarding gates verified per [`BROWNFIELD.md`](BROWNFIELD.md) when adopting existing repos?
 7. Infra documented and production-ready (health, backup, env examples) when in scope?

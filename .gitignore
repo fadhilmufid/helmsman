@@ -7,9 +7,15 @@ project/**
 !project/histories/
 !project/documents/
 !project/tasks/
+!project/design/
+!project/plans/
 project/histories/**
 !project/histories/README.md
 project/documents/**
 !project/documents/README.md
 project/tasks/**
 !project/tasks/README.md
+project/design/**
+!project/design/README.md
+project/plans/**
+!project/plans/README.md

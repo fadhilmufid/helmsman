@@ -1,12 +1,12 @@
 # Feature Documentation
 
-Rules for living feature reference documentation. **Read-only template** — content lives in [`project/documents/`](project/documents/).
+**Integration:** Specs feed Gate D plans and Gate E tasks (Plan ref + Spec ref on every step). UI detail may also live in `project/design/`. See [`RULES.md`](RULES.md) §4.
 
-Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`TASK.md`](TASK.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`HISTORY.md`](HISTORY.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
+Rules for feature reference documentation in [`project/documents/`](project/documents/). **Read-only template**.
 
 ## 0. Production-grade specs (hard default)
 
-Per [`AGENTS.md`](../AGENTS.md) §2.5 — feature docs define **production-ready behavior**, not happy-path sketches that justify stubs.
+Per [`RULES.md`](RULES.md) §5 — feature docs define **production-ready behavior**, not happy-path sketches.
 
 | Rule | Detail |
 |------|--------|
@@ -23,9 +23,9 @@ Living **feature reference documentation** — distinct from other project doc l
 
 | | TASK | DOCUMENT | HISTORY |
 |---|------|----------|---------|
-| **What** | Step-by-step plan for this request | Feature specs and reference docs | Chronological change log |
+| **What** | Exhaustive standalone execution plan | Feature specs and reference docs | Chronological change log |
 | **When** | Before/during a user request | When building or updating a feature | After work completes |
-| **Shape** | One file per task | One folder per feature, many doc files | One file per change event |
+| **Shape** | One file per task — exhaustive, one file per request | One folder per feature, many doc files | One file per change event |
 
 - **Agent-readable reference** — agents read feature docs before and during implementation
 - **Evolves with the app** — update docs as the feature is built, not only at the end
@@ -65,7 +65,7 @@ Use these when applicable — add others with full descriptive names when useful
 | `technical-documentation.md` | Implementation overview, data model, dependencies |
 | `system-design-document.md` | Architecture, components, integration points |
 | `api-specification-document.md` | Endpoints, request/response shapes; every success and error **code**, HTTP status, and frontend scenario (Alert / redirect / modal) |
-| `user-interface-specification-document.md` | Screens, states, interactions, design notes |
+| `user-interface-specification-document.md` | Screens, states, interactions, design notes — screen-level visual detail may also live in `project/design/screens/`; must not contradict |
 
 **Never** use abbreviated filenames such as `brd.md`, `fsd.md`, or `bsd.md`.
 
@@ -104,7 +104,7 @@ See [`GREENFIELD.md`](GREENFIELD.md) Phase A.5.
 | CRUD / entity management feature | functional-specification + user-interface-specification + technical-documentation + api-specification — list all pages, API endpoints, UUID + soft-delete schema **before** coding |
 
 3. **Create or update** relevant files **before implementation begins** (draft status OK) and **as the feature is built** — docs evolve with decisions, not only at the end
-4. **Cross-link** — HISTORY entries should reference `project/documents/{feature}/` paths when applicable; TASK files should reference DOCUMENT paths in Context read and Related
+4. **Cross-link** — PLAN platform inventory references `technical-documentation.md`; TASK/HISTORY link `project/plans/` and `project/documents/`; UI in `project/design/screens/` or `user-interface-specification-document.md` — must not contradict
 
 **Optional to skip** for trivial changes with zero spec impact (same bar as HISTORY optional skip).
 

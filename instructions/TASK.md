@@ -1,38 +1,44 @@
 # Task Plans
 
-Rules for **plan-mode** task files — the instruction-set equivalent of Cursor plan mode. **Read-only template** — plans live in [`project/tasks/`](project/tasks/).
+**Integration:** TASK is Gate E — expands Gate D blueprint ([`PLAN.md`](PLAN.md)). Every implementation step needs **Plan ref** + **Spec ref** + **Code ref**. Re-read [`CODE.md`](CODE.md) at task start per [`RULES.md`](RULES.md) §8.
 
-Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`HISTORY.md`](HISTORY.md), [`DOCUMENT.md`](DOCUMENT.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
+Rules for **exhaustive standalone** task files in [`project/tasks/`](../project/tasks/). One task per request — unlimited steps, no parent/child split. **Read-only template**.
+
+Related: [`RULES.md`](RULES.md), [`PLAN.md`](PLAN.md), [`../AGENTS.md`](../AGENTS.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`HISTORY.md`](HISTORY.md), [`DOCUMENT.md`](DOCUMENT.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
 
 ## 1. Purpose
 
 Forward-looking **change plan** for a single user request — distinct from other project doc layers:
 
-| | TASK | DOCUMENT | HISTORY |
-|---|------|----------|---------|
-| **What** | Step-by-step plan: what to change, where, why | Feature specs and reference docs | Chronological change log |
-| **When** | Before and during work | Before/during feature work | After work completes |
-| **Shape** | One file per task | One folder per feature, many doc files | One file per change event |
+| | PLAN | TASK | DOCUMENT | HISTORY |
+|---|------|------|----------|---------|
+| **What** | Blueprint: platforms, phases, E2E | Exhaustive standalone execution steps | Feature specs | Change log |
+| **When** | Gate D | Gate E | Gate C | After Gate F |
+| **Shape** | One file per request | **One standalone file** — exhaustive step list | Folder per feature | One file per event |
 
-### Plan mode vs execution
+### Blueprint vs task vs execution
 
-| | Plan mode (TASK) | Execution (agent) |
-|---|------------------|-------------------|
-| **When** | Before first meaningful code or config edit | After plan is drafted (user confirms if needed) |
-| **Output** | Reviewable plan in `project/tasks/` | Code, config, local history |
-| **Steps** | What **will** change | Check off steps as done |
+| | PLAN (`project/plans/`) | TASK (`project/tasks/`) | Execution |
+|---|-------------------------|-------------------------|-----------|
+| **When** | Gate D — after specs | Gate E — after plan | After TASK `in_progress` |
+| **Output** | Platform inventory, phases, E2E matrix | **Exhaustive** file-level steps (no step ceiling) | Code, config, history |
+| **Granularity** | Phases and platforms | One deliverable per step — as many steps as needed | Check off TASK steps |
 
-- Task file = **the plan** the user can read and correct before work proceeds
-- `Status: planning` until Approach and steps are written; `in_progress` only when executing
+- TASK file = **standalone exhaustive execution plan** derived from Gate D blueprint — **one file per user request**
+- Spend Gate E drafting **maximum detail** — 50, 100, or 200+ steps is expected for large bootstrap; more steps is better
+- `Status: planning` until steps are written; `in_progress` only after Gates A–D
 - **Change-oriented steps** — every step names files/paths and describes the change, not vague goals
 - **Ask when blocked** — one batch with **Recommended:** default per [`AGENTS.md`](../AGENTS.md) section 2
 
-## 1.5 Plan step format (required)
+## 1.5 Task step format (required)
 
 Each step must be **change-oriented**:
 
 ```markdown
-1. [ ] **{path/from/project/INFRASTRUCTURE.md}** — {what to change and why}
+1. [ ] **{path}** — {what to change and why}
+   - Plan ref: project/plans/...#{section}
+   - Spec ref: project/documents/... or project/design/...
+   - Code ref: instructions/CODE.md §1-2 (always on app source); §8 if API; §11 if CRUD; §9 if auth
    - Before: {current behavior or "new file"}
    - After: {target behavior}
    - Verify: {command or check}
@@ -44,26 +50,82 @@ Each step must be **change-oriented**:
 
 **Bad:** "Implement delete API"
 
-Group steps by phase when helpful: Clarify → Docs → Schema → API → UI → Infra → Verify.
-
 List paths in scope from `project/INFRASTRUCTURE.md` (e.g. `platforms/api/` greenfield, or `backend/` brownfield).
 
 ## 1.6 Execution gates (hard STOP)
 
-Mirror [`AGENTS.md`](../AGENTS.md) §0.5. The task file is the audit trail.
+Mirror [`AGENTS.md`](../AGENTS.md) §0.5 and [`RULES.md`](RULES.md) §2.
 
 | Forbidden until gate passes | Requirement |
 |----------------------------|-------------|
-| `Status: in_progress` | Gate A — Context read lists **every** instruction file and project file read (not empty) |
-| `Status: in_progress` | Gate C — `project/documents/{feature}/` exists with required files for feature/bootstrap work |
-| `Status: in_progress` | Approach and change-oriented steps drafted |
-| Any application code edit | Gates A–D complete; user confirmed plan for greenfield bootstrap or new-app creation |
+| Creating TASK file | Gate D — `project/plans/{slug}.md` exists with platform inventory and E2E matrix |
+| `Status: in_progress` | Gate A — Context read lists every file read (not empty) |
+| `Status: in_progress` | Gate C — documents + design (when UI) complete |
+| `Status: in_progress` | Coding task: **re-read `instructions/CODE.md`** for scope; sections listed in Context read ([`RULES.md`](RULES.md) §8) |
+| `Status: in_progress` | Plan ref + spec ref + code ref (on app source steps); §1.7 granularity |
+| Marking application-source step complete | Touched file passes CODE §1–2 (block comment + inline journal) |
+| `Status: in_progress` | **Files expected to change** table matches implementation steps 1:1 (§1.8); exhaustive scope covered |
+| Any application code edit | Gates A–D complete; user confirmed for bootstrap/new apps |
 
 **User confirm required** for greenfield bootstrap and any request that creates new apps — not only when scope is "large or ambiguous."
 
+## 1.7 Step granularity (hard default)
+
+**One step = one deliverable** — a single file, migration, route, page, component, or compose service. Not a folder wildcard.
+
+| Rule | Detail |
+|------|--------|
+| **Forbidden** | `all API routes`, `Drive UI components`, `pages (drive, docs, auth)`, paths ending in `/**` |
+| **Spec ref required** | Every step links `project/documents/...` or `project/design/...` |
+| **Plan ref required** | Every step links a section in `project/plans/...` |
+| **Code ref required** | Every step that touches application source links `instructions/CODE.md` sections |
+| **Bootstrap minimum** | Greenfield bootstrap must list **every** planned file/route/page/component/platform slug as its own step in **this task file** |
+| **Entity coverage** | Each DB model/migration, API route, page, and shared component → own step |
+
+**Bad:**
+
+```markdown
+6. [ ] **platforms/kardus/src/app/api/** — all API routes
+7. [ ] **platforms/kardus/src/components/** — Drive UI components
+```
+
+**Good:**
+
+```markdown
+6. [ ] **platforms/kardus/src/app/api/files/route.ts** — GET list, POST upload
+   - Plan ref: project/plans/20260622_bootstrap-kardus.md#phase-api
+   - Spec ref: project/documents/kardus-drive/api-specification-document.md
+   - Code ref: instructions/CODE.md §1-2, §8
+   - Before: new file
+   - After: paginated list + multipart upload handler
+   - Verify: curl + integration test per project/AGENTS.md
+```
+
+Group steps by phase: Clarify → Docs → Design → **Service platforms** → Apps → Wire compose → **E2E verify** — all inside **one task file**.
+
+## 1.8 Exhaustive task (hard default)
+
+**One standalone task with as many steps as needed** — never split because the list is long.
+
+| Rule | Detail |
+|------|--------|
+| **Default** | Single `project/tasks/{timestamp}_{slug}.md` covering the **full** scope of the user request |
+| **Planning time** | Over-specify steps during `Status: planning` — agents should enumerate every deliverable, not summarize |
+| **Derive from** | Plan platform inventory + `project/documents/` + `project/design/` + **Files expected to change** table |
+| **No step ceiling** | Step count is not a reason to split; add more steps to the same file |
+| **Coverage** | Every row in **Files expected to change** must have a matching implementation step (or justify merges in Decisions) |
+| **Phases** | Group steps by phase inside one file — do not create separate task files per phase |
+| **Forbidden** | Parent/child task files; splitting at N steps; folder-wildcard steps; "implement later" placeholders |
+
+### Standalone only
+
+- One `project/tasks/{timestamp}_{slug}.md` per user request — update in-progress file instead of duplicating
+- Never `parent`, `child`, or `-phase-` task filenames
+- Huge scope → more steps in the **same file**, not a new task file
+
 ## 2. When to Create a Task File
 
-**Required** for any non-trivial user request that will touch:
+**Required** after Gate D plan exists for any non-trivial request that will touch:
 
 - Application source (paths from `project/INFRASTRUCTURE.md`)
 - Deploy, build, or container config (when applicable)
@@ -105,15 +167,19 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 - **Timestamp:** {ISO-8601 datetime matching filename}
 - **Status:** planning | blocked | in_progress | complete | cancelled
+- **Plan ref:** project/plans/{timestamp}_{slug}.md
 - **User request:** {verbatim or summary}
 - **Scope:** {apps/paths from project/INFRASTRUCTURE.md} | docker | deploy | docs | document | task | multi
 - **Paths in scope:** `{path}/`, ... (from `project/INFRASTRUCTURE.md`)
 
 ## Context read
 
-- `instructions/README.md`, active mode guide (GREENFIELD or BROWNFIELD), `INFRASTRUCTURE.md`, `TASK.md`, `CODE.md`, `DESIGN.md`, `HISTORY.md`, `DOCUMENT.md` — all read
+- `instructions/CODE.md` — **re-read §{list} for this task** (required when touching application source; §1–2 always)
+- `instructions/RULES.md`, `PLAN.md`, `README.md`, active mode guide, `INFRASTRUCTURE.md`, `TASK.md`, `DESIGN.md`, `HISTORY.md`, `DOCUMENT.md` — all read
+- `project/plans/{slug}.md` — {plan read; created before this task}
 - `other-references/` — {entries read, or "empty"}
 - `project/OVERVIEW.md`, `project/INFRASTRUCTURE.md`, `project/AGENTS.md`, `project/DESIGN.md` — {read or "not yet created"}
+- `project/design/` — {all required files read, or "created this task"; N/A if no web UI}
 - `project/histories/` — {entries scanned}
 - `project/documents/{feature}/` — {all files read, or "created this task"}
 - `project/tasks/` — {prior related tasks if any}
@@ -134,12 +200,26 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Implementation steps
 
+**Exhaustive — minimum one step per file.** Group by phase inside this single task file. Enumerate every deliverable before `in_progress`.
+
 ### Phase: {name}
 
 1. [ ] **{path}** — {change summary}
+   - Plan ref: project/plans/...#{section}
+   - Spec ref: project/documents/... or project/design/...
+   - Code ref: instructions/CODE.md §... (required when path is application source)
    - Before: ...
    - After: ...
    - Verify: ...
+
+### Phase: E2E verify
+
+1. [ ] **deploy/docker-compose.yml** — local cycle
+   - Plan ref: project/plans/...#e2e-local
+   - Verify: compose up → health → smoke → compose down
+2. [ ] **deploy/platforms/** — deploy cycle (greenfield bootstrap)
+   - Plan ref: project/plans/...#e2e-deploy
+   - Verify: build all images → save → load → compose up → smoke
 
 ## Files expected to change
 
@@ -154,6 +234,18 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Verification
 
+- [ ] CODE.md re-read at task start; sections listed in Context read
+- [ ] Every step has Code ref on application-source steps
+- [ ] Every touched source file: block comment + Var/Logic inline journal per CODE §1–2
+- [ ] CODE §14 agent checklist passed for touched code
+- [ ] Every step has Plan ref to `project/plans/`
+- [ ] Every step has Spec ref to `project/documents/` or `project/design/`
+- [ ] Task is standalone — no parent/child split (§1.8)
+- [ ] Step count covers full scope — no step-count ceiling (§1.8)
+- [ ] Files expected to change table matches implementation steps 1:1
+- [ ] No folder-wildcard steps (§1.7)
+- [ ] **Local E2E:** compose up → health → smoke → compose down (when compose exists)
+- [ ] **Deploy E2E:** build all platform images → save → load → compose up → smoke (greenfield bootstrap)
 - [ ] Lint/typecheck per [`CODE.md`](CODE.md) section 15
 - [ ] Tests run
 - [ ] Production-grade UI per [`DESIGN.md`](DESIGN.md) (states, responsive, modals)
@@ -166,6 +258,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Related
 
+- `project/plans/...`
 - `project/histories/...`
 - `project/documents/...`
 - `project/tasks/...` (prior tasks if relevant)
@@ -187,11 +280,13 @@ Use **paths and app slugs** from `project/INFRASTRUCTURE.md`. Add `docker`, `dep
 
 ## 5. Agent Workflow (plan mode sequence)
 
-1. **Draft plan** (`Status: planning`) — no code edits; write Context read (Gate A), Approach, change-oriented steps, paths in scope, Files expected to change
-2. **Clarify** — unresolved items → Open questions; user answers → Clarification log and Decisions
-3. **Confirm** — required for greenfield bootstrap and new-app creation; also when scope is large or ambiguous — present plan summary and wait for user approval (per AGENTS §2)
-4. **Execute** (`Status: in_progress`) — only after Gates A–C pass; one step at a time; check off; add steps when discovered
-5. **Complete** — Verification checklist; `project/histories/` entry; `Status: complete`
+1. **Plan exists** (Gate D) — `project/plans/...` with platform inventory?
+2. **CODE.md re-read** — sections listed in Context read when task touches application source?
+3. **Draft exhaustive task** (`Status: planning`) — enumerate **every** deliverable; match Files expected to change
+4. **Clarify** — Open questions → Clarification log
+5. **Confirm** — greenfield bootstrap / new apps / large scope
+6. **Execute** (`Status: in_progress`) — after Gates A–D; one step at a time in order
+7. **Complete** — Gate F E2E + verification; HISTORY links plan + task
 
 ### Get timestamp
 
@@ -212,13 +307,22 @@ date +%Y%m%d_%H%M%S
 - List paths in scope from `project/INFRASTRUCTURE.md`
 - Ask the user when uncertain — one batch, with **Recommended:** defaults
 - Write task files locally — gitignored except `project/tasks/README.md`
+- Write **exhaustive** standalone tasks — as many detailed steps as the scope requires
+- Derive every step from `project/plans/`, `project/documents/`, `project/design/`, and **`instructions/CODE.md`**
+- Include **Code ref** on every application-source implementation step
+- Include explicit E2E verify steps in final phase
 
 ### Don't
 
 - Don't skip task files for non-trivial implementation work
 - Don't use vague steps ("implement feature", "fix bug")
+- Don't use folder paths with `/**` or bundle "all routes/components/pages" in one step
 - Don't start implementation edits while `Status: planning` and steps are incomplete
-- Don't set `Status: in_progress` before Gates A–C pass (see §1.6)
+- Don't create TASK before Gate D plan exists
+- Don't set `Status: in_progress` before Gates A–D pass (see §1.6)
+- Don't split a task because step count is high — add steps to the same file (§1.8)
+- Don't create parent or child task files (§1.8)
+- Don't set `Status: in_progress` before Files expected to change matches steps (§1.8)
 - Don't leave Context read empty — list every file read in Gate A
 - Don't put feature specs in TASK — use `project/documents/`
 - Don't put change logs in TASK — use `project/histories/` after completion
@@ -226,12 +330,12 @@ date +%Y%m%d_%H%M%S
 
 ## 7. Agent Checklist
 
-1. AGENTS Gates A–C passed before `Status: in_progress`?
-2. Context read lists every instruction and project file read (not empty)?
-3. Task file created before first meaningful code or config edit?
-4. Approach, paths in scope, and Files expected to change filled in?
-5. Steps change-oriented — path, before/after, verify per step?
-6. User confirmed plan for greenfield bootstrap or new-app creation (when applicable)?
-7. Status progressed `planning` → `in_progress` → `complete`?
-8. Production verification complete per DESIGN, INFRASTRUCTURE/GREENFIELD, CODE (when UI/infra/API in scope)?
-9. HISTORY entry links back to this task file when work is done?
+1. Gate D plan exists before TASK file?
+2. Task is **standalone exhaustive** — full scope in one file (§1.8)?
+3. CODE.md re-read at task start (sections in Context read)?
+4. AGENTS Gates A–D passed before `Status: in_progress`?
+5. Files expected to change matches implementation steps 1:1?
+6. Every app-source step has Plan ref + Spec ref + Code ref?
+7. CODE §1–2 on every touched source file?
+8. E2E local + deploy cycles complete (Gate F)?
+9. HISTORY links plan + task + E2E + CODE compliance?

@@ -1,29 +1,24 @@
 # Tasks
 
-**Plan-mode task files** for this project — step-by-step change plans (what to change, where, and why) written **before** implementation, like Cursor plan mode. Rules: [`TASK.md`](../../instructions/TASK.md) in `instructions/`.
+**Exhaustive standalone execution plans** — one detailed task file per request, derived from [`project/plans/`](../plans/). Rules: [`TASK.md`](../../instructions/TASK.md).
 
-**Required before application code** — per AGENTS §0.5 Gate D and TASK.md.
-
-## Filename format
-
-```
-{timestamp}_{task-slug}.md
-```
-
-| Part | Rule |
-|------|------|
-| `timestamp` | `YYYYMMDD_HHmmss` (same as histories) |
-| `task-slug` | Lowercase kebab-case, max ~60 chars |
-
-**Example:** `20260622_143052_brownfield-onboarding.md`
+**Gate E** — required after Gate D plan. **No parent/child split** — add as many steps as needed in one file.
 
 ## Workflow
 
-1. Draft plan (`Status: planning`) — Approach, steps, files expected to change
-2. Clarify and confirm with user if needed
-3. Execute (`Status: in_progress`) — check off steps
-4. Complete — verification + `project/histories/` entry
+1. **Re-read CODE.md** — at task start when touching application source ([`RULES.md`](../../instructions/RULES.md) §8)
+2. **Plan first** — `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](../../instructions/PLAN.md)
+3. **Draft exhaustive task** — enumerate **every** file, route, page, platform, and config change as its own step
+4. **Match coverage** — `Files expected to change` table must match implementation steps 1:1
+5. **Plan ref** + **Spec ref** + **Code ref** on every application-source step
+6. **Execute in order** — check off steps one at a time; no splitting into child tasks
+7. **E2E verify** — final phase: compose up/down + deploy image cycle (Gate F)
+8. Complete — `project/histories/` links plan + task + E2E + CODE compliance
+
+## Principle
+
+More steps is better. Large bootstrap tasks may have 50–200+ steps — that is expected. Never split because the list is long.
 
 ## Git
 
-All task entries are **gitignored** except this README. The system maintains plans locally — do not expect these files in version control.
+All task entries are **gitignored** except this README.

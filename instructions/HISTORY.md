@@ -1,8 +1,8 @@
 # AI Change History
 
-Rules for writing change log entries. **Read-only template** — entries go in [`project/histories/`](project/histories/).
+**Integration:** Records results after Gate F — link `project/plans/`, `project/tasks/`, specs, and E2E verify outcomes. See [`RULES.md`](RULES.md).
 
-Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`TASK.md`](TASK.md), [`CODE.md`](CODE.md), [`DOCUMENT.md`](DOCUMENT.md), [`DESIGN.md`](DESIGN.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
+Rules for change log entries in [`project/histories/`](project/histories/). **Read-only template**.
 
 ## 1. Purpose
 
@@ -11,7 +11,7 @@ Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`TASK.md`](T
 - **Traceback** — read entries oldest → newest to follow project evolution
 - **Latest state** — most recent entry = highest timestamp (sort filenames descending)
 
-Distinct from [`project/tasks/`](project/tasks/) (forward-looking step plans) and [`project/documents/`](project/documents/) (feature specs).
+Distinct from [`project/plans/`](project/plans/) (blueprints), [`project/tasks/`](project/tasks/) (exhaustive standalone execution steps), and [`project/documents/`](project/documents/) (feature specs).
 
 ## 2. When to Create an Entry
 
@@ -23,6 +23,8 @@ Distinct from [`project/tasks/`](project/tasks/) (forward-looking step plans) an
 - Database schema, migration files, or seeds (db requirement — scope `db`)
 - Migration runner app (scope `migration` — only when user explicitly requested standalone `platforms/migration/`)
 - Feature documentation under `project/documents/` (scope `document`)
+- Design system specs under `project/design/` (scope `design`)
+- Blueprint plans under `project/plans/` when significant (scope `plan`)
 - Task plan files under `project/tasks/` when the task drove significant work (scope `task`)
 - Files under `project/` (local workspace)
 
@@ -30,7 +32,7 @@ Paths for each concern: see [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE
 
 When feature work touches `project/documents/`, reference those paths in the history entry body.
 
-When work was driven by a task plan, link `project/tasks/{timestamp}_{task-slug}.md` in Summary or Related.
+When work was driven by a plan or task, link `project/plans/...` and `project/tasks/...` in Summary or Related. Include **E2E verify results** (compose up/down, deploy image cycle) when infra was in scope.
 
 **Optional to skip** for trivial typo-only fixes with zero behavioral impact.
 
@@ -68,7 +70,7 @@ When work was driven by a task plan, link `project/tasks/{timestamp}_{task-slug}
 
 ## Summary
 
-One paragraph: what changed and why. State whether delivery met the **production bar** per AGENTS §2.5 (UI, infra, API) or list **known gaps** — never imply complete when stubs or MVP shortcuts remain in scope.
+One paragraph: what changed and why. State whether delivery met the **production bar** per [`RULES.md`](RULES.md) §5 and **E2E verification** per §6 — or list **known gaps**. When application source was touched, state whether **CODE.md §1–2** (block + inline journal) was followed or note gaps.
 
 ## Changes
 
@@ -156,4 +158,4 @@ date +%Y%m%d_%H%M%S
 2. Body includes Summary, Changes, Files touched, Notes?
 3. Task file linked when work was driven by a task plan?
 4. Entry written locally (gitignored)?
-5. Summary states production bar met or lists gaps (when infra/UI/API were in scope)?
+5. Summary states production bar + E2E results + CODE §1–2 compliance (when application source was in scope)?

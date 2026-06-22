@@ -2,7 +2,7 @@
 
 Local **change log** for this project. Rules: [`HISTORY.md`](../../instructions/HISTORY.md) in `instructions/`.
 
-**Summary must state production verification** — per AGENTS §2.5; note when the production bar was met or list known gaps when infra/UI/API were in scope.
+**Summary must state production + E2E verification** — per [`RULES.md`](../../instructions/RULES.md) §5–§6; link `project/plans/` and **exhaustive standalone** `project/tasks/` when applicable.
 
 ## Filename format
 

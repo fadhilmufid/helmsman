@@ -1,21 +1,49 @@
 # Code Style
 
-Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`DESIGN.md`](DESIGN.md), [`TASK.md`](TASK.md), [`DOCUMENT.md`](DOCUMENT.md), [`HISTORY.md`](HISTORY.md).
+**Integration:** Implements specs from `project/documents/` and design from `project/design/` per TASK Plan ref + Spec ref. Paths from `project/INFRASTRUCTURE.md`. See [`RULES.md`](RULES.md).
+
+Related: [`PLAN.md`](PLAN.md), [`TASK.md`](TASK.md), [`DESIGN.md`](DESIGN.md), [`DOCUMENT.md`](DOCUMENT.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`HISTORY.md`](HISTORY.md), [`../AGENTS.md`](../AGENTS.md).
 
 How agents must write and document code. **Read-only template** — project stack and paths are in [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) (from greenfield clarify or brownfield discovery).
 
 **Brownfield:** adapt to existing patterns; apply CODE conventions on **new or touched** code unless the user requests alignment. **Greenfield:** scaffold per section 9 when creating new apps under `platforms/`.
 
-**Production-grade default:** All new and touched code targets production quality per [`AGENTS.md`](../AGENTS.md) §2.5. No stubs, partial CRUD, or unhandled API scenarios unless the user explicitly requests MVP.
+**Production-grade default:** Per [`RULES.md`](RULES.md) §5. No stubs unless user explicitly requests MVP.
 
-Every non-trivial function, route handler, service method, client-side API handler, and React component with business logic gets:
+**Re-read this file** at the start of **every task** that touches application source — per [`RULES.md`](RULES.md) §8. Record sections re-read in the task **Context read**.
+
+## 0. Scope — all languages
+
+This file is **not JavaScript-only**. It applies to **every language and stack** documented in `project/INFRASTRUCTURE.md` that supports block and line comments.
+
+| Rule | Detail |
+|------|--------|
+| **Applies to** | TypeScript, JavaScript, Go, Python, Rust, Java, C#, Kotlin, PHP, Ruby, and any similar language |
+| **Structure** | Same **Function / Variables / Logic / Additional** index in every language |
+| **Syntax** | Adapt block and line comment delimiters per language (table below) |
+| **When** | Re-read §1–2 before every coding task; add §8, §9, §11, §16 when API/auth/CRUD in scope |
+
+### Comment syntax by language
+
+| Language | Block (index above declaration) | Line journal (Var / Logic-N) |
+|----------|--------------------------------|------------------------------|
+| TS / JS | `/** ... */` | `// Var:` / `// Logic-N:` |
+| Go | `/* ... */` or consecutive `//` lines above func | `// Var:` / `// Logic-N:` |
+| Python | `""" ... """` docstring | `# Var:` / `# Logic-N:` |
+| Rust / Java / C# / C++ | `/**` or `///` per project style | `// Var:` / `// Logic-N:` |
+| Ruby | `#` lines or `=begin` / `=end` block above method | `# Var:` / `# Logic-N:` |
+| PHP | `/** ... */` or `#` block above | `// Var:` or `# Var:` per file style |
+
+Use the **project's existing comment style** when brownfield; never skip the index + journal pattern because the stack is not TypeScript.
+
+Every non-trivial function, route handler, service method, client-side API handler, and **UI component with business logic** (React, Vue, Svelte, etc.) gets:
 
 1. A structured **block comment** above the declaration — the **index** (Function, Variables, Logic, Additional)
-2. **Inline journal comments** in the body — `// Var:` for every Variables entry and `// Logic-N:` for every Logic step, at the point each appears in code
+2. **Inline journal comments** in the body — `Var:` and `Logic-N:` prefixes using that language's line-comment syntax, at the point each appears in code
 
 Every API request must return a proper HTTP status, JSON envelope with a **response `code`**, and on the frontend handlers must cover **all scenarios** with the correct UX (Alert, redirect, modal, etc.) — see section 8.
 
-UI styling: [`project/DESIGN.md`](project/DESIGN.md). Structure and workflow: [`AGENTS.md`](../AGENTS.md).
+UI styling: [`project/DESIGN.md`](project/DESIGN.md) index + [`project/design/`](project/design/) detail files per [`DESIGN.md`](DESIGN.md). Structure and workflow: [`AGENTS.md`](../AGENTS.md).
 
 ## 1. Block Comment Template
 
@@ -40,39 +68,80 @@ Place a block comment immediately above the function, method, or handler. It is 
 | Field | Required | Purpose |
 |-------|----------|---------|
 | **Function** | Yes | What the code does. Include route/method for API handlers. |
-| **Variables** | Yes when params exist | Every parameter, prop, local, or request field and where it comes from. **Each entry must reappear inline** in the body with `// Var:` at first use. |
-| **Logic** | Yes | Numbered steps the body implements, in order. **Each step must have `// Logic-N:`** immediately before the code that implements it. |
+| **Variables** | Yes when params exist | Every parameter, prop, local, or request field and where it comes from. **Each entry must reappear inline** in the body with `Var:` at first use (line-comment syntax per §0). |
+| **Logic** | Yes | Numbered steps the body implements, in order. **Each step must have `Logic-N:`** immediately before the code that implements it (line-comment syntax per §0). |
 | **Additional** | When relevant | Auth, audience, response format, packages used, edge cases. |
 
 **Variables and Logic** from the header must each have a matching inline comment in the body (see section 2). Header-only documentation is non-compliant.
 
-## 2. Inline journal comments
+## 2. Inline journal comments (all languages)
 
-The function body is the **journal** — annotate variables and logic **where they appear**, like footnotes in a reference work.
+The function body is the **journal** — annotate variables and logic **where they appear**, like footnotes in a reference work. Use the line-comment prefix for your language (§0).
 
 ### Variable comments
+
+TypeScript / JavaScript / Go / Rust / Java / C#:
 
 ```typescript
 // Var: <name> — <source>; <description>
 ```
 
+Python / Ruby:
+
+```python
+# Var: <name> — <source>; <description>
+```
+
 Rules:
-- One `// Var:` per entry in the header **Variables** section
+- One `Var:` journal line per entry in the header **Variables** section
 - Place at **first declaration** or first meaningful use in the body
 - Wording aligns with the block comment Variables list
 - Order in the body follows code flow (not necessarily header order)
 
 ### Logic comments
 
+TypeScript / Go / etc.:
+
 ```typescript
 // Logic-N: <same wording as Logic step N>
 ```
 
+Python:
+
+```python
+# Logic-N: <same wording as Logic step N>
+```
+
 Rules:
-- One `// Logic-N` per numbered Logic step, **immediately before** the code that implements it
+- One `Logic-N` journal line per numbered Logic step, **immediately before** the code that implements it
 - Wording aligns with the block comment Logic list
 - **Never** skip a step (e.g. validation must have `Logic-1` even when it shares a line with parsing)
 - Header-only Variables or Logic without body comments = **non-compliant**
+
+### Go example (handler)
+
+```go
+/*
+ * Function:  List files for the authenticated user.
+ *             GET /api/files
+ * Variables:
+ *   userId - from auth middleware; caller's user ID
+ *   files  - query result returned to client
+ * Logic:
+ *   1. Read userId from request context
+ *   2. Query non-deleted files for userId
+ *   3. Return JSON list with pagination metadata
+ */
+func ListFiles(c *gin.Context) {
+    // Var: userId — auth middleware; caller's user ID
+    userId := c.GetString("userId")
+    // Logic-1: Read userId from request context (done above)
+    // Logic-2: Query non-deleted files for userId
+    files, err := fileRepo.ListByUser(c, userId)
+    // Logic-3: Return JSON list with pagination metadata
+    c.JSON(200, gin.H{"success": true, "data": files})
+}
+```
 
 Trivial one-liners may omit the block comment and inline journal.
 
@@ -783,7 +852,7 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 10. Every frontend handler documents and implements all response scenarios per block comment (section 8)?
 11. Persisted entities use UUID PK and `deleted_at` soft delete (section 11)?
 12. CRUD features include full API + pages (index with filter/search/sort/pagination, create, edit, detail, delete modal)?
-13. UI matches [`project/DESIGN.md`](project/DESIGN.md); paths and stack match [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md); workflow matches [`AGENTS.md`](../AGENTS.md)?
+13. UI matches `project/design/` and [`project/DESIGN.md`](project/DESIGN.md) index; paths and stack match [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md); workflow matches [`AGENTS.md`](../AGENTS.md)?
 14. Ran post-edit verification (section 15) on all touched files and apps?
 15. Zero linter/typechecker/IDE errors remaining?
 16. **Greenfield** API meets production baseline (section 16) when bootstrapping a new backend?

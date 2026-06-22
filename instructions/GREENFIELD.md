@@ -1,8 +1,10 @@
 # Greenfield Bootstrap Guide
 
-**Read-only template** — how to **build a new app from scratch** after clarify. Stack, layout, and tooling are **chosen by the user** (or delegated with **Recommended:** defaults) — this file does not prescribe a specific framework.
+**Integration:** Part of the connected instruction set — read [`RULES.md`](RULES.md) after [`AGENTS.md`](../AGENTS.md). Blueprint in `project/plans/` ([`PLAN.md`](PLAN.md)); **exhaustive standalone** steps in `project/tasks/` ([`TASK.md`](TASK.md)).
 
-Related: [`README.md`](README.md), [`AGENTS.md`](AGENTS.md) section 0 (mode gate), [`BROWNFIELD.md`](BROWNFIELD.md), [`TASK.md`](TASK.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`DOCUMENT.md`](DOCUMENT.md).
+**Read-only template** — how to **build a new app from scratch** after clarify. Stack and layout are **user-chosen** (or delegated with **Recommended:** defaults).
+
+Related: [`RULES.md`](RULES.md), [`PLAN.md`](PLAN.md), [`TASK.md`](TASK.md), [`BROWNFIELD.md`](BROWNFIELD.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`DOCUMENT.md`](DOCUMENT.md).
 
 For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 
@@ -17,7 +19,7 @@ For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 | **Always ask first** | Per [`AGENTS.md`](AGENTS.md) section 2 — including **stack** and **layout**, even for short prompts |
 | **Recommended:** labels | Propose defaults in the clarify batch; user confirms or delegates |
 | **Wait for confirmation** | Proceed only after the user confirms or says *"use your recommendations"* / *"you decide"* |
-| **Record then build** | Write confirmed decisions to `project/*` and create a task plan per [`TASK.md`](TASK.md) before scaffold/code |
+| **Record then build** | Write `project/*`, create `project/plans/` then `project/tasks/` per [`PLAN.md`](PLAN.md) and [`TASK.md`](TASK.md) before scaffold/code |
 | **Greenfield layout** | New projects in this instruction set use `platforms/` (see §1) — brownfield repos document actual paths instead |
 
 ---
@@ -26,61 +28,67 @@ For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 
 **Applies only to greenfield** — not when adopting an existing repo ([`BROWNFIELD.md`](BROWNFIELD.md)).
 
-Runnable apps live under `{root}/platforms/` (fixed parent name, always plural). Child folder names are **kebab-case slugs** chosen at clarify — document every app in `project/INFRASTRUCTURE.md`.
+Everything runnable or deployable lives under `{root}/platforms/` (fixed parent name, always plural). Child slugs are **kebab-case** — document every slug in `project/INFRASTRUCTURE.md` and the Gate D plan **platform inventory**.
+
+### Platform kinds
+
+| Kind | Examples | Required per slug |
+|------|----------|-------------------|
+| **Service** | `postgresql`, `minio`, `redis`, `rabbitmq` | `docker/` or pinned image, volumes, healthcheck, `.env.example`, compose role |
+| **Application** | `web`, `api`, `worker`, `app` | Source code, Dockerfile, `.env.example`, depends on services |
 
 | Architecture | Example `platforms/` children |
 |--------------|-------------------------------|
-| Split full-stack | `web`, `api`, `db` |
-| Monolith | `app` (or project slug) |
-| Microservices | `gateway`, `users-api`, `orders-api`, `db` |
-| Worker + API | `api`, `worker`, `db` |
-| Frontend only | `web` |
+| Split full-stack + DB + storage | `web`, `api`, `postgresql`, `minio` |
+| Monolith | `app`, `postgresql` |
+| Microservices | `gateway`, `users-api`, `orders-api`, `postgresql`, `redis` |
+| Worker + API | `api`, `worker`, `postgresql` |
 
-`web` / `api` / `db` are **example slugs only** — not required names.
+Slugs are **user-chosen at clarify** — `postgresql` not `db` when that is the actual engine.
 
 ### Required four concerns (greenfield)
 
 Every new project must address these four concerns. Document paths in `project/INFRASTRUCTURE.md`.
 
-| Requirement | What every greenfield project must have | Examples only |
-|-------------|----------------------------------------|---------------|
-| **App** | Application source under `platforms/<app>/` | `platforms/web`, `platforms/api`, `platforms/app` |
-| **Docker** | Every runnable platform app is dockerizable | `platforms/<app>/docker/Dockerfile` |
-| **Deploy / Build** | Build, export, compose, deployment, backup/restore | `deploy/`, `scripts/` |
-| **DB** | DB infra, migrations, seeds, backup strategy | `platforms/db/`, migrations inside backend app |
+| Requirement | What every greenfield project must have | Examples |
+|-------------|----------------------------------------|----------|
+| **App** | Application platforms under `platforms/<app>/` | `platforms/web`, `platforms/api` |
+| **Docker** | Every platform (service + app) is containerized | `platforms/<slug>/docker/` or pinned image |
+| **Deploy / Build** | Compose, image export, scripts | `deploy/`, `deploy/platforms/<slug>/` |
+| **Data** | Service platform for DB/storage + migrations in backend app | `platforms/postgresql`, migrations in `platforms/api/` |
 
-#### DB infra vs migrations
+#### Service platforms vs migrations
 
 | Sub-concern | Purpose | Example paths |
 |-------------|---------|---------------|
-| **DB infra** | Run/build database (compose, version, volumes) | `platforms/db/` (slug may differ) |
-| **Migrations** | Schema changes and seeds | Inside backend by default (`platforms/<backend>/migrations/`); standalone `platforms/migration/` only when user explicitly requests |
+| **Service platform** | Run DB, object storage, cache, queue | `platforms/postgresql/`, `platforms/minio/` |
+| **Migrations** | Schema changes and seeds | Inside backend app (`platforms/api/migrations/`); standalone `platforms/migration/` only when user requests |
 
-Migrations do **not** belong in the DB infra folder. Document the exact migration path in `project/INFRASTRUCTURE.md`.
+Migrations do **not** live in the service platform folder.
 
 #### Platforms layout rules
 
-- Each `platforms/<app>/` is a **standalone application** — runnable without sibling folders or a root workspace
+- Each `platforms/<slug>/` is documented in INFRASTRUCTURE and the plan platform inventory
+- **Service platforms first** — create postgresql, minio, etc. and compose **before** application scaffold (Phase B)
 - `platforms/migration/` is **optional** — only when user explicitly requests a separate migration runner
-- Each app is **fully isolated**: own dependencies, config, secrets; own `.env` + `.env.example` — never a shared root `.env` for app config
-- **Every** runnable app must be dockerizable; prefer scaffold Docker config; default when none: `platforms/<app>/docker/Dockerfile`
+- Each platform has own `.env` + `.env.example` — never a shared root `.env` for app config
+- **Every** platform must be dockerizable or use a pinned image with healthcheck
 - Stack-specific bootstrap commands → `project/AGENTS.md`
 
 #### Hard rules
 
 **Do:**
 
-- Verify all four requirements before considering bootstrap complete
-- Read exact paths from `project/INFRASTRUCTURE.md`
-- Prefer scaffold-provided Docker paths; document actual Dockerfile location
-- Keep migrations inside backend unless user requested standalone runner
-- Export built images to `deploy/platforms/<app>/` (gitignored) when using the three-phase pipeline (§3)
-- Document full repo tree in `project/INFRASTRUCTURE.md`
+- Verify all four requirements and E2E cycles (§5) before bootstrap complete
+- List every slug in plan platform inventory and `project/INFRASTRUCTURE.md`
+- Export built images to `deploy/platforms/<slug>/` when using the three-phase pipeline (§3)
+- Run `docker compose up` then `docker compose down` as part of verification
 
 **Don't:**
 
-- Leave a runnable platform app without documented container build
-- Force `platforms/<app>/docker/` when scaffold provides Docker elsewhere
+- Leave a platform without documented container config or healthcheck
+- Scaffold application code before service platforms and compose exist
+- Use vague `platforms/db/` when the engine is PostgreSQL — prefer `platforms/postgresql/`
 - Create `platforms/migration/` unless user asks
 - Commit `.tar` files, backup dumps, or `.env`
 
@@ -93,8 +101,9 @@ Ask in one batch per AGENTS §2. **Recommended:** values are proposals — not l
 | Topic | What to resolve |
 |-------|-----------------|
 | Project slug | `{project}` name — kebab-case |
-| Platform apps | Which `platforms/<app>/` folders and role of each |
-| Stack | Framework and runtime **per app** — user choice |
+| **Service platforms** | Which infra slugs: `postgresql`, `minio`, `redis`, etc. |
+| **Application platforms** | Which app slugs: `web`, `api`, `worker`, etc. |
+| Stack | Framework and runtime **per application platform** |
 | Auth | Needed? Type? — per [`CODE.md`](CODE.md) section 9 when multi-user |
 | Database | Engine, hosting path |
 | Migrations | Path inside backend (default) or standalone runner |
@@ -102,7 +111,7 @@ Ask in one batch per AGENTS §2. **Recommended:** values are proposals — not l
 | Deploy | Target environment; `deploy/` layout |
 | Design | Theme, component library — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md` |
 | Delivery scope | What the user asked for — implement at **full production quality**, not stripped down |
-| Quality bar | Full / production-ready — per AGENTS §2.5 |
+| Quality bar | Full / production-ready — per [`RULES.md`](RULES.md) §5 |
 | Feature docs | Which `project/documents/{feature}/` files per [`DOCUMENT.md`](DOCUMENT.md) |
 
 After clarify, write:
@@ -110,7 +119,7 @@ After clarify, write:
 | File | Content |
 |------|---------|
 | `project/OVERVIEW.md` | Slug, purpose, delivery scope, quality bar |
-| `project/INFRASTRUCTURE.md` | Platform slugs, stack per app, ports, Docker, deploy, db, migrations |
+| `project/INFRASTRUCTURE.md` | Platform inventory (service + app), stack, ports, Docker, deploy, migrations |
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
 | `project/DESIGN.md` | Component library, theme, breakpoints |
 
@@ -124,14 +133,15 @@ Document all paths in `project/INFRASTRUCTURE.md`. Dev commands in `project/AGEN
 
 ### Environment variables
 
-- Each app under `platforms/` documents vars in its own `.env.example`
+- Each platform under `platforms/` documents vars in its own `.env.example`
 - Copy to `.env` in the same app folder — never commit `.env`
 - Compose may reference per-app `env_file` paths — document in `project/INFRASTRUCTURE.md`
 
 ### Docker conventions
 
-- Container build config documented per runnable `platforms/<app>/`
-- **Default** when scaffold provides none: `platforms/<app>/docker/Dockerfile`, build context `platforms/<app>/`
+- Container build config documented per `platforms/<slug>/` (service and application)
+- **Default** for application platforms when scaffold provides none: `platforms/<slug>/docker/Dockerfile`
+- Service platforms: pinned image in compose or `platforms/<slug>/docker/Dockerfile`
 - Runtime orchestration compose typically in `deploy/`
 - Wire services with `depends_on` and healthchecks
 - DB healthy before migrations; migrations before dependent app services
@@ -140,24 +150,25 @@ Document all paths in `project/INFRASTRUCTURE.md`. Dev commands in `project/AGEN
 
 | Phase | What | Where |
 |-------|------|-------|
-| **1. Build** | `docker build` per platform app | Dockerfile path in `project/INFRASTRUCTURE.md` |
-| **2. Export** | `docker save` timestamped `.tar` + `latest.tar` | `deploy/platforms/<app>/` (gitignored) |
+| **1. Build** | `docker build` per platform (apps + custom service images) | Dockerfile path in `project/INFRASTRUCTURE.md` |
+| **2. Export** | `docker save` timestamped `.tar` + `latest.tar` | `deploy/platforms/<slug>/` (gitignored) |
 | **3. Run** | `docker load` then `docker compose up` | `deploy/docker-compose.yml` |
 
 Startup sequence (typical): db healthy → migrations complete → backend apps → frontend apps.
 
 #### Build script behavior
 
-1. Build each image from documented Dockerfile path
+1. Build each image from documented path (every application platform + custom service images)
 2. Tag images per `project/INFRASTRUCTURE.md`
-3. Export timestamped `.tar` files to `deploy/platforms/<app>/`
-4. Write `latest.tar` copy per app
+3. Export timestamped `.tar` files to `deploy/platforms/<slug>/`
+4. Write `latest.tar` copy per slug
 
 #### Agent rules
 
 - Timestamp image exports for rollback
 - Never commit `.tar` files
 - Verify compose build after Dockerfile changes
+- Run full E2E cycle: compose up → health → smoke → compose down (see §5)
 
 ### Backup and restore
 
@@ -175,12 +186,14 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 ### Phase A — Plan (no application code yet)
 
 1. **Confirm clarify complete** — decisions recorded in `project/*`
-2. **Write `project/OVERVIEW.md`**, **`project/INFRASTRUCTURE.md`**, **`project/AGENTS.md`**, **`project/DESIGN.md`**
+2. **Write `project/OVERVIEW.md`**, **`project/INFRASTRUCTURE.md`**, **`project/AGENTS.md`**, **`project/DESIGN.md`** (index only)
+2b. **Create `project/design/`** required files per [`DESIGN.md`](DESIGN.md) §1 **before** platform code (when web UI is in scope)
 3. **Create `project/documents/{feature}/`** per [`DOCUMENT.md`](DOCUMENT.md) **before** platform code
-4. **Create `project/tasks/{timestamp}_{task-slug}.md`** — bootstrap plan per [`TASK.md`](TASK.md)
-5. **Create** `{root}/README.md` from §7 template (draft OK; fill placeholders after `project/INFRASTRUCTURE.md` and `project/AGENTS.md` are complete)
+4. **Create `project/plans/{timestamp}_bootstrap-{slug}.md`** per [`PLAN.md`](PLAN.md) — platform inventory, phases, E2E matrix
+5. **Create one exhaustive standalone `project/tasks/{timestamp}_{task-slug}.md`** from the plan per [`TASK.md`](TASK.md) — every deliverable as a step; no parent/child split
+6. **Create** `{root}/README.md` from §7 template (draft OK)
 
-**STOP — do not create `platforms/`, `deploy/`, or any application files until steps 1–4 of Phase A are complete and recorded in the task file.**
+**STOP — do not create `platforms/`, `deploy/`, or any application files until steps 1–5 of Phase A are complete.** Step 2b (design) is Gate C when web UI is in scope.
 
 ### Phase A.5 — Required feature documents (Gate C)
 
@@ -196,40 +209,45 @@ For each feature slug, create these files under `project/documents/{feature-slug
 
 See [`DOCUMENT.md`](DOCUMENT.md) for content rules.
 
-### Phase B — Infrastructure scaffold
+### Phase B — Service platforms and compose (infra first)
 
-6. **DB infra** — per confirmed stack (e.g. database container or managed service config)
-7. **Create `deploy/`** in target project — compose, env examples; this instruction repo does not ship `deploy/`
-8. **Per-app `.env.example`** — vars each app needs
+**Before any application scaffold.** Each step is a separate TASK step per [`TASK.md`](TASK.md) §1.7.
+
+7. **Create service platform folders** — e.g. `platforms/postgresql/`, `platforms/minio/` — docker config, volumes, `.env.example` per slug in plan inventory
+8. **Create `deploy/docker-compose.yml`** — all platforms wired with `depends_on` and healthchecks
+9. **Per-platform `.env.example`** — vars each slug needs
+10. **Verify service layer:** `docker compose up` → all service healthchecks pass → `docker compose down`
 
 ### Phase C — Backend / services
 
-9. **Scaffold backend app(s)** — official starter for confirmed stack
-10. **Data models and migrations** — per [`CODE.md`](CODE.md) section 11 when applicable
-11. **Production baseline** — per CODE §16 for APIs
-12. **Auth** — per CODE §9 when required
-13. **Feature APIs** — per `project/documents/`; response `code` per CODE §8
-14. **Dev seeds** — when useful for local dev
+11. **Scaffold backend application platform(s)** — official starter for confirmed stack
+12. **Data models and migrations** — per [`CODE.md`](CODE.md) section 11 when applicable
+13. **Production baseline** — per CODE §16 for APIs
+14. **Auth** — per CODE §9 when required
+15. **Feature APIs** — per `project/documents/`; response `code` per CODE §8
+16. **Dev seeds** — when useful for local dev
 
 ### Phase D — Frontend (when in scope)
 
-15. **Scaffold frontend app(s)** — official starter for confirmed stack
-16. **Component library** — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md`
-17. **Auth UI** — per CODE §9 when required
-18. **API client and pages** — per DOCUMENT and CODE §8 scenarios
+17. **Scaffold frontend application platform(s)** — official starter for confirmed stack
+18. **Component library** — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md`
+19. **Auth UI** — per CODE §9 when required
+20. **API client and pages** — per DOCUMENT and CODE §8 scenarios
 
 ### Phase E — Docker and deploy
 
-19. **Docker per runnable app** — document paths in `project/INFRASTRUCTURE.md`
-20. **Wire compose** — healthchecks and startup order
-21. **Deploy scripts** — build, backup, restore per §3
-22. **Add `{root}/.gitignore`** — per §6
+21. **Docker per application platform** — document paths in `project/INFRASTRUCTURE.md`
+22. **Update compose** — add app services; healthchecks and startup order
+23. **Deploy scripts** — build all images, backup, restore per §3
+24. **Add `{root}/.gitignore`** — per §6
 
-### Phase F — Verify
+### Phase F — Verify (Gate F)
 
-23. **Run Definition of Done** (§5)
-24. **Mark task complete** per [`TASK.md`](TASK.md)
-25. **Append `project/histories/`** — link task file
+25. **Local E2E** — compose up → health → smoke → compose down
+26. **Deploy E2E** — build all images → save → load → compose up → smoke
+27. **Run Definition of Done** (§5)
+28. **Mark task complete** per [`TASK.md`](TASK.md)
+29. **Append `project/histories/`** — link plan, task, E2E results
 
 ---
 
@@ -239,19 +257,21 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 
 | # | Gate |
 |---|------|
-| 1 | Documented deploy path works — all services healthy (e.g. `docker compose up` when using compose) |
-| 2 | Migrations applied; dev seeds run without error (when applicable) |
-| 3 | Auth works when required; data scoped correctly |
-| 4 | Delivery-scope features work completely — polished UX, all documented flows, not skeleton (mobile viewport when web is in scope) |
-| 5 | Destructive actions use confirmation; soft delete when CODE §11 applies |
-| 6 | API responses include `code` when CODE §8 applies; frontend handles documented scenarios |
-| 7 | Build script produces timestamped image exports (when using §3 pipeline) |
-| 8 | Backup script produces a database dump (when DB in scope) |
-| 9 | Lint and tests pass per `project/AGENTS.md` for each touched app |
-| 10 | `project/documents/{feature}/` reflects what was built |
-| 11 | Bootstrap task marked complete in `project/tasks/` |
-| 12 | `project/histories/` bootstrap entry appended |
-| 13 | Root `README.md` has setup instructions |
+| 1 | **Local E2E:** `docker compose up` → all platforms healthy → smoke test → `docker compose down` |
+| 2 | **Deploy E2E:** build all platform images → save → load → compose up → smoke test |
+| 3 | Migrations applied; dev seeds run without error (when applicable) |
+| 4 | Auth works when required; data scoped correctly |
+| 5 | Delivery-scope features work completely — polished UX, all documented flows (mobile when web in scope) |
+| 6 | Destructive actions use confirmation; soft delete when CODE §11 applies |
+| 7 | API responses include `code` when CODE §8 applies; frontend handles documented scenarios |
+| 8 | Build script produces timestamped image exports for **every** platform (when using §3 pipeline) |
+| 9 | Backup script produces a database dump (when DB in scope) |
+| 10 | Lint and tests pass per `project/AGENTS.md` for each touched platform |
+| 11 | `project/documents/{feature}/` reflects what was built |
+| 12 | `project/design/` complete when web UI in scope |
+| 13 | `project/plans/` and `project/tasks/` marked complete; E2E results recorded |
+| 14 | `project/histories/` bootstrap entry links plan, task, E2E |
+| 15 | Root `README.md` has setup instructions |
 
 ### Testing standard
 
@@ -281,17 +301,23 @@ backups/
 other-references/**
 !other-references/README.md
 
-# project — local workspace (see project/histories|documents|tasks/README.md)
+# project — local workspace (see project/histories|documents|tasks|design/README.md)
 project/**
 !project/histories/
 !project/documents/
 !project/tasks/
+!project/design/
+!project/plans/
 project/histories/**
 !project/histories/README.md
 project/documents/**
 !project/documents/README.md
 project/tasks/**
 !project/tasks/README.md
+project/design/**
+!project/design/README.md
+project/plans/**
+!project/plans/README.md
 ```
 
 ---
@@ -401,8 +427,12 @@ other-references/     # Optional user reference dumps (local only)
 - Pass AGENTS §0.5 execution gates before any platform code
 - Ask stack and delivery scope even when you have recommendations
 - Follow bootstrap playbook **after** user confirms or delegates
-- Create bootstrap task plan per [`TASK.md`](TASK.md) before platform code
+- Create `project/plans/` per Phase A step 4 before platform code
+- Create exhaustive standalone `project/tasks/` from plan per Phase A step 5
 - Create `project/documents/{feature}/` per Phase A.5 before Phase B
+- Create `project/design/` + `project/DESIGN.md` index per Phase A step 2b before Phase B when web UI is in scope
+- Create **service platforms** (postgresql, minio, …) in Phase B **before** application scaffold
+- Run local and deploy E2E cycles before marking bootstrap complete
 - Proactively add sensible quality improvements (validation, accessibility, observability, seed data) — record in docs/task when they do not change the core goal
 - Record deploy/compose patterns in `project/INFRASTRUCTURE.md` after clarify — not from this template verbatim
 - Phases B–E target **production deployability** — healthchecks, env examples, backup, startup order — not local-dev-only wiring
@@ -410,8 +440,9 @@ other-references/     # Optional user reference dumps (local only)
 **Don't:**
 
 - Skip clarify because you have recommendations
-- Skip AGENTS Gates A–D — read, document, task, then code
-- Write `platforms/` before `project/*`, feature docs, and task plan exist
+- Skip AGENTS Gates A–F — read, document, plan, task, then code
+- Write `platforms/` before `project/*`, feature docs, design specs, plan, and task exist
+- Scaffold application platforms before service platforms and compose
 - Default to MVP, stubs, or skeleton implementations unless user explicitly asks for MVP
 - Apply this file to brownfield repos without user request to restructure
 - Expect a `deploy/` folder in this instruction template — create it in the target project
