@@ -6,6 +6,8 @@ How agents must write and document code. **Read-only template** — project stac
 
 **Brownfield:** adapt to existing patterns; apply CODE conventions on **new or touched** code unless the user requests alignment. **Greenfield:** scaffold per section 9 when creating new apps under `platforms/`.
 
+**Production-grade default:** All new and touched code targets production quality per [`AGENTS.md`](../AGENTS.md) §2.5. No stubs, partial CRUD, or unhandled API scenarios unless the user explicitly requests MVP.
+
 Every non-trivial function, route handler, service method, client-side API handler, and React component with business logic gets:
 
 1. A structured **block comment** above the declaration — the **index** (Function, Variables, Logic, Additional)
@@ -785,6 +787,7 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 14. Ran post-edit verification (section 15) on all touched files and apps?
 15. Zero linter/typechecker/IDE errors remaining?
 16. **Greenfield** API meets production baseline (section 16) when bootstrapping a new backend?
+17. All new/touched code meets production-grade default — no stubs, partial CRUD, or unhandled API scenarios unless user requested MVP?
 
 ## 15. Post-edit verification
 
@@ -813,7 +816,7 @@ Calling a function without importing it — caught by that app's typecheck comma
 
 ## 16. Production baseline (API, greenfield)
 
-Minimum security and ops bar for **new** APIs bootstrapped per [`GREENFIELD.md`](GREENFIELD.md). Apply when creating a backend under `platforms/<backend>/` (or equivalent path in `project/INFRASTRUCTURE.md`). **Brownfield:** apply only to new endpoints or when user requests alignment.
+Production security and ops bar (**required default**) for **new** APIs bootstrapped per [`GREENFIELD.md`](GREENFIELD.md). Apply when creating a backend under `platforms/<backend>/` (or equivalent path in `project/INFRASTRUCTURE.md`). **Brownfield:** apply to new endpoints and touched backends — not optional when adding API surface.
 
 | Concern | Rule |
 |---------|------|
@@ -837,3 +840,5 @@ Minimum security and ops bar for **new** APIs bootstrapped per [`GREENFIELD.md`]
 - Don't expose stack traces or internal errors in API responses
 - Don't leave list endpoints unbounded — always paginate
 - Don't skip health endpoint — compose depends on it
+- Don't ship endpoints without validation, auth (when required), pagination on lists, or central error handling
+- Don't treat section 16 as optional for greenfield backends or new brownfield API endpoints

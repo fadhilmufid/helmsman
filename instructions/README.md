@@ -12,19 +12,30 @@ Agent guidance index — terminology, document index, and read order. **Agents:*
 | `other-references/` | Optional user reference dumps — local only ([`../other-references/README.md`](../other-references/README.md)) |
 | `project/` | Local agent workspace — config, histories, docs, tasks (mostly gitignored) |
 
+## Production-grade default (all instructions)
+
+Every file in `instructions/` assumes **production-ready delivery** unless the user explicitly asks for MVP.
+
+| Principle | Rule |
+|-----------|------|
+| **Default target** | Production-ready — deployable, polished, complete for in-scope work |
+| **Never unless asked** | MVP, stubs, skeleton UIs, dev-only infra, unbounded APIs, placeholder specs |
+| **Applies to** | Code, design/UI, infrastructure, documents, tasks, verification |
+| **Authority** | [`AGENTS.md`](../AGENTS.md) §2.5 — domain detail in each `instructions/*.md` |
+
 ## Document index
 
 | File | Purpose |
 |------|---------|
-| [`../AGENTS.md`](../AGENTS.md) | Agent gate — mode, clarify, task workflow, testing, checklist |
-| [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) | Documentation architecture + abstract four concerns |
-| [`GREENFIELD.md`](GREENFIELD.md) | New app bootstrap — `platforms/`, Docker, deploy |
-| [`BROWNFIELD.md`](BROWNFIELD.md) | Existing codebase — discovery, document, adapt |
-| [`TASK.md`](TASK.md) | Step-by-step task plan rules |
-| [`CODE.md`](CODE.md) | Block comments, journal comments, scaffold-first, API codes |
-| [`DESIGN.md`](DESIGN.md) | UI design system — mobile-first, component library first |
-| [`HISTORY.md`](HISTORY.md) | How to write change log entries |
-| [`DOCUMENT.md`](DOCUMENT.md) | How to write feature reference documentation |
+| [`../AGENTS.md`](../AGENTS.md) | Agent gate — mode, execution gates (§0.5), clarify, task workflow, quality bar |
+| [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) | Documentation architecture + production infra bar |
+| [`GREENFIELD.md`](GREENFIELD.md) | New app bootstrap — `platforms/`, Docker, deploy (production deployability) |
+| [`BROWNFIELD.md`](BROWNFIELD.md) | Existing codebase — discovery, document, adapt (production on touched work) |
+| [`TASK.md`](TASK.md) | Step-by-step task plan rules + production verification |
+| [`CODE.md`](CODE.md) | Block comments, API codes, CRUD, production baseline |
+| [`DESIGN.md`](DESIGN.md) | UI design system — production-grade mobile-first UI |
+| [`HISTORY.md`](HISTORY.md) | Change log entries + production verification notes |
+| [`DOCUMENT.md`](DOCUMENT.md) | Feature specs that define production-ready behavior |
 
 ## Two-tier system
 
@@ -73,7 +84,7 @@ Every project involves: **app**, **containerization**, **deploy/build**, and **d
 
 ### Agent read order
 
-1. [`../AGENTS.md`](../AGENTS.md) — resolve mode (§0)
+1. [`../AGENTS.md`](../AGENTS.md) — resolve mode (§0) and **execution gates (§0.5)**
 2. This file — index and terminology
 3. **Greenfield** → [`GREENFIELD.md`](GREENFIELD.md) · **Brownfield** → [`BROWNFIELD.md`](BROWNFIELD.md)
 4. Universal: `INFRASTRUCTURE.md` → `TASK.md` → `CODE.md` → `DESIGN.md` → `HISTORY.md` → `DOCUMENT.md`
@@ -82,15 +93,16 @@ Every project involves: **app**, **containerization**, **deploy/build**, and **d
 7. Active tasks: `project/tasks/` — newest first
 8. Recent context: `project/histories/` descending
 9. Feature context: `project/documents/{feature}/`
+10. **Only after read order complete:** create documents → task plan → then code (AGENTS §0.5)
 
 ## Write rules
 
 | Action | Where | Git |
 |--------|-------|-----|
 | User reference dumps | `other-references/` | Gitignored (except README) |
-| Create/update task plan | `project/tasks/{timestamp}_{task-slug}.md` | Gitignored |
+| Create/update task plan | `project/tasks/{timestamp}_{task-slug}.md` — **before** application code (AGENTS Gate D) | Gitignored |
+| Feature documentation | `project/documents/{feature-slug}/` — **before** application code (AGENTS Gate C) | Gitignored |
 | Append change log entry | `project/histories/{timestamp}_{title}.md` | Gitignored |
-| Feature documentation | `project/documents/{feature-slug}/` | Gitignored |
 | App paths, Docker, deploy, db | `project/INFRASTRUCTURE.md` | Gitignored |
 | Dev commands, lint/test, PR/CI | `project/AGENTS.md` | Gitignored |
 | Design tokens | `project/DESIGN.md` | Gitignored |

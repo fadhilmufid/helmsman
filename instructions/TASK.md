@@ -48,6 +48,19 @@ Group steps by phase when helpful: Clarify → Docs → Schema → API → UI �
 
 List paths in scope from `project/INFRASTRUCTURE.md` (e.g. `platforms/api/` greenfield, or `backend/` brownfield).
 
+## 1.6 Execution gates (hard STOP)
+
+Mirror [`AGENTS.md`](../AGENTS.md) §0.5. The task file is the audit trail.
+
+| Forbidden until gate passes | Requirement |
+|----------------------------|-------------|
+| `Status: in_progress` | Gate A — Context read lists **every** instruction file and project file read (not empty) |
+| `Status: in_progress` | Gate C — `project/documents/{feature}/` exists with required files for feature/bootstrap work |
+| `Status: in_progress` | Approach and change-oriented steps drafted |
+| Any application code edit | Gates A–D complete; user confirmed plan for greenfield bootstrap or new-app creation |
+
+**User confirm required** for greenfield bootstrap and any request that creates new apps — not only when scope is "large or ambiguous."
+
 ## 2. When to Create a Task File
 
 **Required** for any non-trivial user request that will touch:
@@ -98,10 +111,12 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Context read
 
+- `instructions/README.md`, active mode guide (GREENFIELD or BROWNFIELD), `INFRASTRUCTURE.md`, `TASK.md`, `CODE.md`, `DESIGN.md`, `HISTORY.md`, `DOCUMENT.md` — all read
+- `other-references/` — {entries read, or "empty"}
+- `project/OVERVIEW.md`, `project/INFRASTRUCTURE.md`, `project/AGENTS.md`, `project/DESIGN.md` — {read or "not yet created"}
 - `project/histories/` — {entries scanned}
-- `project/documents/{feature}/` — {if applicable}
+- `project/documents/{feature}/` — {all files read, or "created this task"}
 - `project/tasks/` — {prior related tasks if any}
-- Related rules — AGENTS, CODE, DESIGN, INFRASTRUCTURE; GREENFIELD or BROWNFIELD per mode
 
 ## Clarification log
 
@@ -141,6 +156,10 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 - [ ] Lint/typecheck per [`CODE.md`](CODE.md) section 15
 - [ ] Tests run
+- [ ] Production-grade UI per [`DESIGN.md`](DESIGN.md) (states, responsive, modals)
+- [ ] Production-grade infra per [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) / [`GREENFIELD.md`](GREENFIELD.md) (health, env, backup when in scope)
+- [ ] Production-grade API per [`CODE.md`](CODE.md) §8, §11, §16
+- [ ] No in-scope stubs or MVP shortcuts unless user explicitly requested MVP
 - [ ] `project/documents/` updated if feature work
 - [ ] `project/histories/{timestamp}_{title}.md` appended
 - [ ] Task status → `complete`
@@ -168,10 +187,10 @@ Use **paths and app slugs** from `project/INFRASTRUCTURE.md`. Add `docker`, `dep
 
 ## 5. Agent Workflow (plan mode sequence)
 
-1. **Draft plan** (`Status: planning`) — no code edits; write Approach, change-oriented steps, paths in scope, Files expected to change
+1. **Draft plan** (`Status: planning`) — no code edits; write Context read (Gate A), Approach, change-oriented steps, paths in scope, Files expected to change
 2. **Clarify** — unresolved items → Open questions; user answers → Clarification log and Decisions
-3. **Confirm** — if scope is large or ambiguous, present plan summary and wait for user approval (per AGENTS §2)
-4. **Execute** (`Status: in_progress`) — one step at a time; check off; add steps when discovered
+3. **Confirm** — required for greenfield bootstrap and new-app creation; also when scope is large or ambiguous — present plan summary and wait for user approval (per AGENTS §2)
+4. **Execute** (`Status: in_progress`) — only after Gates A–C pass; one step at a time; check off; add steps when discovered
 5. **Complete** — Verification checklist; `project/histories/` entry; `Status: complete`
 
 ### Get timestamp
@@ -199,15 +218,20 @@ date +%Y%m%d_%H%M%S
 - Don't skip task files for non-trivial implementation work
 - Don't use vague steps ("implement feature", "fix bug")
 - Don't start implementation edits while `Status: planning` and steps are incomplete
+- Don't set `Status: in_progress` before Gates A–C pass (see §1.6)
+- Don't leave Context read empty — list every file read in Gate A
 - Don't put feature specs in TASK — use `project/documents/`
 - Don't put change logs in TASK — use `project/histories/` after completion
 - Don't rewrite completed task files — append new TASK or HISTORY entries
 
 ## 7. Agent Checklist
 
-1. Task file created before first meaningful code or config edit?
-2. Approach, paths in scope, and Files expected to change filled in?
-3. Steps change-oriented — path, before/after, verify per step?
-4. User confirmed plan when scope was large or ambiguous?
-5. Status progressed `planning` → `in_progress` → `complete`?
-6. HISTORY entry links back to this task file when work is done?
+1. AGENTS Gates A–C passed before `Status: in_progress`?
+2. Context read lists every instruction and project file read (not empty)?
+3. Task file created before first meaningful code or config edit?
+4. Approach, paths in scope, and Files expected to change filled in?
+5. Steps change-oriented — path, before/after, verify per step?
+6. User confirmed plan for greenfield bootstrap or new-app creation (when applicable)?
+7. Status progressed `planning` → `in_progress` → `complete`?
+8. Production verification complete per DESIGN, INFRASTRUCTURE/GREENFIELD, CODE (when UI/infra/API in scope)?
+9. HISTORY entry links back to this task file when work is done?

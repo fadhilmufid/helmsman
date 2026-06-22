@@ -68,7 +68,7 @@ When work was driven by a task plan, link `project/tasks/{timestamp}_{task-slug}
 
 ## Summary
 
-One paragraph: what changed and why.
+One paragraph: what changed and why. State whether delivery met the **production bar** per AGENTS §2.5 (UI, infra, API) or list **known gaps** — never imply complete when stubs or MVP shortcuts remain in scope.
 
 ## Changes
 
@@ -148,6 +148,7 @@ date +%Y%m%d_%H%M%S
 - Don't write entries outside `project/histories/`
 - Don't edit instruction templates (`instructions/*.md`, root `AGENTS.md`) when a history entry suffices
 - Don't put step-by-step plans in HISTORY — use `project/tasks/` per [`TASK.md`](TASK.md)
+- Don't mark work complete in history without stating production verification results when infra/UI/API were in scope
 
 ## 7. Agent Checklist
 
@@ -155,3 +156,4 @@ date +%Y%m%d_%H%M%S
 2. Body includes Summary, Changes, Files touched, Notes?
 3. Task file linked when work was driven by a task plan?
 4. Entry written locally (gitignored)?
+5. Summary states production bar met or lists gaps (when infra/UI/API were in scope)?

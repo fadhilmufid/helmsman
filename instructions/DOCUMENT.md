@@ -4,6 +4,19 @@ Rules for living feature reference documentation. **Read-only template** — con
 
 Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`TASK.md`](TASK.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`HISTORY.md`](HISTORY.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
 
+## 0. Production-grade specs (hard default)
+
+Per [`AGENTS.md`](../AGENTS.md) §2.5 — feature docs define **production-ready behavior**, not happy-path sketches that justify stubs.
+
+| Rule | Detail |
+|------|--------|
+| **Production behavior** | Error cases, edge states, auth boundaries, mobile + desktop UX |
+| **api-specification-document.md** | Every response `code`, HTTP status, and frontend scenario — not happy-path only |
+| **user-interface-specification-document.md** | Loading, error, and empty states per screen |
+| **Done means production** | Specs define what "complete" means at production quality — not a shortcut to code faster |
+
+**Don't write happy-path-only specs** that justify stub implementations.
+
 ## 1. Purpose
 
 Living **feature reference documentation** — distinct from other project doc layers:
@@ -26,7 +39,7 @@ Use [`TASK.md`](TASK.md) for execution steps; use DOCUMENT for persistent specs 
 
 ```
 project/
-└── document/
+└── documents/
     └── {feature-slug}/
         ├── business-requirements-document.md
         ├── functional-specification-document.md
@@ -58,19 +71,37 @@ Use these when applicable — add others with full descriptive names when useful
 
 ## 3. When to Create or Update
 
+**Hard gate:** No application source edits until required DOCUMENT files exist for the feature. Per [`AGENTS.md`](../AGENTS.md) §0.5 Gate C.
+
 **Required** when the user asks to build or significantly change a feature — after clarification per [`AGENTS.md`](../AGENTS.md) section 2 is complete:
+
+### Greenfield bootstrap required documents
+
+For each feature slug, create **before** `platforms/`, `deploy/`, or application code:
+
+| File | When required |
+|------|---------------|
+| `business-requirements-document.md` | Always |
+| `functional-specification-document.md` | Always |
+| `technical-documentation.md` | Always |
+| `api-specification-document.md` | When API is in scope |
+| `user-interface-specification-document.md` | When web UI is in scope |
+
+See [`GREENFIELD.md`](GREENFIELD.md) Phase A.5.
+
+### Feature work steps
 
 1. **Identify the feature slug** — create `project/documents/{feature-slug}/` if new
 2. **Decide which documents are needed** — based on feature complexity:
 
-| Situation | Typical documents |
+| Situation | Required documents |
 |-----------|-------------------|
 | Simple bugfix / tiny tweak | Skip new DOCUMENT files; note in HISTORY only |
-| New user-facing feature | business-requirements + functional-specification + technical-documentation |
-| Integration / API feature | Add api-specification-document |
-| UI-heavy feature | Add user-interface-specification-document |
+| New user-facing feature (API + UI in scope) | **All five:** business-requirements + functional-specification + technical-documentation + api-specification + user-interface-specification |
+| New user-facing feature (UI only) | business-requirements + functional-specification + technical-documentation + user-interface-specification |
+| Integration / API feature (no UI) | business-requirements + functional-specification + technical-documentation + api-specification-document |
 | Architecture change | Add system-design-document or business-solution-document |
-| CRUD / entity management feature | functional-specification + user-interface-specification + technical-documentation listing all pages, API endpoints, UUID + soft-delete schema |
+| CRUD / entity management feature | functional-specification + user-interface-specification + technical-documentation + api-specification — list all pages, API endpoints, UUID + soft-delete schema **before** coding |
 
 3. **Create or update** relevant files **before implementation begins** (draft status OK) and **as the feature is built** — docs evolve with decisions, not only at the end
 4. **Cross-link** — HISTORY entries should reference `project/documents/{feature}/` paths when applicable; TASK files should reference DOCUMENT paths in Context read and Related
@@ -139,17 +170,20 @@ One paragraph.
 
 - Don't put feature specs in `project/histories/` — HISTORY is a change log, not a spec library
 - Don't put execution steps in DOCUMENT — use `project/tasks/` per [`TASK.md`](TASK.md)
+- Don't start scaffold, handlers, or pages before functional-specification and api-specification exist for CRUD/API features
+- Don't write happy-path-only specs that justify stub implementations
 - Don't use abbreviated doc filenames (`brd.md`, `fsd.md`, etc.)
 - Don't let DOCUMENT files drift from the implemented code
 - Don't edit instruction templates (`instructions/*.md`, root `AGENTS.md`) when a `project/documents/` update suffices
 
 ## 7. Agent Checklist
 
-1. Feature scope clarified per [`AGENTS.md`](../AGENTS.md) section 2 before coding?
-2. Task plan created per [`TASK.md`](TASK.md)?
-3. Feature slug folder exists at `project/documents/{feature-slug}/` when building a feature?
-4. Filenames use full names only (no abbreviations)?
-5. Right document types chosen for feature complexity?
-6. Docs created before implementation and updated during, not deferred to the end?
-7. `Last updated` and `Status` reflect current state?
-8. HISTORY entry references DOCUMENT paths when applicable?
+1. AGENTS Gate C passed — required DOCUMENT files exist before application code?
+2. Feature scope clarified per [`AGENTS.md`](../AGENTS.md) section 2 before coding?
+3. Task plan created per [`TASK.md`](TASK.md)?
+4. Feature slug folder exists at `project/documents/{feature-slug}/` when building a feature?
+5. Filenames use full names only (no abbreviations)?
+6. Right document types chosen for feature complexity?
+7. Docs created before implementation and updated during, not deferred to the end?
+8. `Last updated` and `Status` reflect current state?
+9. HISTORY entry references DOCUMENT paths when applicable?

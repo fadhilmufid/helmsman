@@ -6,6 +6,21 @@ General guide for defining a project design system. **Read-only template** — a
 
 **Brownfield:** document existing UI library and tokens in `project/DESIGN.md` before imposing new patterns. **Greenfield:** define tokens and library choice at clarify per [`GREENFIELD.md`](GREENFIELD.md).
 
+## 0. Production-grade UI (hard default)
+
+Per [`AGENTS.md`](../AGENTS.md) §2.5 — UI work targets **production quality**, not wireframes or MVP shells.
+
+| Rule | Detail |
+|------|--------|
+| **Finished screens** | Ship polished UI for in-scope screens — not gray boxes, lorem ipsum placeholders, or "style later" |
+| **Required states** | Loading, error, empty, and success feedback for every async flow |
+| **Accessibility** | Focus visible, keyboard usable, touch targets per §8 table |
+| **CRUD** | Full index/create/edit/detail/delete flows with confirmation modals — per [`CODE.md`](CODE.md) section 11 |
+| **Polish** | Consistent spacing, hover/focus, responsive breakpoints — document in `project/DESIGN.md` |
+| **Proactive** | Sensible enhancements (accessibility, responsive edge cases) that raise quality without changing core goal |
+
+**Don't default to MVP/wireframe UI** unless the user explicitly asks for MVP.
+
 ## 1. Visual Theme & Atmosphere
 
 Define in `project/DESIGN.md`:
@@ -134,6 +149,9 @@ Project-specific do's and don'ts belong in `project/DESIGN.md`. General guidance
 - Don't ship desktop-only layouts, fixed widths that overflow mobile, or hover-only interactions with no touch equivalent
 - Don't rebuild accessible modal/table/select primitives when a maintained library exists
 - Don't mix multiple full component suites without documenting why in project
+- Don't ship unstyled or single-state pages for in-scope features
+- Don't defer mobile layout or error states to a later pass
+- Don't use MVP/wireframe UI unless user explicitly asks for MVP
 
 ## 8. Responsive Behavior
 
@@ -173,3 +191,5 @@ Before UI work:
 4. CRUD index pages include filter, search, sort, pagination per project spec; delete uses confirmation modal
 5. Web UI built mobile-first with responsive breakpoints documented in `project/DESIGN.md`?
 6. UI primitives sourced from a popular component library (or documented reason custom)?
+7. Every in-scope screen has loading, error, and empty states — not happy-path only?
+8. UI is production-polished (responsive, accessible, themed) — not wireframe or MVP shell?

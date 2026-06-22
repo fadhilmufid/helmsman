@@ -13,6 +13,21 @@ UI design system rules remain in [`DESIGN.md`](DESIGN.md) — not duplicated her
 
 ---
 
+## 0. Production-grade infrastructure (hard default)
+
+Per [`AGENTS.md`](../AGENTS.md) §2.5 — infrastructure targets **production deployability**, not "works on my machine" only.
+
+| Rule | Detail |
+|------|--------|
+| **Greenfield** | All four concerns per [`GREENFIELD.md`](GREENFIELD.md) for production use — healthchecks, `depends_on` order, `.env.example`, backup strategy, image export/rollback when using pipeline |
+| **Brownfield** | Document what exists; when adding or changing infra, meet production bar — note gaps in `project/INFRASTRUCTURE.md` |
+| **project/INFRASTRUCTURE.md** | Record health endpoints, migration/startup order, backup location, ports, secrets pattern |
+| **Never unless asked** | Dev-only compose with no healthchecks, no env examples, no backup path, or local-hardcoded secrets |
+
+**Don't default to dev-only infra** when bootstrap or deploy is in scope.
+
+---
+
 ## Part A — Documentation architecture
 
 ### Two-tier system
@@ -92,7 +107,7 @@ Rule templates and project config files use **`CAPITAL.md`**: uppercase basename
 
 | File | Purpose |
 |------|---------|
-| `project/OVERVIEW.md` | Mode (greenfield/brownfield), slug, purpose, MVP scope, gaps |
+| `project/OVERVIEW.md` | Mode (greenfield/brownfield), slug, purpose, delivery scope, gaps |
 | `project/INFRASTRUCTURE.md` | **Project-specific map**: apps, paths, docker, deploy, db, migrations, build/backup |
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
 | `project/DESIGN.md` | UI tokens, component library, breakpoints |
@@ -153,8 +168,10 @@ Top-level [`instructions/INFRASTRUCTURE.md`](INFRASTRUCTURE.md) explains **how t
 
 ## Agent checklist
 
-1. Mode resolved per [`../AGENTS.md`](../AGENTS.md) §0 (greenfield vs brownfield)?
-2. `project/INFRASTRUCTURE.md` populated from clarify (greenfield) or discovery (brownfield)?
-3. Feature work uses `project/documents/`; tasks use `project/tasks/`; changes logged in `project/histories/`?
-4. Greenfield technical gates verified per [`GREENFIELD.md`](GREENFIELD.md) when building new apps?
-5. Brownfield onboarding gates verified per [`BROWNFIELD.md`](BROWNFIELD.md) when adopting existing repos?
+1. AGENTS §0.5 execution gates understood and followed?
+2. Mode resolved per [`../AGENTS.md`](../AGENTS.md) §0 (greenfield vs brownfield)?
+3. `project/INFRASTRUCTURE.md` populated from clarify (greenfield) or discovery (brownfield)?
+4. Feature work uses `project/documents/` **before** code; tasks use `project/tasks/` **before** code; changes logged in `project/histories/`?
+5. Greenfield technical gates verified per [`GREENFIELD.md`](GREENFIELD.md) when building new apps?
+6. Brownfield onboarding gates verified per [`BROWNFIELD.md`](BROWNFIELD.md) when adopting existing repos?
+7. Infra documented and production-ready (health, backup, env examples) when in scope?

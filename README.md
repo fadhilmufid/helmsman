@@ -1,6 +1,6 @@
 # Instruction Pack
 
-Reusable **agent guidance** for software projects — greenfield (new apps) and brownfield (existing codebases). Copy this folder into your repo root and point **agents** at **`AGENTS.md`**.
+Reusable **agent guidance** for software projects — greenfield (new apps) and brownfield (existing codebases). Agents default to **production-grade** delivery unless you explicitly ask for MVP. Copy this folder into your repo root and point **agents** at **`AGENTS.md`**.
 
 ## What this is
 

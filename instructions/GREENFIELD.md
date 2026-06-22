@@ -14,7 +14,7 @@ For an **existing** codebase, use [`BROWNFIELD.md`](BROWNFIELD.md) instead.
 
 | Rule | Detail |
 |------|--------|
-| **Always ask first** | Per [`AGENTS.md`](AGENTS.md) section 2 — including **stack** and **layout**, even for minimal prompts |
+| **Always ask first** | Per [`AGENTS.md`](AGENTS.md) section 2 — including **stack** and **layout**, even for short prompts |
 | **Recommended:** labels | Propose defaults in the clarify batch; user confirms or delegates |
 | **Wait for confirmation** | Proceed only after the user confirms or says *"use your recommendations"* / *"you decide"* |
 | **Record then build** | Write confirmed decisions to `project/*` and create a task plan per [`TASK.md`](TASK.md) before scaffold/code |
@@ -38,7 +38,7 @@ Runnable apps live under `{root}/platforms/` (fixed parent name, always plural).
 
 `web` / `api` / `db` are **example slugs only** — not required names.
 
-### Minimum app requirements (greenfield)
+### Required four concerns (greenfield)
 
 Every new project must address these four concerns. Document paths in `project/INFRASTRUCTURE.md`.
 
@@ -101,14 +101,15 @@ Ask in one batch per AGENTS §2. **Recommended:** values are proposals — not l
 | Docker | Dockerfile location per app |
 | Deploy | Target environment; `deploy/` layout |
 | Design | Theme, component library — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md` |
-| MVP scope | Smallest useful boundary for first delivery |
+| Delivery scope | What the user asked for — implement at **full production quality**, not stripped down |
+| Quality bar | Full / production-ready — per AGENTS §2.5 |
 | Feature docs | Which `project/documents/{feature}/` files per [`DOCUMENT.md`](DOCUMENT.md) |
 
 After clarify, write:
 
 | File | Content |
 |------|---------|
-| `project/OVERVIEW.md` | Slug, purpose, MVP scope |
+| `project/OVERVIEW.md` | Slug, purpose, delivery scope, quality bar |
 | `project/INFRASTRUCTURE.md` | Platform slugs, stack per app, ports, Docker, deploy, db, migrations |
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
 | `project/DESIGN.md` | Component library, theme, breakpoints |
@@ -179,6 +180,22 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 4. **Create `project/tasks/{timestamp}_{task-slug}.md`** — bootstrap plan per [`TASK.md`](TASK.md)
 5. **Create** `{root}/README.md` from §7 template (draft OK; fill placeholders after `project/INFRASTRUCTURE.md` and `project/AGENTS.md` are complete)
 
+**STOP — do not create `platforms/`, `deploy/`, or any application files until steps 1–4 of Phase A are complete and recorded in the task file.**
+
+### Phase A.5 — Required feature documents (Gate C)
+
+For each feature slug, create these files under `project/documents/{feature-slug}/` **before** Phase B:
+
+| File | When required |
+|------|---------------|
+| `business-requirements-document.md` | Always for bootstrap / new features |
+| `functional-specification-document.md` | Always for bootstrap / new features |
+| `technical-documentation.md` | Always for bootstrap / new features |
+| `api-specification-document.md` | When API is in scope |
+| `user-interface-specification-document.md` | When web UI is in scope |
+
+See [`DOCUMENT.md`](DOCUMENT.md) for content rules.
+
 ### Phase B — Infrastructure scaffold
 
 6. **DB infra** — per confirmed stack (e.g. database container or managed service config)
@@ -225,7 +242,7 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 1 | Documented deploy path works — all services healthy (e.g. `docker compose up` when using compose) |
 | 2 | Migrations applied; dev seeds run without error (when applicable) |
 | 3 | Auth works when required; data scoped correctly |
-| 4 | MVP features work in target UI (mobile viewport when web is in scope) |
+| 4 | Delivery-scope features work completely — polished UX, all documented flows, not skeleton (mobile viewport when web is in scope) |
 | 5 | Destructive actions use confirmation; soft delete when CODE §11 applies |
 | 6 | API responses include `code` when CODE §8 applies; frontend handles documented scenarios |
 | 7 | Build script produces timestamped image exports (when using §3 pipeline) |
@@ -236,9 +253,9 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 12 | `project/histories/` bootstrap entry appended |
 | 13 | Root `README.md` has setup instructions |
 
-### Testing minimum
+### Testing standard
 
-Per AGENTS §4: integration tests for critical endpoints/features; lint/typecheck green per app; optional E2E smoke test when web is in scope.
+Per AGENTS §4: integration tests for critical endpoints/features; lint/typecheck green per app; E2E smoke test when web is in scope. **Do not mark bootstrap complete with failing or missing critical tests.**
 
 ---
 
@@ -381,15 +398,21 @@ other-references/     # Optional user reference dumps (local only)
 **Do:**
 
 - Confirm greenfield mode per AGENTS §0
-- Ask stack and MVP even when you have recommendations
+- Pass AGENTS §0.5 execution gates before any platform code
+- Ask stack and delivery scope even when you have recommendations
 - Follow bootstrap playbook **after** user confirms or delegates
 - Create bootstrap task plan per [`TASK.md`](TASK.md) before platform code
+- Create `project/documents/{feature}/` per Phase A.5 before Phase B
+- Proactively add sensible quality improvements (validation, accessibility, observability, seed data) — record in docs/task when they do not change the core goal
 - Record deploy/compose patterns in `project/INFRASTRUCTURE.md` after clarify — not from this template verbatim
+- Phases B–E target **production deployability** — healthchecks, env examples, backup, startup order — not local-dev-only wiring
 
 **Don't:**
 
 - Skip clarify because you have recommendations
-- Write `platforms/` before `project/*` and task plan exist
+- Skip AGENTS Gates A–D — read, document, task, then code
+- Write `platforms/` before `project/*`, feature docs, and task plan exist
+- Default to MVP, stubs, or skeleton implementations unless user explicitly asks for MVP
 - Apply this file to brownfield repos without user request to restructure
 - Expect a `deploy/` folder in this instruction template — create it in the target project
 

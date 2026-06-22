@@ -40,17 +40,38 @@ Record mode in `project/OVERVIEW.md` when writing project config.
 
 ---
 
-## 1. Before You Start
+## 0.5 Execution gates (hard STOP)
 
-1. Resolve mode per **§0**; read [`instructions/README.md`](instructions/README.md) for index and terminology
-2. Read active mode guide: [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) or [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
-3. Read [`instructions/INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`instructions/TASK.md`](instructions/TASK.md), [`instructions/CODE.md`](instructions/CODE.md), [`instructions/DESIGN.md`](instructions/DESIGN.md), [`instructions/HISTORY.md`](instructions/HISTORY.md), [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)
-4. Scan [`other-references/`](other-references/) when it has user-provided content (see [`other-references/README.md`](other-references/README.md))
-5. Read [`project/OVERVIEW.md`](project/OVERVIEW.md) → [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) → [`project/AGENTS.md`](project/AGENTS.md) → [`project/DESIGN.md`](project/DESIGN.md) when those files exist locally
-6. **Brownfield:** if `project/*` is missing or stale, run discovery per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) before large edits
-7. Scan [`project/histories/`](project/histories/) newest first for recent context
-8. Scan [`project/tasks/`](project/tasks/) for active or blocked tasks (`planning`, `blocked`, `in_progress`)
-9. When working on a known feature, scan [`project/documents/{feature}/`](project/documents/) for existing specs
+**No application work until each gate passes.** Gates are sequential — do not skip or reorder.
+
+| Gate | Requirement | Blocks until complete |
+|------|-------------|----------------------|
+| **A — Read-first** | Read every file in §1 Gate A checklist (full read, not skim) | Any edit under `platforms/`, application source, `deploy/`, migrations, Dockerfiles, or target-project root `README.md` |
+| **B — Clarify and record** | Resolve open decisions per §2; write `project/OVERVIEW.md`, `INFRASTRUCTURE.md`, `AGENTS.md`, `DESIGN.md` | Implementation edits |
+| **C — Documents before code** | Create `project/documents/{feature-slug}/` with required files per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) | Application source, scaffold, `platforms/`, `deploy/` |
+| **D — Task before code** | Create `project/tasks/{timestamp}_{task-slug}.md` with `Status: planning`, filled Approach + steps, and **Context read** listing every file from Gate A | Setting `Status: in_progress` or any implementation edit |
+| **E — Quality bar** | Build per §2.5 during and after implementation | Marking task or bootstrap complete |
+
+**Gate D unlocks code:** Set `Status: in_progress` only after Gates A–C pass. List every file read in the task **Context read** section.
+
+**Exceptions:** Instruction-pack maintenance in this repo (`instructions/`, root `AGENTS.md`, tracked `project/*/README.md`) — not target application work.
+
+---
+
+## 1. Before You Start (Gate A checklist)
+
+Complete **every item** before Gate B. Read each file in full — do not skim.
+
+1. Resolve mode per **§0**
+2. [`instructions/README.md`](instructions/README.md) — index and terminology
+3. Active mode guide: [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) or [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
+4. [`instructions/INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`instructions/TASK.md`](instructions/TASK.md), [`instructions/CODE.md`](instructions/CODE.md), [`instructions/DESIGN.md`](instructions/DESIGN.md), [`instructions/HISTORY.md`](instructions/HISTORY.md), [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)
+5. [`other-references/`](other-references/) — read all content when folder is non-empty (see [`other-references/README.md`](other-references/README.md))
+6. [`project/OVERVIEW.md`](project/OVERVIEW.md) → [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) → [`project/AGENTS.md`](project/AGENTS.md) → [`project/DESIGN.md`](project/DESIGN.md) when those files exist
+7. [`project/histories/`](project/histories/) — newest entries first
+8. [`project/tasks/`](project/tasks/) — active or blocked tasks (`planning`, `blocked`, `in_progress`)
+9. [`project/documents/{feature}/`](project/documents/) — all files for the feature in scope
+10. **Brownfield:** if `project/*` is missing or stale, run discovery per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) — discovery is part of Gate A, not a substitute for Gates C–D
 
 ---
 
@@ -72,7 +93,7 @@ If the user says *"use your recommendations"*, *"you decide"*, or similar — ap
 
 | Area | What to resolve |
 |------|-----------------|
-| Purpose and scope | What the app/feature does; MVP or change boundaries |
+| Purpose and scope | What the app/feature does; delivery scope and quality expectations |
 | Feature docs | Which `project/documents/` files per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) — when building or changing features |
 | Data conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 11 when writing new domain entities |
 | API conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 8 when adding or changing APIs |
@@ -115,15 +136,43 @@ If the user says *"use your recommendations"*, *"you decide"*, or similar — ap
 
 ---
 
-## 3. Task Before Build
+## 2.5 Build quality standard
 
-Create and maintain a **plan-mode** task file per [`instructions/TASK.md`](instructions/TASK.md) for every non-trivial user request.
+**Default to full production quality — never strip down to MVP, stubs, or skeleton unless the user explicitly asks for MVP.**
 
-1. **Before** first meaningful code or config edit: create or open `project/tasks/{timestamp}_{task-slug}.md` with `Status: planning`
-2. **Draft** Approach, change-oriented steps (what/where/why per file), paths in scope, and Files expected to change
-3. **Confirm** — for large or ambiguous scope, present plan summary and wait for user approval (per section 2)
-4. **Execute** — set `Status: in_progress`; check off steps one at a time; update `Status` when blocked
-5. **After** work: set `Status: complete`; append `project/histories/` entry linking back to the task file
+| Rule | Detail |
+|------|--------|
+| **Within the user's ask** | Implement completely and production-ready — not bare minimum |
+| **No placeholders** | No stub pages, placeholder handlers, or "TODO later" for in-scope features |
+| **UI states** | Full error, loading, and empty states per [`instructions/DESIGN.md`](instructions/DESIGN.md) |
+| **API quality** | Production baseline per [`instructions/CODE.md`](instructions/CODE.md) section 16; response `code` per section 8 |
+| **CRUD completeness** | When entity management is in scope, full UX per CODE section 11 — every page and flow documented and built |
+| **Proactive improvements** | Add sensible enhancements (validation, accessibility, observability, seed data) that raise quality without changing the core goal — record in task Clarification log or `project/documents/` |
+| **Scope changes** | Do not expand the core goal without user confirm |
+
+### Production bar by domain
+
+| Domain | Instruction file | Production expectation |
+|--------|------------------|------------------------|
+| UI / UX | [`instructions/DESIGN.md`](instructions/DESIGN.md) | Polished mobile-first UI; loading/error/empty; accessible components; no wireframe pages |
+| Infrastructure | [`instructions/INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md) + [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) | Healthchecks, backup/restore, env examples, startup order — not dev-only compose |
+| Code / API | [`instructions/CODE.md`](instructions/CODE.md) §8, §11, §16 | Full CRUD, response codes, validation, auth, pagination, logging |
+| Specs | [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) | Specs describe production flows and error cases — not happy-path-only |
+| Plans | [`instructions/TASK.md`](instructions/TASK.md) | Verification steps include production checks per domain |
+| Change log | [`instructions/HISTORY.md`](instructions/HISTORY.md) | Entries note when production bar was met or gaps remain |
+
+---
+
+## 3. Task Before Build (Gate D)
+
+**Mandatory** for every non-trivial user request per [`instructions/TASK.md`](instructions/TASK.md). `Status: in_progress` is **forbidden** until Gates A–C pass.
+
+1. **Before** first meaningful code or config edit: create `project/tasks/{timestamp}_{task-slug}.md` with `Status: planning`
+2. **Context read** — list every instruction and project file read in Gate A (not empty)
+3. **Draft** Approach, change-oriented steps (what/where/why per file), paths in scope, and Files expected to change
+4. **Confirm** — required for greenfield bootstrap and any request that creates new apps; also when scope is large or ambiguous — present plan summary and wait for user approval (per section 2)
+5. **Execute** — set `Status: in_progress` only after Gates A–C pass; check off steps one at a time; update `Status` when blocked
+6. **After** work: set `Status: complete`; append `project/histories/` entry linking back to the task file
 
 Do not rewrite completed task files — append a new task or HISTORY entry to correct mistakes.
 
@@ -137,13 +186,13 @@ Do not rewrite completed task files — append a new task or HISTORY entry to co
 - Add or update tests for code you change
 - **Greenfield:** verify compose/build per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) after Docker or deploy changes
 
-### Greenfield minimum
+### Greenfield testing standard
 
 When bootstrapping per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md), do not mark complete without:
 
-- Integration tests for critical endpoints/features
+- Integration tests for critical endpoints/features — no marking complete with failing or missing critical tests
 - Lint + typecheck green per app (see [`instructions/CODE.md`](instructions/CODE.md) section 15)
-- Optional E2E smoke test when web is in scope
+- E2E smoke test when web is in scope
 
 CI: add `.github/workflows/ci.yml` at `{root}` when ready; document path in `project/AGENTS.md`.
 
@@ -167,40 +216,41 @@ CI: add `.github/workflows/ci.yml` at `{root}` when ready; document path in `pro
 
 Before starting:
 
-1. Mode resolved per §0 (or recorded in `project/OVERVIEW.md`)?
-2. Read [`instructions/README.md`](instructions/README.md) and active mode guide
-3. Read local `project/*` if present; **brownfield:** run discovery if missing
-4. Scan `project/tasks/`, `project/histories/`, `project/documents/{feature}/`
-5. Read [`instructions/CODE.md`](instructions/CODE.md) before writing code; [`project/DESIGN.md`](project/DESIGN.md) before UI work
+1. **Gate A** — every file in §1 read in full (listed in task Context read)?
+2. **Gate B** — clarify complete; `project/OVERVIEW.md`, `INFRASTRUCTURE.md`, `AGENTS.md`, `DESIGN.md` written?
+3. **Gate C** — `project/documents/{feature}/` exists with required files per DOCUMENT.md?
+4. **Gate D** — task file created with `Status: planning`; steps drafted before `in_progress`?
+5. Mode resolved per §0 (or recorded in `project/OVERVIEW.md`)?
 6. Unspecified decisions resolved per section 2?
-7. Task file created or opened per section 3?
+7. User confirmed plan for greenfield bootstrap or new-app creation (when applicable)?
 
 During work:
 
-8. Follow paths and stack from [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md)
-9. **Greenfield:** four concerns per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md); **brownfield:** adapt existing conventions per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
-10. New env vars → update paths listed in project
-11. Task file steps checked off and `Status` kept current
+8. **Gate E** — building at full production quality per §2.5 (not stubs or bare minimum)?
+9. Follow paths and stack from [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md)
+10. **Greenfield:** four concerns per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md); **brownfield:** adapt existing conventions per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
+11. New env vars → update paths listed in project
+12. Task file steps checked off and `Status` kept current
 
 After work:
 
-12. Followed [`instructions/CODE.md`](instructions/CODE.md) (block comments + inline journal per §1–2) and [`instructions/DESIGN.md`](instructions/DESIGN.md) on touched code?
-13. Post-edit verification per [`instructions/CODE.md`](instructions/CODE.md) section 15 — zero errors on changed files/apps?
-14. [`project/documents/`](project/documents/) updated for feature work, or consciously skipped per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)?
-15. Task file `Status: complete` with verification checklist done?
-16. Append `project/histories/{timestamp}_{title}.md` per [`instructions/HISTORY.md`](instructions/HISTORY.md)
-17. Update `project/*` only if project requirements changed — never edit `instructions/` templates unless user asks
-18. Never commit `.env`, `.tar` files, or backup dumps
+13. Followed [`instructions/CODE.md`](instructions/CODE.md) (block comments + inline journal per §1–2) and [`instructions/DESIGN.md`](instructions/DESIGN.md) on touched code?
+14. Post-edit verification per [`instructions/CODE.md`](instructions/CODE.md) section 15 — zero errors on changed files/apps?
+15. [`project/documents/`](project/documents/) updated for feature work, or consciously skipped per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)?
+16. Task file `Status: complete` with verification checklist done?
+17. Append `project/histories/{timestamp}_{title}.md` per [`instructions/HISTORY.md`](instructions/HISTORY.md)
+18. Update `project/*` only if project requirements changed — never edit `instructions/` templates unless user asks
+19. Never commit `.env`, `.tar` files, or backup dumps
 
 ### Greenfield bootstrap only
 
 When bootstrapping per [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md), also verify Definition of Done (GREENFIELD §5):
 
-19. Deploy path works — services healthy
-20. Migrations and seeds (when applicable)
-21. MVP features work; auth when required
-22. Build/backup scripts (when using GREENFIELD pipeline)
-23. Root `README.md` per GREENFIELD §7 (or equivalent) — user-facing app description
+20. Deploy path works — services healthy
+21. Migrations and seeds (when applicable)
+22. Delivery-scope features work at full quality — polished UX, all documented flows, not skeleton; auth when required
+23. Build/backup scripts (when using GREENFIELD pipeline)
+24. Root `README.md` per GREENFIELD §7 (or equivalent) — user-facing app description
 
 ### Brownfield onboarding only
 

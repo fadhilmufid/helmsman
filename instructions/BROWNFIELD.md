@@ -14,17 +14,19 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 
 | Rule | Detail |
 |------|--------|
+| **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §0.5 — read-first, documents, task, then code |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |
 | **Adapt to conventions** | Follow existing folder layout, stack, and patterns unless the user asks to change them |
 | **No silent restructure** | Do not auto-scaffold `platforms/` or `deploy/` unless the user explicitly wants greenfield-style layout |
 | **Plan before change** | Non-trivial work uses [`TASK.md`](TASK.md); feature specs use [`DOCUMENT.md`](DOCUMENT.md) |
+| **Production on touched work** | New or changed code, UI, and infra meet production bar per AGENTS §2.5 — adapt legacy patterns, don't ship stubs on surfaces you touch |
 
 ---
 
 ## 1. Discovery workflow
 
-Run discovery **before** meaningful code or config edits when `project/*` is missing or stale.
+Run discovery **before** meaningful code or config edits when `project/*` is missing or stale. Discovery satisfies AGENTS Gate A — it does **not** replace Gates C–D (documents and task before code).
 
 ### 1.1 Scan order (adapt to repo)
 
@@ -84,6 +86,8 @@ Include whatever containerization, deploy, and data tooling **already exists** �
 
 ## 3. Document before change
 
+**Hard gate:** Non-trivial implementation requires `project/documents/{feature}/` (when building or changing features) and `project/tasks/` **before** application edits — per AGENTS §0.5.
+
 | Need | Use |
 |------|-----|
 | Non-trivial implementation | [`TASK.md`](TASK.md) — plan-mode task in `project/tasks/` |
@@ -125,7 +129,7 @@ Onboarding is complete when **all** pass:
 
 | # | Gate |
 |---|------|
-| 1 | `project/INFRASTRUCTURE.md` reflects the **actual** repo layout and infra |
+| 1 | `project/INFRASTRUCTURE.md` reflects the **actual** repo layout and infra — note when discovered infra is **not** production-ready (missing health, backup, env examples) as a documented gap |
 | 2 | `project/AGENTS.md` lists dev/lint/test commands that were verified |
 | 3 | `project/OVERVIEW.md` states purpose, slug, and notable gaps or risks |
 | 4 | `project/DESIGN.md` exists or N/A is explicitly noted |
@@ -141,9 +145,11 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 **Do:**
 
 - Resolve brownfield mode per AGENTS §0 before assuming greenfield layout
+- Pass AGENTS §0.5 execution gates before non-trivial application edits
 - Run discovery when `project/*` is empty or contradicts the repo
 - Record actual paths in `project/INFRASTRUCTURE.md`
-- Create a task plan before non-trivial edits
+- Create `project/documents/{feature}/` and a task plan before non-trivial edits
+- Build at full production quality per AGENTS §2.5 — not bare minimum
 - Update `project/documents/` when building or significantly changing features
 
 **Don't:**
