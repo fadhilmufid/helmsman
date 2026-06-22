@@ -102,7 +102,7 @@ Ask in one batch per AGENTS §2. **Recommended:** values are proposals — not l
 | Deploy | Target environment; `deploy/` layout |
 | Design | Theme, component library — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md` |
 | MVP scope | Smallest useful boundary for first delivery |
-| Feature docs | Which `project/document/{feature}/` files per [`DOCUMENT.md`](DOCUMENT.md) |
+| Feature docs | Which `project/documents/{feature}/` files per [`DOCUMENT.md`](DOCUMENT.md) |
 
 After clarify, write:
 
@@ -175,8 +175,8 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 
 1. **Confirm clarify complete** — decisions recorded in `project/*`
 2. **Write `project/OVERVIEW.md`**, **`project/INFRASTRUCTURE.md`**, **`project/AGENTS.md`**, **`project/DESIGN.md`**
-3. **Create `project/document/{feature}/`** per [`DOCUMENT.md`](DOCUMENT.md) **before** platform code
-4. **Create `project/task/{timestamp}_{task-slug}.md`** — bootstrap plan per [`TASK.md`](TASK.md)
+3. **Create `project/documents/{feature}/`** per [`DOCUMENT.md`](DOCUMENT.md) **before** platform code
+4. **Create `project/tasks/{timestamp}_{task-slug}.md`** — bootstrap plan per [`TASK.md`](TASK.md)
 5. **Create** `{root}/README.md` from §7 template (draft OK; fill placeholders after `project/INFRASTRUCTURE.md` and `project/AGENTS.md` are complete)
 
 ### Phase B — Infrastructure scaffold
@@ -191,7 +191,7 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 10. **Data models and migrations** — per [`CODE.md`](CODE.md) section 11 when applicable
 11. **Production baseline** — per CODE §16 for APIs
 12. **Auth** — per CODE §9 when required
-13. **Feature APIs** — per `project/document/`; response `code` per CODE §8
+13. **Feature APIs** — per `project/documents/`; response `code` per CODE §8
 14. **Dev seeds** — when useful for local dev
 
 ### Phase D — Frontend (when in scope)
@@ -212,7 +212,7 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 
 23. **Run Definition of Done** (§5)
 24. **Mark task complete** per [`TASK.md`](TASK.md)
-25. **Append `project/history/`** — link task file
+25. **Append `project/histories/`** — link task file
 
 ---
 
@@ -231,9 +231,9 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 7 | Build script produces timestamped image exports (when using §3 pipeline) |
 | 8 | Backup script produces a database dump (when DB in scope) |
 | 9 | Lint and tests pass per `project/AGENTS.md` for each touched app |
-| 10 | `project/document/{feature}/` reflects what was built |
-| 11 | Bootstrap task marked complete in `project/task/` |
-| 12 | `project/history/` bootstrap entry appended |
+| 10 | `project/documents/{feature}/` reflects what was built |
+| 11 | Bootstrap task marked complete in `project/tasks/` |
+| 12 | `project/histories/` bootstrap entry appended |
 | 13 | Root `README.md` has setup instructions |
 
 ### Testing minimum
@@ -260,21 +260,21 @@ backups/
 .idea/
 .vscode/
 
-# ai_references — user reference dumps (see ai_references/README.md)
-ai_references/**
-!ai_references/README.md
+# other-references — user reference dumps (see other-references/README.md)
+other-references/**
+!other-references/README.md
 
-# project — local workspace (see project/history|document|task/README.md)
+# project — local workspace (see project/histories|documents|tasks/README.md)
 project/**
-!project/history/
-!project/document/
-!project/task/
-project/history/**
-!project/history/README.md
-project/document/**
-!project/document/README.md
-project/task/**
-!project/task/README.md
+!project/histories/
+!project/documents/
+!project/tasks/
+project/histories/**
+!project/histories/README.md
+project/documents/**
+!project/documents/README.md
+project/tasks/**
+!project/tasks/README.md
 ```
 
 ---
@@ -365,8 +365,8 @@ Copy the repo tree from `project/INFRASTRUCTURE.md`:
 {app-path}/        # {role — from project/INFRASTRUCTURE.md}
 {app-path}/        # {role}
 deploy/            # {deploy layout, if applicable}
-project/           # system workspace — config and feature docs (local)
-ai_references/     # Optional user reference dumps (local only)
+project/           # agent workspace — config and feature docs (local)
+other-references/     # Optional user reference dumps (local only)
 ```
 
 ## License
@@ -414,6 +414,6 @@ Adjust service names, slugs, and migration commands to the **confirmed** stack �
 
 - [`../README.md`](../README.md) — user-facing repo overview
 - [`BROWNFIELD.md`](BROWNFIELD.md) — existing codebase adoption
-- [`../AGENTS.md`](../AGENTS.md) — system gate, clarify, task workflow
+- [`../AGENTS.md`](../AGENTS.md) — agent gate, clarify, task workflow
 - [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) — documentation architecture
 - [`CODE.md`](CODE.md) — coding rules, scaffold-first, production baseline

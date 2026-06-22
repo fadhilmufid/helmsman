@@ -1,6 +1,6 @@
-# References
+# Other references
 
-Optional folder for **user-provided reference material** — anything you want the system to read while working on this project.
+Optional folder for **user-provided reference material** — anything you want agents to read while working on this project.
 
 ## What to put here
 
@@ -14,9 +14,9 @@ Optional folder for **user-provided reference material** — anything you want t
 - Application source code (paths per `project/INFRASTRUCTURE.md`)
 - Deploy scripts (`deploy/`)
 - Instruction templates (`instructions/`, root `AGENTS.md`)
-- Project workflow files (`project/OVERVIEW.md`, `project/INFRASTRUCTURE.md`, `project/history/`, etc.)
+- Project workflow files (`project/OVERVIEW.md`, `project/INFRASTRUCTURE.md`, `project/histories/`, etc.)
 
-## For the system
+## For agents
 
 1. Scan this folder when it exists and has content — before and during tasks (especially **brownfield** discovery per [`BROWNFIELD.md`](../instructions/BROWNFIELD.md))
 2. Treat contents as **user-provided context**, not authoritative over instruction templates or `project/` config
@@ -24,4 +24,4 @@ Optional folder for **user-provided reference material** — anything you want t
 
 ## Git
 
-Everything under `ai_references/` is **gitignored** except this file. Dump references freely; they stay local to your machine.
+Everything under `other-references/` is **gitignored** except this file. Dump references freely; they stay local to your machine.

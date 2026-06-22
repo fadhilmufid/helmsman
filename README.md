@@ -1,10 +1,10 @@
-# AI Instruction Pack
+# Instruction Pack
 
-Reusable **system guidance** for software projects — greenfield (new apps) and brownfield (existing codebases). Copy this folder into your repo root and point the **system** at **`AGENTS.md`**.
+Reusable **agent guidance** for software projects — greenfield (new apps) and brownfield (existing codebases). Copy this folder into your repo root and point **agents** at **`AGENTS.md`**.
 
 ## What this is
 
-A structured instruction set that helps the **system**:
+A structured instruction set that helps **agents**:
 
 - **Plan** work with task files and clarification before coding
 - **Build** new apps with consistent layout, Docker, and deploy patterns
@@ -13,23 +13,23 @@ A structured instruction set that helps the **system**:
 
 ## Who it's for
 
-Developers using **Cursor** (or similar tools) who want consistent **system** behavior across projects.
+Developers using **Cursor** (or similar tools) who want consistent **agent** behavior across projects.
 
 ## How to use it
 
 1. Copy this entire folder into your repository root (`{root}`).
-2. Configure the **system** to read **[`AGENTS.md`](AGENTS.md)** at repo root — **not** this README.
-3. Let the system resolve **greenfield** vs **brownfield** and populate `project/*` per the mode guides in [`instructions/`](instructions/).
-4. Optionally drop reference material (specs, wireframes, notes) into [`ai_references/`](ai_references/).
+2. Configure Cursor (or your tool) to read **[`AGENTS.md`](AGENTS.md)** at repo root — **not** this README.
+3. Agents resolve **greenfield** vs **brownfield** and populate `project/*` per the mode guides in [`instructions/`](instructions/).
+4. Optionally drop reference material (specs, wireframes, notes) into [`other-references/`](other-references/).
 
 ## Folder overview
 
 | Path | Purpose |
 |------|---------|
-| [`AGENTS.md`](AGENTS.md) | **System entry gate** — mode, workflow, read order |
+| [`AGENTS.md`](AGENTS.md) | **Agent entry gate** — mode, workflow, read order |
 | [`instructions/`](instructions/) | Rule templates (CODE, DESIGN, GREENFIELD, etc.) |
-| [`project/`](project/) | Local system workspace — config, tasks, history, feature docs (mostly gitignored) |
-| [`ai_references/`](ai_references/) | Optional user reference dumps (gitignored except README) |
+| [`project/`](project/) | Local agent workspace — config, tasks, histories, feature docs (mostly gitignored) |
+| [`other-references/`](other-references/) | Optional user reference dumps (gitignored except README) |
 
 ## Operating modes
 

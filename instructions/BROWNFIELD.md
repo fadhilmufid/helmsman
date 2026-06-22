@@ -34,7 +34,7 @@ Run discovery **before** meaningful code or config edits when `project/*` is mis
 4. **Deploy / runtime** — Docker, Kubernetes, serverless, PaaS configs, env examples
 5. **Dev workflow** — install, run, test, lint, typecheck commands per app or package
 6. **UI** — component library, CSS framework, theme tokens, responsive patterns (if applicable)
-7. **`ai_references/`** — user-provided specs, wireframes, notes (see [`ai_references/README.md`](ai_references/README.md))
+7. **`other-references/`** — user-provided specs, wireframes, notes (see [`other-references/README.md`](other-references/README.md))
 
 ### 1.2 Discovery output
 
@@ -50,7 +50,7 @@ Draft findings in the active task file or notes before editing. Capture:
 
 For first-time adoption, create:
 
-`project/task/{timestamp}_brownfield-onboarding.md`
+`project/tasks/{timestamp}_brownfield-onboarding.md`
 
 with `Status: planning` → discovery steps → populate `project/*` → verify commands → `Status: complete`.
 
@@ -86,14 +86,14 @@ Include whatever containerization, deploy, and data tooling **already exists** �
 
 | Need | Use |
 |------|-----|
-| Non-trivial implementation | [`TASK.md`](TASK.md) — plan-mode task in `project/task/` |
-| New or changed feature behavior | [`DOCUMENT.md`](DOCUMENT.md) — `project/document/{feature-slug}/` |
-| After work completes | [`HISTORY.md`](HISTORY.md) — `project/history/` entry |
+| Non-trivial implementation | [`TASK.md`](TASK.md) — plan-mode task in `project/tasks/` |
+| New or changed feature behavior | [`DOCUMENT.md`](DOCUMENT.md) — `project/documents/{feature-slug}/` |
+| After work completes | [`HISTORY.md`](HISTORY.md) — `project/histories/` entry |
 
 Discovery findings feed:
 
-- `project/document/{feature}/technical-documentation.md`
-- `project/document/{feature}/system-design-document.md`
+- `project/documents/{feature}/technical-documentation.md`
+- `project/documents/{feature}/system-design-document.md`
 
 when documenting architecture or onboarding.
 
@@ -130,7 +130,7 @@ Onboarding is complete when **all** pass:
 | 3 | `project/OVERVIEW.md` states purpose, slug, and notable gaps or risks |
 | 4 | `project/DESIGN.md` exists or N/A is explicitly noted |
 | 5 | Onboarding task (if used) is `Status: complete` |
-| 6 | `project/history/{timestamp}_brownfield-onboarding.md` appended — links task file |
+| 6 | `project/histories/{timestamp}_brownfield-onboarding.md` appended — links task file |
 
 After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 
@@ -144,7 +144,7 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 - Run discovery when `project/*` is empty or contradicts the repo
 - Record actual paths in `project/INFRASTRUCTURE.md`
 - Create a task plan before non-trivial edits
-- Update `project/document/` when building or significantly changing features
+- Update `project/documents/` when building or significantly changing features
 
 **Don't:**
 
@@ -157,6 +157,6 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 ## Related
 
 - [`../README.md`](../README.md) — user-facing repo overview
-- [`../AGENTS.md`](../AGENTS.md) — system gate, clarify, task workflow
+- [`../AGENTS.md`](../AGENTS.md) — agent gate, clarify, task workflow
 - [`GREENFIELD.md`](GREENFIELD.md) — new app bootstrap (not brownfield)
 - [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) — documentation architecture and four concerns

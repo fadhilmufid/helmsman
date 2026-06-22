@@ -1,15 +1,15 @@
-# ai_references — user-provided reference material (see ai_references/README.md)
-ai_references/**
-!ai_references/README.md
+# other-references — user-provided reference material (see other-references/README.md)
+other-references/**
+!other-references/README.md
 
 # project — local workspace; only generated-folder README templates tracked
 project/**
-!project/history/
-!project/document/
-!project/task/
-project/history/**
-!project/history/README.md
-project/document/**
-!project/document/README.md
-project/task/**
-!project/task/README.md
+!project/histories/
+!project/documents/
+!project/tasks/
+project/histories/**
+!project/histories/README.md
+project/documents/**
+!project/documents/README.md
+project/tasks/**
+!project/tasks/README.md

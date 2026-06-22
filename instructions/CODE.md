@@ -2,7 +2,7 @@
 
 Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`DESIGN.md`](DESIGN.md), [`TASK.md`](TASK.md), [`DOCUMENT.md`](DOCUMENT.md), [`HISTORY.md`](HISTORY.md).
 
-How the system must write and document code. **Read-only template** — project stack and paths are in [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) (from greenfield clarify or brownfield discovery).
+How agents must write and document code. **Read-only template** — project stack and paths are in [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) (from greenfield clarify or brownfield discovery).
 
 **Brownfield:** adapt to existing patterns; apply CODE conventions on **new or touched** code unless the user requests alignment. **Greenfield:** scaffold per section 9 when creating new apps under `platforms/`.
 
@@ -407,7 +407,7 @@ Rules:
 - `AppError` (or stack equivalent) carries `code` + `message`; `errorHandler` always emits both in the envelope
 - Route handlers call `next(error)` for failures — never swallow errors or return `200` with `success: false` unless the HTTP status also reflects failure
 - Use `res.status(201).json({ success: true, code: 'COMPANY_CREATED', data })` for creates
-- Document response codes in route block comment `Additional` and in `project/document/{feature}/api-specification-document.md` when the feature has an API spec
+- Document response codes in route block comment `Additional` and in `project/documents/{feature}/api-specification-document.md` when the feature has an API spec
 
 ```typescript
 /**
@@ -554,7 +554,7 @@ sequenceDiagram
 2. **Look up the official scaffold command** for that framework and version
 3. **Run it** targeting the correct `platforms/<app>/` path (document non-obvious commands in project)
 4. **Customize** generated output only where the project requires it
-5. **Document** the scaffold choice in `project/history/` when bootstrapping a new app
+5. **Document** the scaffold choice in `project/histories/` when bootstrapping a new app
 
 ### Example scaffolds (illustrative — search fresh each time)
 
@@ -587,7 +587,7 @@ Applies to frontend and backend apps as documented in `project/INFRASTRUCTURE.md
 2. **Search** for the framework's recommended auth scaffold or starter — official docs first
 3. **Run scaffold/install** in the correct app path (per `project/INFRASTRUCTURE.md`) before writing custom auth code
 4. **Customize** only where PROJECT requires it
-5. **Document** the auth scaffold choice in block comment `Additional` and `project/history/`
+5. **Document** the auth scaffold choice in block comment `Additional` and `project/histories/`
 
 #### Example auth scaffolds (illustrative — search fresh each time)
 
@@ -671,7 +671,7 @@ Use the app path from [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) (
 
 - Every **persisted entity/table** uses a **UUID** primary key (`uuid` in PostgreSQL; UUID type in ORM schema)
 - API routes use UUID in path params (e.g. `GET /api/todos/:id`)
-- Do not use auto-increment integer IDs for domain entities unless the user explicitly opts out and it is documented in `project/INFRASTRUCTURE.md` + `project/history/`
+- Do not use auto-increment integer IDs for domain entities unless the user explicitly opts out and it is documented in `project/INFRASTRUCTURE.md` + `project/histories/`
 
 ### Soft delete
 
@@ -706,7 +706,7 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 | **Detail** | Read-only view of one record |
 | **Delete** | Button on index and/or detail → **confirmation modal** (see [`DESIGN.md`](DESIGN.md)) |
 
-- Add any **additional pages** the feature needs (bulk actions, trash/restore, import, etc.) — document in `project/document/{feature}/`
+- Add any **additional pages** the feature needs (bulk actions, trash/restore, import, etc.) — document in `project/documents/{feature}/`
 - Delete confirmation: shared `ConfirmModal` / dialog component — **not** `window.confirm`, **not** `window.alert` (same bar as section 8 `Alert` rule)
 
 ## 12. General Coding Rules

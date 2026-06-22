@@ -65,7 +65,7 @@ Document each component variant in `project/DESIGN.md`:
 3. **Evaluate** using criteria below
 4. **Install** in the frontend app path per `project/INFRASTRUCTURE.md` and [`CODE.md`](CODE.md) section 10 (install before import)
 5. **Theme** components with project tokens from `project/DESIGN.md` — customize, don't reimplement
-6. **Document** the library choice in `project/DESIGN.md` and `project/history/` when first adopted
+6. **Document** the library choice in `project/DESIGN.md` and `project/histories/` when first adopted
 
 #### Evaluation criteria
 

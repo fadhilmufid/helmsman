@@ -1,8 +1,8 @@
 # Agent Instructions
 
-**System: read this file first.** Users: see [`README.md`](README.md).
+**Agents: read this file first.** Users: see [`README.md`](README.md).
 
-General system workflow for any project using this instruction set. **Read-only gate** — do not edit during normal project work. Rule templates live in [`instructions/`](instructions/). Project-specific config: [`project/`](project/).
+General agent workflow for any project using this instruction set. **Read-only gate** — do not edit during normal project work. Rule templates live in [`instructions/`](instructions/). Project-specific config: [`project/`](project/).
 
 ---
 
@@ -45,12 +45,12 @@ Record mode in `project/OVERVIEW.md` when writing project config.
 1. Resolve mode per **§0**; read [`instructions/README.md`](instructions/README.md) for index and terminology
 2. Read active mode guide: [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) or [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md)
 3. Read [`instructions/INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`instructions/TASK.md`](instructions/TASK.md), [`instructions/CODE.md`](instructions/CODE.md), [`instructions/DESIGN.md`](instructions/DESIGN.md), [`instructions/HISTORY.md`](instructions/HISTORY.md), [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)
-4. Scan [`ai_references/`](ai_references/) when it has user-provided content (see [`ai_references/README.md`](ai_references/README.md))
+4. Scan [`other-references/`](other-references/) when it has user-provided content (see [`other-references/README.md`](other-references/README.md))
 5. Read [`project/OVERVIEW.md`](project/OVERVIEW.md) → [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md) → [`project/AGENTS.md`](project/AGENTS.md) → [`project/DESIGN.md`](project/DESIGN.md) when those files exist locally
 6. **Brownfield:** if `project/*` is missing or stale, run discovery per [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) before large edits
-7. Scan [`project/history/`](project/history/) newest first for recent context
-8. Scan [`project/task/`](project/task/) for active or blocked tasks (`planning`, `blocked`, `in_progress`)
-9. When working on a known feature, scan [`project/document/{feature}/`](project/document/) for existing specs
+7. Scan [`project/histories/`](project/histories/) newest first for recent context
+8. Scan [`project/tasks/`](project/tasks/) for active or blocked tasks (`planning`, `blocked`, `in_progress`)
+9. When working on a known feature, scan [`project/documents/{feature}/`](project/documents/) for existing specs
 
 ---
 
@@ -73,7 +73,7 @@ If the user says *"use your recommendations"*, *"you decide"*, or similar — ap
 | Area | What to resolve |
 |------|-----------------|
 | Purpose and scope | What the app/feature does; MVP or change boundaries |
-| Feature docs | Which `project/document/` files per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) — when building or changing features |
+| Feature docs | Which `project/documents/` files per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) — when building or changing features |
 | Data conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 11 when writing new domain entities |
 | API conventions | Per [`instructions/CODE.md`](instructions/CODE.md) section 8 when adding or changing APIs |
 | CRUD scope | Per CODE §11 when adding entity management UI/API |
@@ -103,8 +103,8 @@ If the user says *"use your recommendations"*, *"you decide"*, or similar — ap
 
 ### After answers
 
-1. Write decisions to the right `project/*` files (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`) and `project/document/{feature}/` when building a feature
-2. Record answers in the active `project/task/` file Clarification log
+1. Write decisions to the right `project/*` files (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`) and `project/documents/{feature}/` when building a feature
+2. Record answers in the active `project/tasks/` file Clarification log
 3. Then proceed per active mode guide
 
 ### When clarification can be skipped
@@ -119,11 +119,11 @@ If the user says *"use your recommendations"*, *"you decide"*, or similar — ap
 
 Create and maintain a **plan-mode** task file per [`instructions/TASK.md`](instructions/TASK.md) for every non-trivial user request.
 
-1. **Before** first meaningful code or config edit: create or open `project/task/{timestamp}_{task-slug}.md` with `Status: planning`
+1. **Before** first meaningful code or config edit: create or open `project/tasks/{timestamp}_{task-slug}.md` with `Status: planning`
 2. **Draft** Approach, change-oriented steps (what/where/why per file), paths in scope, and Files expected to change
 3. **Confirm** — for large or ambiguous scope, present plan summary and wait for user approval (per section 2)
 4. **Execute** — set `Status: in_progress`; check off steps one at a time; update `Status` when blocked
-5. **After** work: set `Status: complete`; append `project/history/` entry linking back to the task file
+5. **After** work: set `Status: complete`; append `project/histories/` entry linking back to the task file
 
 Do not rewrite completed task files — append a new task or HISTORY entry to correct mistakes.
 
@@ -158,19 +158,19 @@ CI: add `.github/workflows/ci.yml` at `{root}` when ready; document path in `pro
 - New env vars: update relevant `.env.example` and compose/config files
 - UI: comply with [`project/DESIGN.md`](project/DESIGN.md)
 - Code: comply with [`instructions/CODE.md`](instructions/CODE.md)
-- Feature work: update `project/document/{feature}/` per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) when applicable
-- `project/` workflow files are local and gitignored — do not commit `project/history/`, `project/task/`, or `project/document/` entries
+- Feature work: update `project/documents/{feature}/` per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md) when applicable
+- `project/` workflow files are local and gitignored — do not commit `project/histories/`, `project/tasks/`, or `project/documents/` entries
 
 ---
 
-## 6. System checklist
+## 6. Agent checklist
 
 Before starting:
 
 1. Mode resolved per §0 (or recorded in `project/OVERVIEW.md`)?
 2. Read [`instructions/README.md`](instructions/README.md) and active mode guide
 3. Read local `project/*` if present; **brownfield:** run discovery if missing
-4. Scan `project/task/`, `project/history/`, `project/document/{feature}/`
+4. Scan `project/tasks/`, `project/histories/`, `project/documents/{feature}/`
 5. Read [`instructions/CODE.md`](instructions/CODE.md) before writing code; [`project/DESIGN.md`](project/DESIGN.md) before UI work
 6. Unspecified decisions resolved per section 2?
 7. Task file created or opened per section 3?
@@ -186,9 +186,9 @@ After work:
 
 12. Followed [`instructions/CODE.md`](instructions/CODE.md) (block comments + inline journal per §1–2) and [`instructions/DESIGN.md`](instructions/DESIGN.md) on touched code?
 13. Post-edit verification per [`instructions/CODE.md`](instructions/CODE.md) section 15 — zero errors on changed files/apps?
-14. [`project/document/`](project/document/) updated for feature work, or consciously skipped per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)?
+14. [`project/documents/`](project/documents/) updated for feature work, or consciously skipped per [`instructions/DOCUMENT.md`](instructions/DOCUMENT.md)?
 15. Task file `Status: complete` with verification checklist done?
-16. Append `project/history/{timestamp}_{title}.md` per [`instructions/HISTORY.md`](instructions/HISTORY.md)
+16. Append `project/histories/{timestamp}_{title}.md` per [`instructions/HISTORY.md`](instructions/HISTORY.md)
 17. Update `project/*` only if project requirements changed — never edit `instructions/` templates unless user asks
 18. Never commit `.env`, `.tar` files, or backup dumps
 

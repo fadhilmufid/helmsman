@@ -1,6 +1,6 @@
 # Task Plans
 
-Rules for **plan-mode** task files — the instruction-set equivalent of Cursor plan mode. **Read-only template** — plans live in [`project/task/`](project/task/).
+Rules for **plan-mode** task files — the instruction-set equivalent of Cursor plan mode. **Read-only template** — plans live in [`project/tasks/`](project/tasks/).
 
 Related: [`README.md`](../README.md), [`AGENTS.md`](../AGENTS.md), [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md), [`HISTORY.md`](HISTORY.md), [`DOCUMENT.md`](DOCUMENT.md), [`CODE.md`](CODE.md), [`DESIGN.md`](DESIGN.md), [`GREENFIELD.md`](GREENFIELD.md), [`BROWNFIELD.md`](BROWNFIELD.md).
 
@@ -19,7 +19,7 @@ Forward-looking **change plan** for a single user request — distinct from othe
 | | Plan mode (TASK) | Execution (agent) |
 |---|------------------|-------------------|
 | **When** | Before first meaningful code or config edit | After plan is drafted (user confirms if needed) |
-| **Output** | Reviewable plan in `project/task/` | Code, config, local history |
+| **Output** | Reviewable plan in `project/tasks/` | Code, config, local history |
 | **Steps** | What **will** change | Check off steps as done |
 
 - Task file = **the plan** the user can read and correct before work proceeds
@@ -73,15 +73,15 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 |------|------|
 | `timestamp` | Server time: `YYYYMMDD_HHmmss` (24-hour, zero-padded) — same as HISTORY |
 | `task-slug` | Lowercase kebab-case, words separated by `-`, no spaces, max ~60 chars |
-| Location | `project/task/{timestamp}_{task-slug}.md` |
+| Location | `project/tasks/{timestamp}_{task-slug}.md` |
 
-**Example:** `project/task/20260622_143052_bootstrap-app.md`
+**Example:** `project/tasks/20260622_143052_bootstrap-app.md`
 
 ### Finding task files
 
 | Goal | How |
 |------|-----|
-| **Latest task** | Sort `project/task/` filenames **descending** |
+| **Latest task** | Sort `project/tasks/` filenames **descending** |
 | **Active work** | Read newest files with `Status: planning`, `blocked`, or `in_progress` |
 | **Correct a mistake** | Append a new task file or HISTORY entry — never rewrite completed task files |
 
@@ -98,9 +98,9 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Context read
 
-- `project/history/` — {entries scanned}
-- `project/document/{feature}/` — {if applicable}
-- `project/task/` — {prior related tasks if any}
+- `project/histories/` — {entries scanned}
+- `project/documents/{feature}/` — {if applicable}
+- `project/tasks/` — {prior related tasks if any}
 - Related rules — AGENTS, CODE, DESIGN, INFRASTRUCTURE; GREENFIELD or BROWNFIELD per mode
 
 ## Clarification log
@@ -141,15 +141,15 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 - [ ] Lint/typecheck per [`CODE.md`](CODE.md) section 15
 - [ ] Tests run
-- [ ] `project/document/` updated if feature work
-- [ ] `project/history/{timestamp}_{title}.md` appended
+- [ ] `project/documents/` updated if feature work
+- [ ] `project/histories/{timestamp}_{title}.md` appended
 - [ ] Task status → `complete`
 
 ## Related
 
-- `project/history/...`
-- `project/document/...`
-- `project/task/...` (prior tasks if relevant)
+- `project/histories/...`
+- `project/documents/...`
+- `project/tasks/...` (prior tasks if relevant)
 ```
 
 ### Status values
@@ -172,7 +172,7 @@ Use **paths and app slugs** from `project/INFRASTRUCTURE.md`. Add `docker`, `dep
 2. **Clarify** — unresolved items → Open questions; user answers → Clarification log and Decisions
 3. **Confirm** — if scope is large or ambiguous, present plan summary and wait for user approval (per AGENTS §2)
 4. **Execute** (`Status: in_progress`) — one step at a time; check off; add steps when discovered
-5. **Complete** — Verification checklist; `project/history/` entry; `Status: complete`
+5. **Complete** — Verification checklist; `project/histories/` entry; `Status: complete`
 
 ### Get timestamp
 
@@ -192,15 +192,15 @@ date +%Y%m%d_%H%M%S
 - Name exact paths and describe before/after for each step
 - List paths in scope from `project/INFRASTRUCTURE.md`
 - Ask the user when uncertain — one batch, with **Recommended:** defaults
-- Write task files locally — gitignored except `project/task/README.md`
+- Write task files locally — gitignored except `project/tasks/README.md`
 
 ### Don't
 
 - Don't skip task files for non-trivial implementation work
 - Don't use vague steps ("implement feature", "fix bug")
 - Don't start implementation edits while `Status: planning` and steps are incomplete
-- Don't put feature specs in TASK — use `project/document/`
-- Don't put change logs in TASK — use `project/history/` after completion
+- Don't put feature specs in TASK — use `project/documents/`
+- Don't put change logs in TASK — use `project/histories/` after completion
 - Don't rewrite completed task files — append new TASK or HISTORY entries
 
 ## 7. Agent Checklist
