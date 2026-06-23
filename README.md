@@ -1,52 +1,42 @@
-# Instruction Pack
+# Helmsman
 
-Reusable **agent guidance** — one **integrated system**. In an app: clone as `helmsman/`, then agents read [`helmsman/AGENTS.md`](AGENTS.md) and [`helmsman/instructions/RULES.md`](instructions/RULES.md). Default: **production-grade** unless you ask for MVP.
+This repository contains two things:
 
-## What this is
+| Path | What it is |
+|------|------------|
+| [`helmsman/`](helmsman/) | The **Helmsman instruction pack** — reusable agent guidance (AGENTS.md, instructions, project workspace). Clone it into your own app as `helmsman/`. |
+| [`site/`](site/) | The **landing page** — a Next.js app that explains what Helmsman is. |
 
-A structured instruction set that helps **agents**:
+## helmsman/ — the instruction pack
 
-- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding — each step includes **How to do it** + **Step checklist**; re-open active task each work block while `in_progress` ([`instructions/TASK.md`](instructions/TASK.md) §1.9)
-- **Build** greenfield apps with `platforms/` (postgresql, minio, web, api, …) and E2E Docker verify
-- **Understand** existing repos through discovery and local documentation
-- **Document** features, changes, and project config in a local `project/` workspace
-- **Write code** per [`instructions/CODE.md`](instructions/CODE.md) — all languages with comments; agents **re-read CODE.md at every coding task**
-- **Re-enter helmsman every session** — HARD STOP + Gate A when the pack is present ([`AGENTS.md`](AGENTS.md))
-- **Default UI theme** when user silent — neutral grayscale light per [`instructions/DESIGN.md`](instructions/DESIGN.md) §3; responsive strategy per §10
+A structured instruction set that gives coding agents consistent, production-grade
+behavior across projects: blueprint work, build greenfield apps, understand existing
+repos, document features, and write code by a single set of rules.
 
-## Who it's for
+Start at [`helmsman/AGENTS.md`](helmsman/AGENTS.md), then
+[`helmsman/instructions/RULES.md`](helmsman/instructions/RULES.md). Full usage is in
+[`helmsman/README.md`](helmsman/README.md).
 
-Developers using **Cursor** (or similar tools) who want consistent **agent** behavior across projects.
+To use it in your own project:
 
-## How to use it
+```bash
+git clone <this-repo-url> helmsman
+```
 
-1. Inside your app repo (`{root}`): `git clone <this-repo-url> helmsman` — folder name **`helmsman`**.
-2. Configure Cursor (or your tool) to read **[`helmsman/AGENTS.md`](AGENTS.md)** — **not** this README, and **not** a root-level copy.
-3. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. They must **not** copy `instructions/`, `project/`, or `AGENTS.md` to `{root}`. **Every session:** agents re-read [`helmsman/AGENTS.md`](AGENTS.md) and run Gate A when the pack is present — including after bootstrap is complete.
-4. Greenfield app code (`platforms/`, `deploy/`, etc.) is created as a **sibling** of `helmsman/` at `{root}`.
-5. Optionally drop reference material into [`other-references/`](other-references/) inside `helmsman/`.
+Then point your agent at `helmsman/AGENTS.md`.
 
-**Do not** copy this entire folder into `{root}` — that causes agents to hoist the pack. Clone as `helmsman/` and leave it there.
+## site/ — the landing page
 
-## Folder overview
+A [Next.js](https://nextjs.org) app (App Router, TypeScript, Tailwind CSS v4) that
+presents Helmsman to visitors.
 
-Paths below are **inside `{pack}`** (`helmsman/` when installed in an app). See [`AGENTS.md`](AGENTS.md) §0.
+```bash
+cd site
+npm install
+npm run dev      # http://localhost:3000
+```
 
-| Path | Purpose |
-|------|---------|
-| [`AGENTS.md`](AGENTS.md) | **Agent entry** — HARD STOP re-entry every session, mode, gates A–F |
-| [`instructions/RULES.md`](instructions/RULES.md) | **Integrated rulebook** — read second |
-| [`instructions/`](instructions/) | Domain templates (PLAN, TASK, CODE, …) |
-| [`project/plans/`](project/plans/) | Blueprint plans (gitignored except README) |
-| [`project/`](project/) | Local agent workspace — config, tasks, histories, feature docs (mostly gitignored) |
-| [`other-references/`](other-references/) | Optional user reference dumps (gitignored except README) |
-
-## Operating modes
-
-| Mode | When | Guide |
-|------|------|-------|
-| **Greenfield** | New app from scratch | [`instructions/GREENFIELD.md`](instructions/GREENFIELD.md) |
-| **Brownfield** | Existing codebase | [`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) |
+Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
 ## License
 
