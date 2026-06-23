@@ -121,7 +121,7 @@ One plan per request — do not split into parent/child plan files.
 
 Create **one standalone exhaustive** TASK file: `project/tasks/{timestamp}_{slug}.md`.
 
-Expand this plan to **every** file-level step — no step-count ceiling, no parent/child task split. Each TASK step references a section above (Plan ref), a spec (Spec ref), and **CODE.md sections (Code ref)** on application-source steps.
+Expand this plan to **every** file-level step — no step-count ceiling, no parent/child task split. TASK must include **Application map** ([`TASK.md`](TASK.md) §1.4a) before implementation steps. **Do not copy Phase map bullets as TASK steps** — expand per TASK §5.1. Each TASK step references a section above (Plan ref), a spec (Spec ref), and **CODE.md sections (Code ref)** on application-source steps.
 
 ## Related
 
@@ -163,5 +163,5 @@ Expand this plan to **every** file-level step — no step-count ceiling, no pare
 1. Gate C passed before drafting plan?
 2. Platform inventory complete (service + application platforms)?
 3. E2E matrix includes compose up/down and deploy image cycle (when applicable)?
-4. **One exhaustive standalone** TASK file created from this plan — every deliverable as a step with **How to do it** + **Step checklist**; Plan ref on each step?
+4. **One exhaustive standalone** TASK file created from this plan — **Application map** (TASK §1.4a) + file-level steps with **How to do it** + **Step checklist**; no shorthand (§1.4); follow §5.1; Plan ref on each step?
 5. HISTORY links this plan when work completes?

@@ -95,7 +95,7 @@ Sequential — detail in [`instructions/RULES.md`](instructions/RULES.md) §2.
 | **B — Clarify and record** | §3; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation |
 | **C — Documents and design** | `project/documents/`; `project/design/` when web UI | Scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/` per [`instructions/PLAN.md`](instructions/PLAN.md) | TASK, implementation |
-| **E — Task before code** | One **exhaustive standalone** `project/tasks/` file with **How to do it** + **Step checklist** per step; re-read [`CODE.md`](instructions/CODE.md) when touching app source; **re-read active task file every work block** while `in_progress` ([`TASK.md`](instructions/TASK.md) §1.9); `in_progress` after A–D | Application edits |
+| **E — Task before code** | One **exhaustive standalone** `project/tasks/` with **Application map** ([`TASK.md`](instructions/TASK.md) §1.4a), file-level steps (**How to do it** + **Step checklist**; no shorthand §1.4); follow §5.1; Plan + Spec + Code refs; re-read [`CODE.md`](instructions/CODE.md) + active task each work block (§1.9); `in_progress` after A–D | Application edits |
 | **F — Quality + E2E** | Production bar + compose/deploy verify per RULES §6 | Marking complete |
 
 **Exceptions:** Instruction-pack maintenance (`instructions/`, pack `AGENTS.md`, tracked `project/*/README.md`).
@@ -166,7 +166,7 @@ If user says *"use your recommendations"* — apply mode-guide defaults, record 
 Per [`instructions/PLAN.md`](instructions/PLAN.md) then [`instructions/TASK.md`](instructions/TASK.md):
 
 1. **Plan** (Gate D) — `project/plans/{timestamp}_{slug}.md`: platform inventory, phases, E2E matrix
-2. **Task** (Gate E) — **one exhaustive standalone** `project/tasks/...`: enumerate every deliverable as a step with **How to do it** + **Step checklist**; **Plan ref** + **Spec ref** + **Code ref**; no parent/child split
+2. **Task** (Gate E) — **one exhaustive standalone** `project/tasks/...`: **Application map** (§1.4a) then enumerate every deliverable as a step with **How to do it** + **Step checklist**; no forbidden shorthand (§1.4); **Plan ref** + **Spec ref** + **Code ref**; no parent/child split; follow §5.1 drafting prompt
 3. **Re-read CODE.md** — before `in_progress` on any task touching application source; list sections in task Context read ([`RULES.md`](instructions/RULES.md) §8)
 4. **Confirm** — greenfield bootstrap and new apps require user approval
 5. **Execute** — `in_progress` only after Gates A–D and CODE re-read recorded; follow [`TASK.md`](instructions/TASK.md) §1.9 — re-open task file, run **Agent execution checklist**, complete per-step **Step checklist** before marking steps `[x]`
@@ -197,7 +197,7 @@ Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`instructions/GREE
 
 ## 7. Agent checklist
 
-**Before:** HARD STOP re-entry run this session? Gate A read complete? B clarify? C docs/design? D plan? E **exhaustive standalone** task drafted (every file as a step **with How to do it + Step checklist**)?
+**Before:** HARD STOP re-entry run this session? Gate A read complete? B clarify? C docs/design? D plan? E **exhaustive standalone** task drafted (**Application map** §1.4a + file-level steps; no shorthand §1.4; §5.1)?
 
 **During:** Active task file re-opened this work block ([`TASK.md`](instructions/TASK.md) §1.9)? **Agent execution checklist** run? Next step **Step checklist** complete before moving on? Gate F production quality ([`RULES.md`](instructions/RULES.md) §5)? **CODE.md §1–2 on every touched source file?** Paths from `project/INFRASTRUCTURE.md`? Service platforms before apps (greenfield)?
 

@@ -8,7 +8,7 @@
 
 1. **Re-read CODE.md** — at task start when touching application source ([`RULES.md`](../../instructions/RULES.md) §8)
 2. **Plan first** — `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](../../instructions/PLAN.md)
-3. **Draft exhaustive task** — enumerate **every** file, route, page, platform, and config change as its own step; each step includes **How to do it**, **Step checklist**, and **Done when** (§1.5)
+3. **Draft exhaustive task** — write **Application map** (§1.4a) first; enumerate **every** file, route, page, platform, and config change as its own step; no forbidden shorthand (§1.4); each step includes **How to do it**, **Step checklist**, and **Done when** (§1.5); follow §5.1 drafting prompt
 4. **Match coverage** — `Files expected to change` table must match implementation steps 1:1
 5. **Plan ref** + **Spec ref** + **Code ref** on every application-source step
 6. **Execute in order** — §1.9: re-open task file each work block; run **Agent execution checklist**; complete per-step **Step checklist** before marking `[x]`

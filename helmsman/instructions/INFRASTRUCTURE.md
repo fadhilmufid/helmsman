@@ -139,7 +139,7 @@ Write **mode** to `project/OVERVIEW.md` first — from [`../AGENTS.md`](../AGENT
 | Layer | Path | Timing | Purpose |
 |-------|------|--------|---------|
 | **PLAN** | `project/plans/{timestamp}_{slug}.md` | After specs, before TASK (Gate D) | Blueprint: platforms, phases, E2E matrix |
-| **TASK** | `project/tasks/{timestamp}_{task-slug}.md` | After plan (Gate E) | File-level execution steps |
+| **TASK** | `project/tasks/{timestamp}_{task-slug}.md` | After plan (Gate E) | Application map + file-level execution steps |
 | **DOCUMENT** | `project/documents/{feature-slug}/` | Before code (Gate C) | Persistent feature specs |
 | **DESIGN** | `project/design/*.md` (+ optional `screens/`) | Before UI code | Design system specs |
 | **HISTORY** | `project/histories/{timestamp}_{title}.md` | After work | Change log |

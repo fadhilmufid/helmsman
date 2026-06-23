@@ -6,7 +6,7 @@ Reusable **agent guidance** — one **integrated system**. In an app: clone as `
 
 A structured instruction set that helps **agents**:
 
-- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding — each step includes **How to do it** + **Step checklist**; re-open active task each work block while `in_progress` ([`instructions/TASK.md`](instructions/TASK.md) §1.9)
+- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding — **Application map** (§1.4a) then file-level steps; no shorthand (§1.4); follow §5.1; re-open active task each work block while `in_progress` ([`instructions/TASK.md`](instructions/TASK.md) §1.9)
 - **Build** greenfield apps with `platforms/` (postgresql, minio, web, api, …) and E2E Docker verify
 - **Understand** existing repos through discovery and local documentation
 - **Document** features, changes, and project config in a local `project/` workspace

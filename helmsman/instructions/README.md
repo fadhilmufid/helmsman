@@ -33,7 +33,7 @@ flowchart LR
 | [`../AGENTS.md`](../AGENTS.md) | Entry — HARD STOP re-entry every session, mode, gates A–F |
 | [`RULES.md`](RULES.md) | **Integrated rulebook** — read second |
 | [`PLAN.md`](PLAN.md) | Blueprint plans → `project/plans/` |
-| [`TASK.md`](TASK.md) | Exhaustive tasks → `project/tasks/` — How to do it, Step checklist, §1.9 execution loop |
+| [`TASK.md`](TASK.md) | Exhaustive tasks → `project/tasks/` — Application map (§1.4a), file-level steps, no shorthand (§1.4), §5.1 drafting prompt, §1.9 execution loop |
 | [`GREENFIELD.md`](GREENFIELD.md) | New app — `platforms/`, service-first, E2E |
 | [`BROWNFIELD.md`](BROWNFIELD.md) | Existing codebase |
 | [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) | Doc architecture + infra bar |

@@ -71,7 +71,7 @@ Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) 
 | **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
-| **E — Task before code** | **One standalone exhaustive** `project/tasks/...` — every deliverable as a step with **How to do it** + **Step checklist**; no parent/child split; re-read [`CODE.md`](CODE.md) when touching app source; **re-read active task file every work block** while `in_progress` ([`TASK.md`](TASK.md) §1.9) | Application edits |
+| **E — Task before code** | **One standalone exhaustive** `project/tasks/...` with **Application map** ([`TASK.md`](TASK.md) §1.4a), file-level steps (**How to do it** + **Step checklist**; no shorthand §1.4); follow §5.1; Plan + Spec + Code refs; no parent/child split; re-read [`CODE.md`](CODE.md) + active task each work block (§1.9) | Application edits |
 | **F — Quality + E2E** | Production bar + E2E verification (§6) before marking complete | Task/bootstrap complete |
 
 **Non-trivial** = touches app source, `platforms/`, `deploy/`, db, docker, or multi-file config. Trivial typo-only edits skip PLAN and TASK per [`TASK.md`](TASK.md).
@@ -195,7 +195,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 2. Gates B–D complete (clarify, docs/design, plan) before TASK `in_progress`?
 3. **CODE.md re-read at task start** when touching application source; sections in Context read?
 4. Plan platform inventory lists every `platforms/<slug>`?
-5. TASK is **standalone exhaustive** — full scope in one file; How to do it + Step checklist on every step; Files expected to change matches steps?
+5. TASK has **Application map** (§1.4a) + **standalone exhaustive** file-level steps; no forbidden shorthand (§1.4); How to do it + Step checklist on every step; Files expected to change matches steps?
 6. CODE §1–2 applied on every touched source file?
 7. Service platforms created before app scaffold (greenfield)?
 8. Active task file re-read this work block; step Step checklists complete (§1.9)?

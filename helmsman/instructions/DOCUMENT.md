@@ -105,6 +105,7 @@ See [`GREENFIELD.md`](GREENFIELD.md) Phase A.5.
 
 3. **Create or update** relevant files **before implementation begins** (draft status OK) and **as the feature is built** — docs evolve with decisions, not only at the end
 4. **Cross-link** — PLAN platform inventory references `technical-documentation.md`; TASK/HISTORY link `project/plans/` and `project/documents/`; UI in `project/design/screens/` or `user-interface-specification-document.md` — must not contradict
+5. **Application map inputs** — `user-interface-specification-document.md` and `api-specification-document.md` must list routes, screens, endpoints, and flows in enough detail to populate TASK **Application map** ([`TASK.md`](TASK.md) §1.4a)
 
 **Optional to skip** for trivial changes with zero spec impact (same bar as HISTORY optional skip).
 

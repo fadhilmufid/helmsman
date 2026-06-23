@@ -196,10 +196,12 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 2b. **Create `project/design/`** required files per [`DESIGN.md`](DESIGN.md) §1 **before** platform code (when web UI is in scope)
 3. **Create `project/documents/{feature}/`** per [`DOCUMENT.md`](DOCUMENT.md) **before** platform code
 4. **Create `project/plans/{timestamp}_bootstrap-{slug}.md`** per [`PLAN.md`](PLAN.md) — platform inventory, phases, E2E matrix
-5. **Create one exhaustive standalone `project/tasks/{timestamp}_{task-slug}.md`** from the plan per [`TASK.md`](TASK.md) — every deliverable as a step; no parent/child split
+5. **Create one exhaustive standalone `project/tasks/{timestamp}_{task-slug}.md`** from the plan per [`TASK.md`](TASK.md) — **Application map** (§1.4a) then every deliverable as a file-level step; no forbidden shorthand (§1.4); follow §5.1; no parent/child split
 6. **Create** `{root}/README.md` from §7 template (draft OK)
 
 **STOP — do not create `platforms/`, `deploy/`, or any application files until steps 1–5 of Phase A are complete.** Step 2b (design) is Gate C when web UI is in scope.
+
+**Hard rule — Phase B–F below are order-of-work guidance only.** Do **not** copy these playbook bullets or PLAN phase-map bullets into the TASK file as steps. Expand each bullet to file-level steps per [`TASK.md`](TASK.md) §1.4–§1.5 and §5.1.
 
 ### Phase A.5 — Required feature documents (Gate C)
 

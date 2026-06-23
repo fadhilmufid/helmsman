@@ -21,14 +21,124 @@ Forward-looking **change plan** for a single user request — distinct from othe
 | | PLAN (`project/plans/`) | TASK (`project/tasks/`) | Execution |
 |---|-------------------------|-------------------------|-----------|
 | **When** | Gate D — after specs | Gate E — after plan | After TASK `in_progress` |
-| **Output** | Platform inventory, phases, E2E matrix | **Exhaustive** file-level steps (no step ceiling) | Code, config, history |
+| **Output** | Platform inventory, phases, E2E matrix | **Application map** + exhaustive file-level steps (no step ceiling) | Code, config, history |
 | **Granularity** | Phases and platforms | One deliverable per step — as many steps as needed | Check off TASK steps |
 
 - TASK file = **standalone exhaustive execution plan** derived from Gate D blueprint — **one file per user request**
 - Spend Gate E drafting **maximum detail** — 50, 100, or 200+ steps is expected for large bootstrap; more steps is better
-- `Status: planning` until steps are written; `in_progress` only after Gates A–D
+- `Status: planning` until Application map (§1.4a) and all implementation steps are written; `in_progress` only after Gates A–D and TASK §1.6 gates
 - **Change-oriented steps** — every step names files/paths and describes the change, not vague goals
 - **Ask when blocked** — one batch with **Recommended:** default per [`AGENTS.md`](../AGENTS.md) section 3
+
+## 1.4 Forbidden shorthand format (hard STOP)
+
+Agents sometimes collapse Gate E into **phase-level summaries** instead of file-level steps. This format is **forbidden** — do not write tasks like this:
+
+```markdown
+# Task: Bootstrap SplitBill Web App
+
+**Status:** in_progress
+
+### Step 1 — Scaffold Next.js
+**How:** Run official create-next-app in platforms/web
+**Checklist:** [ ] App runs on :3000
+
+### Step 2 — Settlement library
+**How:** Implement types, settlement, storage
+**Checklist:** [ ] Tests pass
+
+### Step 3 — UI
+**How:** Build split bill page with shadcn components
+**Checklist:** [ ] All sections work
+
+### Step 4 — Docker & README
+**How:** Dockerfile, compose, root README
+**Checklist:** [ ] docker compose up works
+```
+
+| Forbidden | Required instead |
+|-----------|------------------|
+| `### Step N — {phase title}` | `### Phase: {name}` then numbered `1. [ ] **{exact/path}** — ...` |
+| `**How:**` one line | `How to do it:` with **3–8 numbered sub-steps** |
+| `**Checklist:** [ ]` one item | `Step checklist:` with **3–6 checkboxes** + `Done when:` + `Verify:` |
+| Bundling "Scaffold", "UI", "Docker" as 4 mega-steps | **One step per file/route/page/component** (§1.7) |
+| `Status: in_progress` with fewer than ~10 implementation steps for a bootstrap | `Status: planning` until Application map (§1.4a) + all steps written |
+
+**Compliant excerpt** — "Scaffold Next.js" alone expands to many steps (not one):
+
+```markdown
+### Phase: Web scaffold
+
+1. [ ] **platforms/web/package.json** — Next.js 16 app manifest
+   - Plan ref: project/plans/20250623_bootstrap-splitbill.md#platform-web
+   - Spec ref: project/documents/bill-splitting/overview.md
+   - Code ref: instructions/CODE.md §1-2
+   - Before: new file
+   - After: next, react, react-dom, typescript, tailwind deps pinned per GREENFIELD
+   - Done when: package.json matches plan inventory; Verify passes
+   - How to do it:
+     1. Run `npx create-next-app@latest` in `platforms/web` per plan flags (App Router, TS, Tailwind)
+     2. Remove boilerplate pages not in spec
+     3. Pin versions to match project/INFRASTRUCTURE.md
+     4. Add scripts: dev, build, lint, test
+   - Step checklist:
+     - [ ] Plan platform inventory row for web read
+     - [ ] Spec client-only constraint noted (no API)
+     - [ ] package.json matches planned stack
+     - [ ] Verify command below passes
+   - Verify: `cd platforms/web && npm install && npm run build`
+
+2. [ ] **platforms/web/src/app/layout.tsx** — root layout, fonts, metadata
+   ...
+3. [ ] **platforms/web/src/app/page.tsx** — shell for split bill UI (sections wired in later steps)
+   ...
+```
+
+A greenfield bootstrap task typically has **50–200+** such steps — not 4.
+
+## 1.4a Application map (required for every task)
+
+**Before writing implementation steps**, every task file must include an **Application map** section derived from `project/plans/`, `project/documents/`, and `project/design/` — not invented during execution.
+
+| Task type | Application map must include |
+|-----------|------------------------------|
+| **Web / UI** | Every route/page, navigation order, screen purpose, spec ref per screen |
+| **API-only** | Every endpoint/module, request/response flow, service dependencies |
+| **Library-only** | Public exports, consumer files, data flow between modules |
+| **Infra-only** | Services, ports, healthchecks, deploy/load sequence |
+
+Place **Application map** after **Approach** and before **Agent execution checklist** (§4 template).
+
+```markdown
+## Application map
+
+### User / data flow
+1. User opens `/` → enters bill items and participants
+2. App reads/writes `localStorage` key `splitbill:v1`
+3. Settlement runs client-side → results render in summary section
+{mermaid diagram optional}
+
+### Routes and pages (web) OR modules and endpoints (API-only)
+| Path / module | Purpose | Reads from | Writes to | Spec ref |
+|---------------|---------|------------|-----------|----------|
+| `/` | Split bill form + results | localStorage | localStorage | project/documents/bill-splitting/ui.md |
+| `lib/settlement.ts` | Calculate who owes whom | Bill[], Participant[] | Settlement[] | project/documents/bill-splitting/settlement.md |
+
+### Component / module tree
+| Parent | Children (file paths) |
+|--------|----------------------|
+| `platforms/web/src/app/page.tsx` | `components/BillForm.tsx`, `components/ParticipantList.tsx`, `components/SettlementSummary.tsx` |
+| `platforms/web/src/lib/` | `types.ts`, `settlement.ts`, `storage.ts` |
+
+### Build sequence
+1. Types (`lib/types.ts`)
+2. Core logic (`lib/settlement.ts`) + tests
+3. Storage (`lib/storage.ts`) + tests
+4. UI components (leaf → page)
+5. Docker + compose + README
+```
+
+**Forbidden:** skipping Application map; leaving route/module table empty; writing implementation steps before the map is complete.
 
 ## 1.5 Task step format (required)
 
@@ -77,6 +187,8 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
 | `Status: in_progress` | Gate C — documents + design (when UI) complete |
 | `Status: in_progress` | Coding task: **re-read `instructions/CODE.md`** for scope; sections listed in Context read ([`RULES.md`](RULES.md) §8) |
 | `Status: in_progress` | Plan ref + spec ref + code ref (on app source steps); §1.7 granularity |
+| `Status: in_progress` | **Application map** (§1.4a) complete — user/data flow + route/module table + build sequence |
+| `Status: in_progress` | Zero steps using forbidden shorthand (§1.4); every step has 3+ **How to do it** sub-steps |
 | Marking application-source step complete | Touched file passes CODE §1–2 (block comment + inline journal) |
 | `Status: in_progress` | **Files expected to change** table matches implementation steps 1:1 (§1.8); exhaustive scope covered |
 | Any application code edit | Gates A–D complete; user confirmed for bootstrap/new apps |
@@ -244,6 +356,21 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 {1–3 sentences: strategy, which paths/apps are touched}
 
+## Application map
+
+### User / data flow
+{numbered flow or mermaid — every screen, API call, or service interaction}
+
+### Routes and pages (web) OR modules and endpoints (API-only)
+| Path / module | Purpose | Reads from | Writes to | Spec ref |
+|---------------|---------|------------|-----------|----------|
+
+### Component / module tree
+{table — parent → children with file paths; N/A if single-file change}
+
+### Build sequence
+1. {dependency order — e.g. types → lib → storage → pages → docker}
+
 ## Agent execution checklist
 
 **Hard rule — re-read and tick this section at the start of every work block while `Status: in_progress`.**
@@ -251,6 +378,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 - [ ] Active task file: `project/tasks/{timestamp}_{slug}.md` (this file)
 - [ ] `Status:` is `in_progress` (not `planning`)
 - [ ] Context read + CODE.md re-read sections noted for this session
+- [ ] Application map read this session — next step matches mapped flow
 - [ ] Next unchecked implementation step: #{number} — **{path}**
 - [ ] That step's Plan ref, Spec ref, Code ref read this session
 - [ ] After work: step #{number} Step checklist complete; step marked `[x]`
@@ -258,7 +386,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 ## Implementation steps
 
-**Exhaustive — minimum one step per file.** Every step must include **How to do it**, **Step checklist**, and **Done when** (§1.5) before `Status: in_progress`. Group by phase inside this single task file.
+**Exhaustive — minimum one step per file.** Every step must include **How to do it**, **Step checklist**, and **Done when** (§1.5) before `Status: in_progress`. No forbidden shorthand (§1.4). Group by phase inside this single task file.
 
 ### Phase: {name}
 
@@ -328,6 +456,8 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 - [ ] Step count covers full scope — no step-count ceiling (§1.8)
 - [ ] Files expected to change table matches implementation steps 1:1
 - [ ] No folder-wildcard steps (§1.7)
+- [ ] Application map complete — every route/page or endpoint/module listed with spec refs (§1.4a)
+- [ ] No forbidden shorthand steps (§1.4)
 - [ ] **Local E2E:** compose up → health → smoke → compose down (when compose exists)
 - [ ] **Deploy E2E:** build all platform images → save → load → compose up → smoke (greenfield bootstrap)
 - [ ] Lint/typecheck per [`CODE.md`](CODE.md) section 15
@@ -352,7 +482,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 | Status | Use when |
 |--------|----------|
-| `planning` | Drafting Approach and steps — no implementation edits yet |
+| `planning` | Drafting Application map, Approach, and implementation steps — no implementation edits yet |
 | `blocked` | Waiting on user answer or external dependency |
 | `in_progress` | Executing plan steps |
 | `complete` | All steps and verification done; HISTORY entry appended |
@@ -366,7 +496,7 @@ Use **paths and app slugs** from `project/INFRASTRUCTURE.md`. Add `docker`, `dep
 
 1. **Plan exists** (Gate D) — `project/plans/...` with platform inventory?
 2. **CODE.md re-read** — sections listed in Context read when task touches application source?
-3. **Draft exhaustive task** (`Status: planning`) — enumerate **every** deliverable; match Files expected to change
+3. **Draft exhaustive task** (`Status: planning`) — follow §5.1 drafting prompt; write Application map (§1.4a) then enumerate **every** deliverable; match Files expected to change
 4. **Clarify** — Open questions → Clarification log
 5. **Confirm** — greenfield bootstrap / new apps / large scope
 6. **Execute** (`Status: in_progress`) — §1.9 loop: re-open task → Agent execution checklist → next step → How to do it → Step checklist → Verify → mark `[x]` → repeat
@@ -382,6 +512,25 @@ Get-Date -Format 'yyyyMMdd_HHmmss'
 date +%Y%m%d_%H%M%S
 ```
 
+## 5.1 Gate E drafting prompt (literal block)
+
+**When drafting** `Status: planning` task files, agents follow this prompt — do not substitute a shorter format:
+
+```markdown
+You are drafting Gate E task file project/tasks/{timestamp}_{slug}.md.
+
+HARD RULES:
+1. Read project/plans/{slug}.md platform inventory and E2E matrix.
+2. Write ## Application map (§1.4a) — full user/data flow before any implementation step.
+3. Expand EVERY planned file, route, page, component, migration, and compose service into its own numbered step.
+4. Each step MUST have: Plan ref, Spec ref, Code ref (if app source), Before, After, Done when, How to do it (3–8 sub-steps), Step checklist (3–6 items), Verify.
+5. FORBIDDEN: phase-only steps, ### Step N headers, one-line How, single-checkbox Checklist.
+6. Minimum step count: match Files expected to change table 1:1; greenfield bootstrap typically 50–200+ steps.
+7. Stay Status: planning until Application map + all implementation steps are written.
+```
+
+After drafting, self-check against §1.4 (no shorthand), §1.4a (map complete), and §1.7 (one step per file).
+
 ## 6. Do's and Don'ts
 
 ### Do
@@ -395,6 +544,7 @@ date +%Y%m%d_%H%M%S
 - Derive every step from `project/plans/`, `project/documents/`, `project/design/`, and **`instructions/CODE.md`**
 - Include **Code ref** on every application-source implementation step
 - Include **How to do it** and **Step checklist** on every implementation step (§1.5)
+- Write **Application map** (§1.4a) before implementation steps — every route/page or endpoint/module with spec refs
 - Include explicit E2E verify steps in final phase
 - Re-open active task file and run **Agent execution checklist** each work block while `in_progress` (§1.9)
 
@@ -402,9 +552,11 @@ date +%Y%m%d_%H%M%S
 
 - Don't skip task files for non-trivial implementation work
 - Don't use vague steps ("implement feature", "fix bug")
+- Don't use forbidden shorthand: `### Step N —`, `**How:**`, `**Checklist:**` with one line (§1.4)
 - Don't use folder paths with `/**` or bundle "all routes/components/pages" in one step
 - Don't start implementation edits while `Status: planning` and steps are incomplete
 - Don't create TASK before Gate D plan exists
+- Don't set `Status: in_progress` before Application map is complete (§1.4a)
 - Don't set `Status: in_progress` before Gates A–D pass (see §1.6)
 - Don't split a task because step count is high — add steps to the same file (§1.8)
 - Don't create parent or child task files (§1.8)
@@ -419,13 +571,16 @@ date +%Y%m%d_%H%M%S
 ## 7. Agent Checklist
 
 1. Gate D plan exists before TASK file?
-2. Task is **standalone exhaustive** — full scope in one file (§1.8)?
-3. CODE.md re-read at task start (sections in Context read)?
-4. AGENTS Gates A–D passed before `Status: in_progress`?
-5. Files expected to change matches implementation steps 1:1?
-6. Every app-source step has Plan ref + Spec ref + Code ref?
-7. CODE §1–2 on every touched source file?
-8. E2E local + deploy cycles complete (Gate F)?
-9. Active task file re-opened this work block; step Step checklists complete (§1.9)?
-10. Task completion checklist all checked before `Status: complete`?
-11. HISTORY links plan + task + E2E + CODE compliance?
+2. **Application map** complete with flow, route/module table, build sequence (§1.4a)?
+3. Task is **standalone exhaustive** — full scope in one file (§1.8)?
+4. No forbidden shorthand steps — every step has 3+ **How to do it** sub-steps (§1.4)?
+5. Step count ≥ **Files expected to change** row count (§1.8)?
+6. CODE.md re-read at task start (sections in Context read)?
+7. AGENTS Gates A–D passed before `Status: in_progress`?
+8. Files expected to change matches implementation steps 1:1?
+9. Every app-source step has Plan ref + Spec ref + Code ref?
+10. CODE §1–2 on every touched source file?
+11. E2E local + deploy cycles complete (Gate F)?
+12. Active task file re-opened this work block; step Step checklists complete (§1.9)?
+13. Task completion checklist all checked before `Status: complete`?
+14. HISTORY links plan + task + E2E + CODE compliance?
