@@ -70,7 +70,7 @@ When work was driven by a plan or task, link `project/plans/...` and `project/ta
 
 ## Summary
 
-One paragraph: what changed and why. State whether delivery met the **production bar** per [`RULES.md`](RULES.md) §5 and **E2E verification** per §6 — or list **known gaps**. When application source was touched, state whether **CODE.md §1–2** (block + inline journal) was followed or note gaps.
+One paragraph: what changed and why. State whether delivery met the **production bar** per [`RULES.md`](RULES.md) §5 and **E2E verification** per §6 — or list **known gaps**. When application source was touched, state whether **CODE.md §1–2** (block summary + context inline journal per CODE §2.3) was followed or note gaps.
 
 ## Changes
 
@@ -158,4 +158,4 @@ date +%Y%m%d_%H%M%S
 2. Body includes Summary, Changes, Files touched, Notes?
 3. Task file linked when work was driven by a task plan?
 4. Entry written locally (gitignored)?
-5. Summary states production bar + E2E results + CODE §1–2 compliance (when application source was in scope)?
+5. Summary states production bar + E2E results + CODE §1–2 (block summary + context inline journal) compliance when application source was in scope?

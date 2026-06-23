@@ -158,7 +158,7 @@ Each step must be **change-oriented** and **procedural** — not only what to ch
      3. {register route/export; update parent file if needed}
    - Step checklist:
      - [ ] Spec section for this deliverable read
-     - [ ] CODE §1–2 block + inline journal (when app source)
+     - [ ] CODE §1–2 block summary + context inline journal (CODE §2.3; when app source)
      - [ ] Change matches spec/design
      - [ ] Verify command below passes
    - Verify: {command or check}
@@ -189,7 +189,7 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
 | `Status: in_progress` | Plan ref + spec ref + code ref (on app source steps); §1.7 granularity |
 | `Status: in_progress` | **Application map** (§1.4a) complete — user/data flow + route/module table + build sequence |
 | `Status: in_progress` | Zero steps using forbidden shorthand (§1.4); every step has 3+ **How to do it** sub-steps |
-| Marking application-source step complete | Touched file passes CODE §1–2 (block comment + inline journal) |
+| Marking application-source step complete | Touched file passes CODE §1–2 (block summary + context inline journal per CODE §2.3) |
 | `Status: in_progress` | **Files expected to change** table matches implementation steps 1:1 (§1.8); exhaustive scope covered |
 | Any application code edit | Gates A–D complete; user confirmed for bootstrap/new apps |
 | Any application code edit while `in_progress` | Active task file re-opened; **Agent execution checklist** run this work block (§1.9) |
@@ -231,13 +231,13 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
    - After: paginated list + multipart upload handler
    - Done when: both methods registered, responses match spec, Verify passes
    - How to do it:
-     1. Create `route.ts`; add block comment per CODE §1
+     1. Create `route.ts`; add block summary + `Additional` per CODE §1
      2. Implement GET: parse page/limit query, call service, return `{ code, data }` envelope
      3. Implement POST: parse multipart, validate MIME/size per spec, store via service
      4. Wire exports; ensure parent router imports this file (see step N)
    - Step checklist:
      - [ ] Spec section for list + upload read
-     - [ ] CODE §1–2 block + inline journal on handlers
+     - [ ] CODE §1–2 context inline journal on handlers (Branch:/Guard:/Step: per §2.3)
      - [ ] Response shapes match api-specification-document.md
      - [ ] Verify command below passes
    - Verify: curl + integration test per project/AGENTS.md
@@ -451,7 +451,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 - [ ] Agent execution checklist re-run at start of final work block
 - [ ] CODE.md re-read at task start; sections listed in Context read
 - [ ] Every step has Code ref on application-source steps
-- [ ] Every touched source file: block comment + Var/Logic inline journal per CODE §1–2
+- [ ] Every touched source file: block summary + context inline journal per CODE §1–2
 - [ ] CODE §14 agent checklist passed for touched code
 - [ ] Every step has Plan ref to `project/plans/`
 - [ ] Every step has Spec ref to `project/documents/` or `project/design/`

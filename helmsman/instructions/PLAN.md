@@ -95,7 +95,7 @@ One plan per request — do not split into parent/child plan files.
 
 ### Phase 2: Applications
 
-- Scaffold api, web, … — **all application code per [`CODE.md`](CODE.md) §1–2** (block + inline journal; any language per §0)
+- Scaffold api, web, … — **all application code per [`CODE.md`](CODE.md) §1–2** (block summary + context inline journal per CODE §2.3; any language per §0)
 
 ### Phase 3: Wire and scripts
 - Dockerfiles, build/backup scripts

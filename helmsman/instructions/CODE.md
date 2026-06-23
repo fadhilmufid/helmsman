@@ -19,27 +19,27 @@ This file is **not JavaScript-only**. It applies to **every language and stack**
 | Rule | Detail |
 |------|--------|
 | **Applies to** | TypeScript, JavaScript, Go, Python, Rust, Java, C#, Kotlin, PHP, Ruby, and any similar language |
-| **Structure** | Same **Function / Variables / Logic / Additional** index in every language |
+| **Structure** | Block index (**summary + Additional**) + **context inline journal** per §2.3 in every language |
 | **Syntax** | Adapt block and line comment delimiters per language (table below) |
 | **When** | Re-read §1–2 before every coding task; add §8, §9, §11, §16 when API/auth/CRUD in scope |
 
 ### Comment syntax by language
 
-| Language | Block (index above declaration) | Line journal (Var / Logic-N) |
-|----------|--------------------------------|------------------------------|
-| TS / JS | `/** ... */` | `// Var:` / `// Logic-N:` |
-| Go | `/* ... */` or consecutive `//` lines above func | `// Var:` / `// Logic-N:` |
-| Python | `""" ... """` docstring | `# Var:` / `# Logic-N:` |
-| Rust / Java / C# / C++ | `/**` or `///` per project style | `// Var:` / `// Logic-N:` |
-| Ruby | `#` lines or `=begin` / `=end` block above method | `# Var:` / `# Logic-N:` |
-| PHP | `/** ... */` or `#` block above | `// Var:` or `# Var:` per file style |
+| Language | Block (index above declaration) | Line journal (context prefixes; §2.3) |
+|----------|--------------------------------|----------------------------------------|
+| TS / JS | `/** ... */` | `// Param:` / `// Guard:` / `// Branch:` / `// Var:` / `// Step:` |
+| Go | `/* ... */` or consecutive `//` lines above func | `// Param:` / `// Return:` / `// Var:` / `// Step:` |
+| Python | `""" ... """` docstring | `# Input:` / `# Guard:` / `# Var:` / `# Step:` |
+| Rust / Java / C# / C++ | `/**` or `///` per project style | `// Param:` / `// Guard:` / `// Var:` / `// Step:` |
+| Ruby | `#` lines or `=begin` / `=end` block above method | `# Param:` / `# Var:` / `# Step:` |
+| PHP | `/** ... */` or `#` block above | `// Param:` / `// Step:` or `# Var:` per file style |
 
 Use the **project's existing comment style** when brownfield; never skip the index + journal pattern because the stack is not TypeScript.
 
 Every non-trivial function, route handler, service method, client-side API handler, and **UI component with business logic** (React, Vue, Svelte, etc.) gets:
 
-1. A structured **block comment** above the declaration — the **index** (Function, Variables, Logic, Additional)
-2. **Inline journal comments** in the body — `Var:` and `Logic-N:` prefixes using that language's line-comment syntax, at the point each appears in code
+1. A structured **block comment** above the declaration — the **index** (summary line + optional `Additional`)
+2. **Inline journal comments** in the body — context prefixes from §2.3 (`Param:`, `Guard:`, `Branch:`, etc.; fall back to `Var:` / `Step:`) at the point each binding or step appears
 
 Every API request must return a proper HTTP status, JSON envelope with a **response `code`**, and on the frontend handlers must cover **all scenarios** with the correct UX (Alert, redirect, modal, etc.) — see section 8.
 
@@ -47,17 +47,12 @@ UI styling: [`project/DESIGN.md`](project/DESIGN.md) index + [`project/design/`]
 
 ## 1. Block Comment Template
 
-Place a block comment immediately above the function, method, or handler. It is the **index** — the body must repeat every Variables and Logic entry as inline journal comments (see section 2).
+Place a block comment immediately above the function, method, or handler. It is the **index** — what the entry point does and integration context. **Bindings and steps are documented only in the body** as inline journal comments (see section 2). The summary line may use `Function:`, `Route:`, `Handler:`, or `Component:` per §2.3.
 
 ```
 /**
  * Function:  <one-line summary of what this entry point does>
  *             <HTTP method and path, if applicable>
- * Variables:
- *   <name> - <source>; <description>
- * Logic:
- *   1. <first step>
- *   2. <second step>
  * Additional:
  *   - <integration notes, auth rules, content types, side effects, etc.>
  */
@@ -67,78 +62,95 @@ Place a block comment immediately above the function, method, or handler. It is 
 
 | Field | Required | Purpose |
 |-------|----------|---------|
-| **Function** | Yes | What the code does. Include route/method for API handlers. |
-| **Variables** | Yes when params exist | Every parameter, prop, local, or request field and where it comes from. **Each entry must reappear inline** in the body with `Var:` at first use (line-comment syntax per §0). |
-| **Logic** | Yes | Numbered steps the body implements, in order. **Each step must have `Logic-N:`** immediately before the code that implements it (line-comment syntax per §0). |
-| **Additional** | When relevant | Auth, audience, response format, packages used, edge cases. |
-
-**Variables and Logic** from the header must each have a matching inline comment in the body (see section 2). Header-only documentation is non-compliant.
+| **Summary** | Yes | What the code does. Use `Function:` (default), `Route:` (HTTP handlers), `Handler:` (client API handlers), or `Component:` (UI) per §2.3. Include route/method for API handlers. |
+| **Additional** | When relevant | Auth, audience, response format, packages used, edge cases, response scenarios. |
 
 ## 2. Inline journal comments (all languages)
 
-The function body is the **journal** — annotate variables and logic **where they appear**, like footnotes in a reference work. Use the line-comment prefix for your language (§0).
+The function body is the **journal** — annotate bindings and steps **where they appear**, like footnotes in a reference work. Use the line-comment prefix for your language (§0). Pick prefixes from the **approved vocabulary** (§2.3); fall back to `Var:` and `Step:` when context is mixed or unclear.
 
-### Variable comments
+### 2.1 Bindings
 
 TypeScript / JavaScript / Go / Rust / Java / C#:
 
 ```typescript
-// Var: <name> — <source>; <description>
+// Param: <name> — <source>; <description>   // route params, body, query
+// Prop: <name> — <source>; <description>    // React/Vue props
+// Input: <name> — <source>; <description>   // service method args
+// Var: <name> — <source>; <description>     // locals and general fallback
 ```
 
 Python / Ruby:
 
 ```python
-# Var: <name> — <source>; <description>
+# Param: / # Prop: / # Input: / # Var: — same pattern as above
 ```
 
 Rules:
-- One `Var:` journal line per entry in the header **Variables** section
-- Place at **first declaration** or first meaningful use in the body
-- Wording aligns with the block comment Variables list
-- Order in the body follows code flow (not necessarily header order)
+- One binding journal line per meaningful parameter, prop, or local at **first declaration** or first meaningful use
+- Prefer context-specific prefixes (`Param:`, `Prop:`, `Input:`) over `Var:` when the table in §2.3 applies
+- Order in the body follows code flow
 
-### Logic comments
+### 2.2 Steps
 
 TypeScript / Go / etc.:
 
 ```typescript
-// Logic-N: <same wording as Logic step N>
+// Step: <what this step does>       // general procedure (default)
+// Guard: <check or early return>    // auth, validation, permission
+// Branch: <outcome → UX action>     // frontend if on error.code
+// Effect: <side effect>              // notify, revalidate, persist
+// Return: <response or redirect>     // res.json, c.JSON, router.push on success path
+// Throws: <domain error>             // before throw new AppError(...)
 ```
 
 Python:
 
 ```python
-# Logic-N: <same wording as Logic step N>
+# Step: / # Guard: / # Branch: / # Effect: / # Return: / # Throws: — same pattern
 ```
 
 Rules:
-- One `Logic-N` journal line per numbered Logic step, **immediately before** the code that implements it
-- Wording aligns with the block comment Logic list
-- **Never** skip a step (e.g. validation must have `Logic-1` even when it shares a line with parsing)
-- Header-only Variables or Logic without body comments = **non-compliant**
+- One step journal line **immediately before** each logical step the body implements
+- Prefer context-specific prefixes from §2.3 over generic `Step:`
+- **Never** skip a step (e.g. validation must have `Guard:` or `Step:` even when it shares a line with parsing)
+- Missing inline binding or step journal in the body = **non-compliant**
 
-### Go example (handler)
+### 2.3 Context vocabulary (default)
+
+Pick prefixes by code type. `Function:` and `Var:` / `Step:` remain valid fallbacks everywhere.
+
+| Code type | Block summary (preferred) | Inline bindings (preferred) | Inline steps (preferred) |
+|-----------|---------------------------|----------------------------|-------------------------|
+| Any (default) | `Function:` | `Var:` | `Step:` |
+| HTTP route handler | `Route:` | `Param:` | `Guard:`, `Step:`, `Return:` |
+| Service / business logic | `Function:` | `Input:` | `Step:`, `Throws:`, `Effect:` |
+| Server action | `Function:` | `Var:` | `Guard:`, `Step:`, `Effect:` |
+| Client API handler | `Handler:` | `Var:` | `Step:`, `Branch:`, `Effect:` |
+| UI component | `Component:` | `Prop:` | `Step:` |
+
+### 2.4 Free-form prefixes (when vocabulary does not fit)
+
+Agents may use any clear single-word `Prefix:` when no §2.3 row fits (e.g. `Retry:`, `Cache:`).
+
+- Prefix must be one English word + colon
+- Compliance still requires block summary + inline journal — custom labels replace vocabulary picks, not the annotation requirement
+- If unusual, add one line under block `Additional:` explaining the custom prefix
+
+### 2.5 Go example (handler)
 
 ```go
 /*
- * Function:  List files for the authenticated user.
- *             GET /api/files
- * Variables:
- *   userId - from auth middleware; caller's user ID
- *   files  - query result returned to client
- * Logic:
- *   1. Read userId from request context
- *   2. Query non-deleted files for userId
- *   3. Return JSON list with pagination metadata
+ * Route: List files for the authenticated user.
+ *        GET /api/files
  */
 func ListFiles(c *gin.Context) {
-    // Var: userId — auth middleware; caller's user ID
+    // Param: userId — auth middleware; caller's user ID
     userId := c.GetString("userId")
-    // Logic-1: Read userId from request context (done above)
-    // Logic-2: Query non-deleted files for userId
+    // Step: query non-deleted files for userId
+    // Var: files — query result returned to client
     files, err := fileRepo.ListByUser(c, userId)
-    // Logic-3: Return JSON list with pagination metadata
+    // Return: JSON list with pagination metadata
     c.JSON(200, gin.H{"success": true, "data": files})
 }
 ```
@@ -149,17 +161,8 @@ Trivial one-liners may omit the block comment and inline journal.
 
 ```typescript
 /**
- * Function:  REST entry point for withdrawing a team invitation.
- *             DELETE /api/invitations/:invitationId/withdraw
- * Variables:
- *   invitationId - path parameter; ID of the invitation to withdraw
- *   body         - JSON body (WithdrawInvitationDto); optional reason
- *   req.user     - authenticated caller from auth middleware
- *   invitation   - loaded invitation record
- *   result       - withdraw service result returned to client
- * Logic:
- *   1. Verify caller belongs to the team that owns the invitation
- *   2. Delegate to invitationService.withdraw with caller ID, invitationId, body
+ * Route: Withdraw a team invitation.
+ *        DELETE /api/invitations/:invitationId/withdraw
  * Additional:
  *   - Requires authenticated employee session
  *   - Returns JSON { success, code, data } or standard error envelope with error.code
@@ -168,12 +171,12 @@ router.delete(
   '/:invitationId/withdraw',
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      // Var: invitationId — path parameter; ID of the invitation to withdraw
+      // Param: invitationId — path parameter; ID of the invitation to withdraw
       const { invitationId } = req.params;
-      // Var: body — JSON body (WithdrawInvitationDto); optional reason
+      // Param: body — JSON body (WithdrawInvitationDto); optional reason
       const body = req.body as WithdrawInvitationDto;
 
-      // Logic-1: verify caller belongs to the team that owns the invitation
+      // Guard: verify caller belongs to the team that owns the invitation
       // Var: invitation — loaded invitation record
       const invitation = await invitationService.findById(invitationId);
       // Var: req.user — authenticated caller from auth middleware
@@ -181,9 +184,10 @@ router.delete(
         throw new ForbiddenError('You do not have access to this invitation');
       }
 
-      // Logic-2: delegate to withdraw service
+      // Step: delegate to withdraw service
       // Var: result — withdraw service result returned to client
       const result = await invitationService.withdraw(req.user.id, invitationId, body);
+      // Return: success envelope with code INVITATION_WITHDRAWN
       return res.json({ success: true, code: 'INVITATION_WITHDRAWN', data: result });
     } catch (error) {
       next(error);
@@ -197,16 +201,6 @@ router.delete(
 ```typescript
 /**
  * Function:  Withdraw a pending invitation and notify the invitee.
- * Variables:
- *   callerId     - ID of the employee performing the withdraw
- *   invitationId - ID of the invitation record
- *   dto          - optional reason and metadata
- *   invitation   - loaded invitation row
- *   updated      - persisted invitation after status change
- * Logic:
- *   1. Load invitation; reject if not found or not pending
- *   2. Update status to withdrawn and persist
- *   3. Send notification to the invitee
  * Additional:
  *   - Runs inside a DB transaction
  *   - Idempotent if invitation is already withdrawn
@@ -217,23 +211,25 @@ async function withdraw(
   dto: WithdrawInvitationDto
 ): Promise<Invitation> {
   return db.transaction(async (tx) => {
-    // Var: callerId — ID of the employee performing the withdraw
-    // Var: invitationId — ID of the invitation record
-    // Var: dto — optional reason and metadata
-    // Logic-1: load invitation; reject if not found or not pending
+    // Input: callerId — ID of the employee performing the withdraw
+    // Input: invitationId — ID of the invitation record
+    // Input: dto — optional reason and metadata
+    // Step: load invitation; reject if not found or not pending
     // Var: invitation — loaded invitation row
     const invitation = await tx.invitation.findUnique({ where: { id: invitationId } });
+    // Throws: not found when invitation missing
     if (!invitation) throw new NotFoundError('Invitation not found');
+    // Throws: conflict when invitation is not pending
     if (invitation.status !== 'pending') throw new ConflictError('Invitation is not pending');
 
-    // Logic-2: update status to withdrawn and persist
+    // Step: update status to withdrawn and persist
     // Var: updated — persisted invitation after status change
     const updated = await tx.invitation.update({
       where: { id: invitationId },
       data: { status: 'withdrawn', reason: dto.reason, withdrawnBy: callerId },
     });
 
-    // Logic-3: send notification to the invitee
+    // Effect: send notification to the invitee
     await notificationService.sendWithdrawNotice(updated);
 
     return updated;
@@ -246,21 +242,12 @@ async function withdraw(
 ```typescript
 /**
  * Function:  Server action to create a new project for the active team.
- * Variables:
- *   formData - FormData from client; name, description, teamId
- *   parsed   - validated fields from formData
- *   session  - authenticated session
- *   project  - created project record
- * Logic:
- *   1. Parse and validate form fields
- *   2. Verify session user is a member of the team
- *   3. Create project via projectService and revalidate cache
  * Additional:
  *   - Called from web UI only; not for external integrations
  *   - Revalidates /dashboard/projects after success
  */
 export async function createProject(formData: FormData) {
-  // Logic-1: parse and validate form fields
+  // Guard: parse and validate form fields
   // Var: formData — FormData from client; name, description, teamId
   // Var: parsed — validated fields from formData
   const parsed = createProjectSchema.safeParse({
@@ -270,16 +257,17 @@ export async function createProject(formData: FormData) {
   });
   if (!parsed.success) throw new ValidationError(parsed.error);
 
-  // Logic-2: verify session user is a member of the team
+  // Guard: verify session user is a member of the team
   // Var: session — authenticated session
   const session = await getSession();
   if (!session || !await teamService.isMember(session.userId, parsed.data.teamId)) {
     throw new ForbiddenError('Not a team member');
   }
 
-  // Logic-3: create project and revalidate cache
+  // Step: create project via projectService
   // Var: project — created project record
   const project = await projectService.create(session.userId, parsed.data);
+  // Effect: revalidate projects list cache
   revalidatePath('/dashboard/projects');
   return project;
 }
@@ -291,27 +279,19 @@ Pure display components with no API calls or business logic. Block comments are 
 
 ```typescript
 /**
- * Function:  Dashboard card showing team KPI with premium gold highlight when target is met.
- * Variables:
- *   title   - prop; metric label
- *   value   - prop; current numeric value
- *   target   - prop; goal threshold for gold accent
- *   targetMet - whether value meets or exceeds target
- * Logic:
- *   1. Determine whether value meets or exceeds target
- *   2. Render metric card with blue default or gold highlight styling
+ * Component:  Dashboard card showing team KPI with premium gold highlight when target is met.
  * Additional:
  *   - Follow project/DESIGN.md KPI card spec (gold left accent when target met)
  */
 export function KpiCard({ title, value, target }: KpiCardProps) {
-  // Var: title — prop; metric label
-  // Var: value — prop; current numeric value
-  // Var: target — prop; goal threshold for gold accent
-  // Logic-1: determine whether value meets or exceeds target
+  // Prop: title — metric label
+  // Prop: value — current numeric value
+  // Prop: target — goal threshold for gold accent
+  // Step: determine whether value meets or exceeds target
   // Var: targetMet — whether value meets or exceeds target
   const targetMet = value >= target;
 
-  // Logic-2: render metric card with appropriate accent styling
+  // Step: render metric card with appropriate accent styling
   return (
     <div className={cn('kpi-card', targetMet && 'kpi-card--gold')}>
       <span className="kpi-card__title">{title}</span>
@@ -323,7 +303,7 @@ export function KpiCard({ title, value, target }: KpiCardProps) {
 
 ## 7. Frontend Client Handler / Page Example
 
-Client pages and handlers that call the API need the same block-comment **and inline journal** discipline as backend code. Document every response scenario and UX action in block comments; use `@/components/Alert` for inline feedback (see section 8).
+Client pages and handlers that call the API need the same block-comment **and inline journal** discipline as backend code. Document every response scenario in block `Additional` and implement with inline `Branch:` / `Guard:`; use `@/components/Alert` for inline feedback (see section 8).
 
 ### When frontend block comments are required
 
@@ -343,12 +323,6 @@ import { Input } from "@/components/Input";
 
 /**
  * Function:  Client page to create a company and chief assistant.
- * Variables:
- *   router - Next.js router; redirect after successful creation
- * Logic:
- *   1. On mount, verify session via GET /auth/me; UNAUTHORIZED → redirect /login; other errors → Alert
- *   2. On submit, POST /companies; VALIDATION_FAILED/other → Alert; success → continue
- *   3. POST chief assistant; on failure show error Alert; on success redirect to company detail
  * Additional:
  *   - Uses apiPost from @/lib/api
  *   - Scenarios: UNAUTHORIZED → redirect; validation/server errors → Alert; create success → redirect (no success Alert)
@@ -361,18 +335,13 @@ export default function NewCompanyPage() {
   const [loading, setLoading] = useState(false);
 
   /**
-   * Function:  Load session and redirect unauthenticated users.
-   * Variables:
-   *   res - GET /auth/me response envelope
-   * Logic:
-   *   1. Fetch GET /auth/me
-   *   2. UNAUTHORIZED or no user → redirect /login; other error codes → error Alert
+   * Handler: Load session and redirect unauthenticated users.
    */
   async function load() {
-    // Logic-1: fetch GET /auth/me
+    // Step: fetch GET /auth/me
     // Var: res — GET /auth/me response envelope
     const res = await apiFetch<{ user: { id: string } | null }>("/auth/me");
-    // Logic-2: UNAUTHORIZED or no user → redirect /login; other error codes → error Alert
+    // Branch: UNAUTHORIZED or no user → redirect /login; other error codes → error Alert
     if (!res.success) {
       if (res.error?.code === "UNAUTHORIZED") {
         router.push("/login");
@@ -389,15 +358,7 @@ export default function NewCompanyPage() {
   }, [router]);
 
   /**
-   * Function:  Create company and chief assistant via API.
-   * Variables:
-   *   e            - form submit event
-   *   companyRes   - POST /companies response envelope
-   *   assistantRes - POST chief assistant response envelope
-   * Logic:
-   *   1. Clear prior alerts and POST /companies with company name
-   *   2. On failure, branch by error.code — VALIDATION_FAILED or other → error Alert
-   *   3. POST chief assistant; on failure show error Alert; on success redirect
+   * Handler: Create company and chief assistant via API.
    */
   async function handleSubmit(e: FormEvent) {
     // Var: e — form submit event
@@ -405,19 +366,19 @@ export default function NewCompanyPage() {
     setLoading(true);
     setError("");
 
-    // Logic-1: clear prior alerts and POST /companies with company name
+    // Step: clear prior alerts and POST /companies with company name
     // Var: companyRes — POST /companies response envelope
     const companyRes = await apiPost<{ company: { id: string } }>("/companies", {
       name: companyName,
     });
-    // Logic-2: on failure, branch by error.code — VALIDATION_FAILED or other → error Alert
+    // Branch: on failure, branch by error.code — VALIDATION_FAILED or other → error Alert
     if (!companyRes.success || !companyRes.data?.company) {
       setError(companyRes.error?.message ?? "Failed to create company");
       setLoading(false);
       return;
     }
 
-    // Logic-3: POST chief assistant; on failure show error Alert; on success redirect
+    // Step: POST chief assistant
     // Var: assistantRes — POST chief assistant response envelope
     const assistantRes = await apiPost<{ agent: unknown }>(
       `/companies/${companyRes.data.company.id}/assistant`,
@@ -425,11 +386,13 @@ export default function NewCompanyPage() {
     );
     setLoading(false);
 
+    // Branch: assistant failure → error Alert; success → redirect
     if (!assistantRes.success) {
       setError(assistantRes.error?.message ?? "Failed to create assistant");
       return;
     }
 
+    // Return: redirect to company detail on success
     router.push(`/companies/${companyRes.data.company.id}`);
   }
 
@@ -482,16 +445,8 @@ Rules:
 
 ```typescript
 /**
- * Function:  Create a new company for the authenticated user.
- *             POST /companies
- * Variables:
- *   req.user - authenticated user from auth middleware
- *   parsed   - req.body validated by companySchema; company name
- *   company  - persisted company record for req.user
- * Logic:
- *   1. Validate request body with zod schema
- *   2. Create company via companyService
- *   3. Return 201 with success envelope and code COMPANY_CREATED
+ * Route: Create a new company for the authenticated user.
+ *        POST /companies
  * Additional:
  *   - Success code: COMPANY_CREATED
  *   - Error codes: VALIDATION_FAILED, UNAUTHORIZED (via errorHandler)
@@ -499,16 +454,16 @@ Rules:
  */
 router.post('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    // Logic-1: validate request body with zod schema
+    // Guard: validate request body with zod schema
     // Var: parsed — req.body validated by companySchema; company name
     const parsed = companySchema.safeParse(req.body);
     if (!parsed.success) throw new ValidationError('Company name is required');
 
-    // Logic-2: create company via companyService
+    // Step: create company via companyService
     // Var: company — persisted company record for req.user
     const company = await createCompany(req.user!.id, parsed.data.name);
 
-    // Logic-3: return 201 with success envelope and code COMPANY_CREATED
+    // Return: 201 with success envelope and code COMPANY_CREATED
     res.status(201).json({ success: true, code: 'COMPANY_CREATED', data: { company } });
   } catch (error) {
     next(error);
@@ -531,7 +486,7 @@ Use `@/components/Alert` for inline feedback — not `window.alert` and not ad-h
 
 ### Frontend scenario handling (required)
 
-Every client handler (`load`, `handleSubmit`, `handleDelete`, etc.) must define what happens for **each** outcome **before** coding. List scenarios in the block comment **Logic** or **Additional** section, then implement every branch with `// Logic-N:` at each branch (e.g. before `router.push`, before `setError`).
+Every client handler (`load`, `handleSubmit`, `handleDelete`, etc.) must define what happens for **each** outcome **before** coding. List high-level scenarios in block comment **Additional**, then implement every branch with `// Branch:` or `// Guard:` at each branch (e.g. before `router.push`, before `setError`).
 
 | Scenario | Typical `code` / condition | UX action |
 |----------|--------------------------|-----------|
@@ -549,7 +504,7 @@ Rules:
 - Never leave loading spinners running after any terminal outcome
 - Never silently ignore a failed response
 - Use `ConfirmModal` for destructive confirm — not `window.confirm`
-- Redirect only when the scenario table (or block comment) says so — document why
+- Redirect only when the scenario table or block `Additional` says so — document why
 
 ```typescript
 const router = useRouter(); // next/navigation
@@ -557,15 +512,7 @@ const [error, setError] = useState("");
 const [message, setMessage] = useState("");
 
 /**
- * Function:  Save LLM settings from the settings form.
- * Variables:
- *   e       - form submit event
- *   payload - form fields for LLM settings
- *   res     - PUT /settings/llm response envelope
- * Logic:
- *   1. Clear alerts and PUT /settings/llm
- *   2. UNAUTHORIZED → redirect /login; VALIDATION_FAILED/other → error Alert
- *   3. Success → success Alert (user stays on page)
+ * Handler: Save LLM settings from the settings form.
  */
 async function handleSave(e: FormEvent) {
   // Var: e — form submit event
@@ -573,11 +520,11 @@ async function handleSave(e: FormEvent) {
   setError("");
   setMessage("");
 
-  // Logic-1: clear alerts and PUT /settings/llm
+  // Step: clear alerts and PUT /settings/llm
   // Var: payload — form fields for LLM settings
   // Var: res — PUT /settings/llm response envelope
   const res = await apiPut<{ settings: unknown }>("/settings/llm", payload);
-  // Logic-2: UNAUTHORIZED → redirect /login; VALIDATION_FAILED/other → error Alert
+  // Branch: UNAUTHORIZED → redirect /login; VALIDATION_FAILED/other → error Alert
   if (!res.success) {
     if (res.error?.code === "UNAUTHORIZED") {
       router.push("/login");
@@ -586,7 +533,7 @@ async function handleSave(e: FormEvent) {
     setError(res.error?.message ?? "Failed to save settings");
     return;
   }
-  // Logic-3: success → success Alert (user stays on page)
+  // Effect: success → success Alert (user stays on page)
   setMessage("Settings saved.");
 }
 
@@ -805,12 +752,12 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 - Search npm and prefer popular packages before custom feature code
 - Run `npm install` in the correct platforms app **before** writing `import` from that package
 - Document packages in block comment `Additional`
-- Write block comment before body — Variables and Logic steps are the spec
-- Mirror **every** Variables entry with `// Var:` at first use in the body
-- Place `// Logic-N:` immediately before the code for step N — never skip early steps
-- Add block comments and inline journal on client API handlers (`handleSubmit`, `load`, etc.)
+- Write block summary + `Additional` before body; annotate bindings and steps inline per §2.3
+- Pick inline prefixes from §2.3 vocabulary for the code type; fall back to `Var:` / `Step:` when unclear
+- Use custom `Prefix:` only when vocabulary does not fit; note in `Additional` if unusual
+- Add block comments and context inline journal on client API handlers (`handleSubmit`, `load`, etc.)
 - Return HTTP status + `{ success, code, data }` or `{ success: false, error: { code, message } }` from every API route
-- Document every API response scenario (Alert, redirect, modal, refresh) in handler block comments before coding
+- Document every API response scenario (Alert, redirect, modal, refresh) in handler `Additional` and inline `Branch:` / `Guard:` before coding
 - Show `<Alert variant="error">` on failures that stay on page; redirect or modal when the scenario table says so
 - Use UUID primary keys and `deleted_at` soft delete on every persisted entity (section 11)
 - Build full CRUD surface (API + index/create/edit/detail/delete modal) when the feature manages a resource collection (section 11)
@@ -824,9 +771,10 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 - Don't leave broken imports expecting the user to install later
 - Don't copy-paste third-party logic inline instead of installing the package
 - Don't skip block comments on multi-step handlers (backend or frontend)
-- Don't document Variables or Logic **only** in the header block — body must carry journal comments
-- Don't skip `Logic-N` for early steps (validation, parsing, auth checks)
-- Don't let inline `// Var:` or `// Logic-N:` comments drift from the header index
+- Don't omit inline binding or step journal regardless of prefix choice
+- Don't use block comment as the only place for bindings/steps — body must carry the journal
+- Don't skip `Guard:` / `Step:` for early steps (validation, parsing, auth checks)
+- Don't let inline journal comments drift from actual code behavior
 - Don't omit `code` from success or error API responses
 - Don't use a one-size-fits-all Alert for every error when redirect or modal is the correct scenario
 - Don't return `200` with `success: false` — use the correct HTTP error status
@@ -845,11 +793,11 @@ Use package-first for pagination/tables (section 10 — e.g. `@tanstack/react-ta
 3. Searched npm for a popular package before custom feature code?
 4. Package installed in terminal **before** first `import` from that package appears in code?
 5. Package documented in `Additional`?
-6. Block comment on every non-trivial function (including client API handlers)?
-7. Every Variables entry has matching `// Var:` in the body?
-8. Every Logic step has matching `// Logic-N:` in the body (none skipped)?
+6. Block summary + `Additional` on every non-trivial function (including client API handlers)?
+7. Meaningful bindings annotated (`Param:` / `Prop:` / `Var:` / etc.) at first use?
+8. Every logical step has inline annotation (`Step:` / `Guard:` / `Branch:` / etc.) — none skipped?
 9. Every new API route returns correct HTTP status + JSON envelope with required `code`?
-10. Every frontend handler documents and implements all response scenarios per block comment (section 8)?
+10. Every frontend handler documents scenarios in `Additional` and implements them via `Branch:` / `Guard:` (section 8)?
 11. Persisted entities use UUID PK and `deleted_at` soft delete (section 11)?
 12. CRUD features include full API + pages (index with filter/search/sort/pagination, create, edit, detail, delete modal)?
 13. UI matches `project/design/` and [`project/DESIGN.md`](project/DESIGN.md) index; paths and stack match [`project/INFRASTRUCTURE.md`](project/INFRASTRUCTURE.md); workflow matches [`AGENTS.md`](../AGENTS.md)?

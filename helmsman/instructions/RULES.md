@@ -122,7 +122,7 @@ Migrations live inside the backend app by default — not in the service platfor
 |--------|------|-------------|
 | UI / UX | [`DESIGN.md`](DESIGN.md) + `project/design/` | Responsive strategy per `project/DESIGN.md`; default neutral grayscale (light) when theme unspecified; usable on phone + desktop; loading/error/empty; accessible |
 | Infrastructure | [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) + [`GREENFIELD.md`](GREENFIELD.md) | Healthchecks, backup, env examples, startup order |
-| Code / API | [`CODE.md`](CODE.md) §0–2, §8, §11, §16 | Block + inline journal on all languages; full CRUD, response codes, validation |
+| Code / API | [`CODE.md`](CODE.md) §0–2, §8, §11, §16 | Block summary + context inline journal (CODE §2.3); full CRUD, response codes, validation |
 | Specs | [`DOCUMENT.md`](DOCUMENT.md) | Production flows and error cases |
 | Plans / tasks | [`PLAN.md`](PLAN.md), [`TASK.md`](TASK.md) | E2E verify in plan matrix and task steps |
 | Change log | [`HISTORY.md`](HISTORY.md) | State production bar met or list gaps |
@@ -183,7 +183,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 | **When** | Start of **every task** that will touch application source (`platforms/`, `backend/`, `src/`, app packages, etc.) |
 | **Re-read** | First session: full [`CODE.md`](CODE.md). Each new coding task: **§1–2 always**; plus §8 (API), §9 (auth), §11 (CRUD), §16 (API baseline) when in scope |
 | **Record** | TASK **Context read** — `instructions/CODE.md — re-read §{list} for this task` |
-| **Apply** | Block comment + inline `Var:` / `Logic-N:` journal on every non-trivial function/handler in **any** language per §0 |
+| **Apply** | Block summary + `Additional:` + context inline journal per CODE §2.3 (vocabulary default; custom `Prefix:` allowed when needed) |
 | **Per step** | TASK implementation steps include **Code ref** pointing to CODE sections |
 | **Verify** | CODE §14 checklist + §15 post-edit before task complete |
 
