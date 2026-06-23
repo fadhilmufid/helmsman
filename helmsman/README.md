@@ -2,7 +2,7 @@
 
 Reusable **agent guidance** — one **integrated system**. In an app: clone as `helmsman/`, then agents read [`helmsman/AGENTS.md`](AGENTS.md) and [`helmsman/instructions/RULES.md`](instructions/RULES.md). Default: **production-grade** unless you ask for MVP.
 
-## What this is
+## What this is 
 
 A structured instruction set that helps **agents**:
 
