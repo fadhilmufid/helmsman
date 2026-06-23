@@ -21,12 +21,13 @@ Developers using **Cursor** (or similar tools) who want consistent **agent** beh
 ## How to use it
 
 1. Inside your app repo (`{root}`): `git clone <this-repo-url> helmsman` — folder name **`helmsman`**.
-2. Configure Cursor (or your tool) to read **[`helmsman/AGENTS.md`](AGENTS.md)** — **not** this README, and **not** a root-level copy.
-3. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. They must **not** copy `instructions/`, `project/`, or `AGENTS.md` to `{root}`. **Every session:** agents re-read [`helmsman/AGENTS.md`](AGENTS.md) and run Gate A when the pack is present — including after bootstrap is complete.
-4. Greenfield app code (`platforms/`, `deploy/`, etc.) is created as a **sibling** of `helmsman/` at `{root}`.
-5. Optionally drop reference material into [`other-references/`](other-references/) inside `helmsman/`.
+2. Create or update **`{root}/AGENTS.md`** — copy [`templates/root-AGENTS.md`](templates/root-AGENTS.md) or the [repo-root template](../AGENTS.md); merge the **For agents** block if you already have a root `AGENTS.md`.
+3. Agents read **[`helmsman/AGENTS.md`](AGENTS.md)** for the full workflow (gates, plans, tasks, code). **Every session:** re-read this file and run Gate A when the pack is present.
+4. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. **Allowed at `{root}`:** thin `AGENTS.md` pointer only. **Forbidden:** copy full pack `AGENTS.md`, `instructions/`, or `project/` to `{root}`.
+5. Greenfield app code (`platforms/`, `deploy/`, etc.) is created as a **sibling** of `helmsman/` at `{root}`.
+6. Optionally drop reference material into [`other-references/`](other-references/) inside `helmsman/`.
 
-**Do not** copy this entire folder into `{root}` — that causes agents to hoist the pack. Clone as `helmsman/` and leave it there.
+**Do not** flatten or hoist the pack to `{root}`. Clone as `helmsman/` and leave it there.
 
 ## Folder overview
 

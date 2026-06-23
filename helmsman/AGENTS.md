@@ -33,6 +33,7 @@ When this repo is cloned into an app as **`helmsman/`**, agents **use it in plac
 
 ```
 {root}/
+├── AGENTS.md          ← optional thin Helmsman pointer (from templates/root-AGENTS.md)
 ├── helmsman/          ← {pack} — this instruction repo (use in place)
 │   ├── AGENTS.md
 │   ├── README.md
@@ -50,11 +51,12 @@ When this repo is cloned into an app as **`helmsman/`**, agents **use it in plac
 - Read `{pack}/AGENTS.md` — this file when inside `helmsman/`
 - Read templates from `{pack}/instructions/`
 - Write plans, tasks, histories, and project config to `{pack}/project/`
+- **Optional:** `{root}/AGENTS.md` as a **thin pointer** to this file — use [`templates/root-AGENTS.md`](templates/root-AGENTS.md); do not copy this full file to `{root}`
 
 **Don't (never copy to `{root}`):**
 
-- Do **not** create `{root}/instructions/`, `{root}/project/`, `{root}/AGENTS.md`, or `{root}/other-references/`
-- Do **not** copy `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
+- Do **not** create `{root}/instructions/`, `{root}/project/`, or `{root}/other-references/`
+- Do **not** copy the **full** pack `AGENTS.md`, `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
 - Do **not** move, duplicate, symlink, or flatten `helmsman/` — it stays one folder under `{root}`
 - Do **not** put app code (`platforms/`, `deploy/`, application source) inside `{pack}`
 

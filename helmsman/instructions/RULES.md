@@ -48,13 +48,13 @@ When this instruction repo lives at `{root}/helmsman/` (folder name **`helmsman`
 | Agent workspace | `helmsman/project/` | Plans, tasks, histories, config |
 | App runtime | `{root}/platforms/`, `{root}/deploy/` | Greenfield scaffold — **not** inside `{pack}` |
 
-**Do:** read and write inside `{pack}`; build app at `{root}`.
+**Do:** read and write inside `{pack}`; build app at `{root}`; optional thin `{root}/AGENTS.md` pointer per [`templates/root-AGENTS.md`](../templates/root-AGENTS.md).
 
 **Don't:**
 
 - Copy, move, symlink, or flatten `{pack}` to `{root}`
-- Create `{root}/instructions/`, `{root}/project/`, `{root}/AGENTS.md`, or `{root}/other-references/`
-- Copy `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
+- Create `{root}/instructions/`, `{root}/project/`, or `{root}/other-references/`
+- Copy the **full** pack `AGENTS.md`, `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
 - Put `platforms/`, `deploy/`, or application source inside `{pack}`
 
 Paths `project/`, `instructions/` in this instruction set mean inside `{pack}` unless prefixed with `{root}/`.

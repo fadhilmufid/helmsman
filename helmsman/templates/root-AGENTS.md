@@ -7,9 +7,3 @@ Helmsman is installed at `helmsman/` in this repository.
 1. **Read [`helmsman/AGENTS.md`](helmsman/AGENTS.md) in full** — that is the instruction pack entry point.
 2. **Use the pack in place** — read `helmsman/instructions/`, write to `helmsman/project/`.
 3. **Do not** copy `helmsman/instructions/`, `helmsman/project/`, or the full pack `AGENTS.md` to the repo root.
-
-## For humans
-
-Copy this file to your app repository root as `AGENTS.md`, or merge the **For agents** section into an existing root `AGENTS.md`. Full setup: [README.md](README.md).
-
-Also available inside the pack: [`helmsman/templates/root-AGENTS.md`](helmsman/templates/root-AGENTS.md).

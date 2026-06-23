@@ -38,6 +38,7 @@ When installed in an app, documentation spans **`{root}`** (app) and **`{pack}`*
 
 ```
 {root}/                           ← app repository
+├── AGENTS.md                     ← optional thin Helmsman pointer (user app; see templates/root-AGENTS.md)
 ├── helmsman/                     ← {pack} — cloned instruction repo (use in place)
 │   ├── AGENTS.md                 ← agent gate
 │   ├── README.md
@@ -57,7 +58,7 @@ When installed in an app, documentation spans **`{root}`** (app) and **`{pack}`*
 └── deploy/
 ```
 
-**Hard rule:** never copy `{pack}` contents to `{root}`. See [`../AGENTS.md`](../AGENTS.md) §0.
+**Hard rule:** never copy `{pack}` contents to `{root}` (except optional thin `{root}/AGENTS.md` pointer). See [`../AGENTS.md`](../AGENTS.md) §0.
 
 When this repo **is** `{pack}` (paths relative to pack root):
 
@@ -78,6 +79,7 @@ When this repo **is** `{pack}` (paths relative to pack root):
 | App folders (brownfield) | whatever the repo uses | `src/`, `backend/`, `apps/web/` — per [`BROWNFIELD.md`](BROWNFIELD.md) |
 | Instruction templates | `CAPITAL.md` in `instructions/` | `instructions/CODE.md`, `instructions/TASK.md` |
 | Agent gate | `{pack}/AGENTS.md` (e.g. `helmsman/AGENTS.md`) | `AGENTS.md` inside pack |
+| Root pointer | `{root}/AGENTS.md` | Optional thin Helmsman pointer — [`templates/root-AGENTS.md`](../templates/root-AGENTS.md); not the full pack file |
 | Project config files | `CAPITAL.md` in `project/` | `project/OVERVIEW.md`, `project/AGENTS.md`, `project/INFRASTRUCTURE.md` |
 | Generated entries | `{timestamp}_{slug}.md` | `project/histories/20260622_143052_bootstrap.md` |
 
