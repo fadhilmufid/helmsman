@@ -61,6 +61,8 @@ Each file must include: token values, states (default/hover/focus/disabled/error
 Agents create locally. Keep it short:
 
 - One-paragraph design philosophy
+- **Visual theme** — user preference, or pack default neutral grayscale (light) per §3
+- **Responsive strategy** — mobile-first / desktop-first / balanced + one-line rationale
 - Component library choice + version
 - Link table to every file in `project/design/`
 - Optional quick hex/token cheat sheet
@@ -77,9 +79,63 @@ Define in `project/DESIGN.md` (summary) and `project/design/color-palette-and-to
 - Secondary/premium accent color role (if any)
 - Key geometric patterns (pill buttons, rounded cards, etc.)
 
+**If the user specifies nothing about theme or colors, use the pack default below and record in `project/DESIGN.md`.**
+
+### Default visual theme (when user specifies nothing)
+
+When the user is silent on design or says *"use your recommendations"*, apply a **clean, simple, light-mode neutral grayscale** theme — the aesthetic shared by Notion, Vercel, Cursor, and OpenAI: content-first, minimal chrome, subtle borders, near-monochrome UI with color reserved for semantics and primary actions.
+
+**Decision order:** (1) user stated theme/colors → (2) existing brownfield UI → (3) **pack default below** — do not ask a clarify question for theme when the user is silent or delegates.
+
+Record in `project/DESIGN.md`:
+
+```markdown
+**Visual theme:** Default neutral grayscale (light) — per helmsman DESIGN.md §3 default; user did not specify custom branding.
+```
+
+#### Aesthetic principles
+
+| Principle | Detail |
+|-----------|--------|
+| Mood | Professional, calm, content-first — not playful or high-saturation |
+| Palette | Neutral grays only for chrome; near-black primary text; white/off-white surfaces |
+| Accent | Single near-black (or very dark gray) for primary buttons/links — not a brand color |
+| Color use | Semantic only for error/warning/success/info states |
+| Density | Comfortable spacing; not cramped admin, not oversized marketing |
+| Chrome | Subtle 1px borders over heavy shadows; light elevation on modals/dropdowns |
+| Radius | Moderate — ~6–8px cards/inputs, ~4px badges (shadcn-like) |
+| Typography | Inter (preferred) or `system-ui` stack; clear hierarchy, no decorative fonts |
+
+#### Starter token table
+
+Copy/adapt into `project/design/color-palette-and-tokens.md` when the user is silent:
+
+| Token | Light default | Role |
+|-------|---------------|------|
+| `--bg-base` | `#ffffff` | Page background |
+| `--bg-surface` | `#fafafa` | Cards, panels |
+| `--bg-muted` | `#f4f4f5` | Hover rows, secondary areas |
+| `--border-default` | `#e4e4e7` | Dividers, input borders |
+| `--border-muted` | `#f4f4f5` | Subtle separators |
+| `--text-primary` | `#18181b` | Headings, body |
+| `--text-muted` | `#71717a` | Secondary labels |
+| `--text-subtle` | `#a1a1aa` | Placeholders, hints |
+| `--accent-primary` | `#18181b` | Primary button bg, active nav |
+| `--accent-primary-hover` | `#27272a` | Primary hover |
+| `--accent-on-primary` | `#fafafa` | Text on primary button |
+| Semantic | Standard accessible red/amber/green/blue | Errors, warnings, success, info only |
+
+**Typography default:** Inter 14px body / 600 weight headings; mono for code (`ui-monospace` or Geist Mono if stack provides it) — document in `typography-system.md`.
+
+**Elevation default:** prefer borders over shadows; use `0 1px 3px rgba(0,0,0,0.08)` on dropdowns/modals only — document in `elevation-and-shadow-system.md`.
+
+**Component library default:** when frontend is **React + Tailwind** and the user did not pick a library, **Recommended:** shadcn/ui with default neutral theme (see §6).
+
+**Still required:** create full `project/design/` files at Gate C — default tokens are starting values, not a skip for design docs. User brand colors, dark mode, or custom themes override this block. **Brownfield:** document existing theme first; do not impose default on legacy UI unless the user asks.
+
 ## 4. Color Palette & Roles
 
-Document in `project/design/color-palette-and-tokens.md`:
+Document in `project/design/color-palette-and-tokens.md`. When applying the pack default from §3, populate groups from the starter token table there.
 
 | Group | Examples |
 |-------|----------|
@@ -94,7 +150,7 @@ Use CSS custom property names (e.g. `--bg-base`, `--accent-primary`) consistentl
 
 ## 5. Typography Rules
 
-Define in `project/design/typography-system.md`:
+Define in `project/design/typography-system.md`. **Default font:** Inter or `system-ui` per §3 when the user specifies nothing.
 
 - Font families (title, body, mono if needed)
 - Type scale table: role, size, weight, line-height, letter-spacing
@@ -135,7 +191,7 @@ Document in `project/design/buttons-and-actions.md`, `forms-and-inputs.md`, `mod
 | Popularity | High npm weekly downloads and/or GitHub stars |
 | Maintenance | Recent releases, active issues/PRs |
 | Stack fit | React/Next.js/Vue/etc. per project |
-| Mobile-first | Works on small viewports; touch-friendly (§10) |
+| Responsive / viewport fit | Works across chosen strategy viewports; touch-friendly (§10) |
 | Accessibility | Keyboard focus, ARIA patterns built-in |
 | Theming | Supports design tokens / CSS variables / Tailwind |
 
@@ -169,8 +225,8 @@ Include: background, text color, radius, padding, hover/focus states, and usage 
 
 Document in `project/design/spacing-layout-and-grid.md`:
 
-- **Mobile-first (web apps):** default styles target the smallest viewport; use `min-width` media queries to add tablet/desktop layout — never desktop-only layouts that break on mobile
-- Spacing system (base unit and scale)
+- **Responsive strategy (web apps):** follow the strategy recorded in `project/DESIGN.md` (mobile-first, desktop-first, or balanced) — see §10; never desktop-only layouts that break on mobile
+- **Spacing default (when user silent):** 4px base unit; scale 4 / 8 / 12 / 16 / 24 / 32 / 48
 - Grid and container structure
 - Whitespace philosophy
 - Border radius scale
@@ -187,10 +243,11 @@ Shadow philosophy: opacity, blur, and when to use each level.
 
 Project-specific do's and don'ts belong in `project/design/` files and `project/DESIGN.md` index. General guidance:
 
+- Do apply pack default neutral grayscale (light) when the user did not specify theme — per §3
 - Do define accent color roles clearly (functional vs decorative)
 - Do keep semantic colors separate from brand accents
 - Do use a styled confirmation modal for delete actions — not browser dialogs
-- Do design and build frontend apps **mobile-first** when web UI is in scope; ensure pages work on phone and desktop
+- Do record and follow the chosen responsive strategy in `project/DESIGN.md` and `project/design/responsive-breakpoints.md`; ensure pages work on phone and desktop
 - Do use a popular component library for buttons, modals, tables, forms, and navigation before hand-rolling
 - Do install UI packages in the frontend app path (per `project/INFRASTRUCTURE.md`) before importing (see [`CODE.md`](CODE.md) section 10)
 - Don't add ad-hoc colors outside the defined palette
@@ -200,27 +257,44 @@ Project-specific do's and don'ts belong in `project/design/` files and `project/
 - Don't rebuild accessible modal/table/select primitives when a maintained library exists
 - Don't mix multiple full component suites without documenting why in project
 - Don't ship unstyled or single-state pages for in-scope features
-- Don't defer mobile layout or error states to a later pass
+- Don't defer responsive layout or error states to a later pass
 - Don't use MVP/wireframe UI unless user explicitly asks for MVP
 
 ## 10. Responsive Behavior
 
-**Greenfield / new UI work:** frontend apps are **mobile-first** — design and implement for small screens first, then enhance for tablet and desktop. **Brownfield:** document existing responsive behavior in `project/DESIGN.md` before changing breakpoints.
+**Choose and record a responsive strategy** during Gate B clarify / Gate C design — the agent picks the best fit; user preference overrides. **Brownfield:** document existing responsive behavior in `project/DESIGN.md` before changing breakpoints.
+
+### Strategy selection
+
+| Strategy | Agent recommends when | CSS approach |
+|----------|----------------------|--------------|
+| **mobile-first** | Consumer/field apps, PWA, phone-primary users | Base = smallest viewport; `min-width` for tablet/desktop |
+| **desktop-first** | Admin dashboards, data-dense B2B, internal tools, wide tables | Base = desktop layout; simplify/stack/hide columns for small screens |
+| **balanced** | General SaaS, marketing + app, unclear audience | Co-design primary breakpoints; neither viewport is an afterthought |
+
+**Decision order:** (1) user stated preference → (2) `project/OVERVIEW.md` audience/use context → (3) app type from feature docs → (4) brownfield existing patterns → (5) if still ambiguous, **ask once** in clarify batch.
+
+**Record in:** `project/DESIGN.md` (one line: chosen strategy + rationale) and `project/design/responsive-breakpoints.md` (full breakpoint table + layout notes).
+
+**Hard floor:** Every web UI must remain **usable on phone and desktop** — no desktop-only layouts that break on mobile, no hover-only interactions without touch equivalents. Strategy affects design priority and CSS approach, not whether mobile works.
 
 Document in `project/design/responsive-breakpoints.md`:
 
 | Item | What to define |
 |------|----------------|
-| Breakpoint table | Mobile (default), tablet, desktop — min-width values |
-| Layout strategy | Single column default; multi-column only at larger breakpoints |
+| Chosen strategy | mobile-first / desktop-first / balanced + rationale |
+| Breakpoint table | Mobile, tablet, desktop — min-width (or max-width) values per strategy |
+| Layout strategy | Per strategy — e.g. single column default (mobile-first), stacked cards on small (desktop-first), or co-designed columns (balanced) |
 | Navigation | Mobile: bottom nav, hamburger, or collapsible drawer; desktop: sidebar or top nav |
 | Touch targets | Minimum tap size on mobile (e.g. 44px) |
 | Tables / CRUD index | Horizontal scroll, stacked cards, or column hiding on small screens |
 
-**Implementation guidance (general):**
+**Implementation guidance (per strategy):**
 
-- Write base CSS/Tailwind for mobile; add `sm:` / `md:` / `lg:` (or `@media (min-width: ...)`) for larger screens
-- Test layout at mobile width before considering desktop polish
+- **mobile-first:** base CSS/Tailwind for mobile; add `sm:` / `md:` / `lg:` (or `@media (min-width: ...)`) for larger screens
+- **desktop-first:** base styles for desktop layout; use `max-width` queries or responsive utilities to stack/simplify for tablet and mobile
+- **balanced:** define and test both primary breakpoints during design; avoid treating either viewport as a secondary pass
+- Test layout at all documented breakpoints before marking UI complete
 - CRUD index pages (per [`CODE.md`](CODE.md) section 11) must remain usable on mobile — filters/search may collapse into a drawer or accordion
 
 ## 11. Agent Prompt Guide
@@ -239,8 +313,9 @@ Before UI work:
 2. Read [`project/DESIGN.md`](project/DESIGN.md) index and **all** required files in [`project/design/`](project/design/) (**brownfield:** document existing UI first if missing)
 3. Use hex/CSS vars from `project/design/` — not invented colors
 4. CRUD index pages include filter, search, sort, pagination per project spec; delete uses confirmation modal
-5. Web UI built mobile-first with breakpoints in `project/design/responsive-breakpoints.md`?
-6. UI primitives sourced from a popular component library (or documented reason in `project/design/component-library-and-theming.md`)?
-7. Every in-scope screen has loading, error, and empty states — not happy-path only?
-8. UI is production-polished (responsive, accessible, themed) — not wireframe or MVP shell?
-9. `project/design/accessibility-guidelines.md` applied for keyboard, focus, and touch targets?
+5. Responsive strategy recorded in `project/DESIGN.md` and `project/design/responsive-breakpoints.md`?
+6. If user silent on theme, default neutral grayscale (light) applied and recorded in `project/DESIGN.md`?
+7. UI primitives sourced from a popular component library (or documented reason in `project/design/component-library-and-theming.md`)?
+8. Every in-scope screen has loading, error, and empty states — not happy-path only?
+9. UI is production-polished (responsive, accessible, themed) — not wireframe or MVP shell?
+10. `project/design/accessibility-guidelines.md` applied for keyboard, focus, and touch targets?

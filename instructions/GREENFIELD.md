@@ -114,7 +114,8 @@ Ask in one batch per AGENTS §3. **Recommended:** values are proposals — not l
 | Migrations | Path inside backend (default) or standalone runner |
 | Docker | Dockerfile location per app |
 | Deploy | Target environment; `deploy/` layout |
-| Design | Theme, component library — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md` |
+| Design | Theme, component library — per [`DESIGN.md`](DESIGN.md) → `project/DESIGN.md`. **Recommended when user silent:** neutral grayscale light theme per DESIGN.md §3 |
+| Responsive strategy | mobile-first / desktop-first / balanced — per [`DESIGN.md`](DESIGN.md) §10; record in `project/DESIGN.md` (when web UI in scope) |
 | Delivery scope | What the user asked for — implement at **full production quality**, not stripped down |
 | Quality bar | Full / production-ready — per [`RULES.md`](RULES.md) §5 |
 | Feature docs | Which `project/documents/{feature}/` files per [`DOCUMENT.md`](DOCUMENT.md) |
@@ -126,7 +127,7 @@ After clarify, write:
 | `project/OVERVIEW.md` | Slug, purpose, delivery scope, quality bar |
 | `project/INFRASTRUCTURE.md` | Platform inventory (service + app), stack, ports, Docker, deploy, migrations |
 | `project/AGENTS.md` | Dev commands, lint/test, PR/CI conventions, scaffold notes |
-| `project/DESIGN.md` | Component library, theme, breakpoints |
+| `project/DESIGN.md` | Component library, theme, responsive strategy, breakpoints |
 
 Use official framework scaffolds per [`CODE.md`](CODE.md) section 9 — search fresh scaffold commands for the **confirmed** stack.
 
@@ -266,7 +267,7 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 2 | **Deploy E2E:** build all platform images → save → load → compose up → smoke test |
 | 3 | Migrations applied; dev seeds run without error (when applicable) |
 | 4 | Auth works when required; data scoped correctly |
-| 5 | Delivery-scope features work completely — polished UX, all documented flows (mobile when web in scope) |
+| 5 | Delivery-scope features work completely — polished UX, all documented flows (responsive per `project/design/` on all primary viewports when web in scope) |
 | 6 | Destructive actions use confirmation; soft delete when CODE §11 applies |
 | 7 | API responses include `code` when CODE §8 applies; frontend handles documented scenarios |
 | 8 | Build script produces timestamped image exports for **every** platform (when using §3 pipeline) |

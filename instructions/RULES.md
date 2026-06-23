@@ -67,7 +67,7 @@ Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) 
 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
-| **A — Read-first** | Read every file in AGENTS §2 checklist (full read) | Any `platforms/`, `deploy/`, app source, Dockerfiles |
+| **A — Read-first** | Read every file in AGENTS §2 checklist (full read) — **every session**, not bootstrap-only; run AGENTS HARD STOP re-entry first when `helmsman/` exists | Any `platforms/`, `deploy/`, app source, Dockerfiles |
 | **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
@@ -120,7 +120,7 @@ Migrations live inside the backend app by default — not in the service platfor
 
 | Domain | Read | Expectation |
 |--------|------|-------------|
-| UI / UX | [`DESIGN.md`](DESIGN.md) + `project/design/` | Mobile-first; loading/error/empty; accessible |
+| UI / UX | [`DESIGN.md`](DESIGN.md) + `project/design/` | Responsive strategy per `project/DESIGN.md`; default neutral grayscale (light) when theme unspecified; usable on phone + desktop; loading/error/empty; accessible |
 | Infrastructure | [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) + [`GREENFIELD.md`](GREENFIELD.md) | Healthchecks, backup, env examples, startup order |
 | Code / API | [`CODE.md`](CODE.md) §0–2, §8, §11, §16 | Block + inline journal on all languages; full CRUD, response codes, validation |
 | Specs | [`DOCUMENT.md`](DOCUMENT.md) | Production flows and error cases |
@@ -191,7 +191,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 
 ## 9. Agent checklist
 
-1. Read AGENTS → RULES → mode guide → domain files per Gate A?
+1. AGENTS HARD STOP re-entry run this session (when `helmsman/` exists)? Read AGENTS → RULES → mode guide → domain files per Gate A?
 2. Gates B–D complete (clarify, docs/design, plan) before TASK `in_progress`?
 3. **CODE.md re-read at task start** when touching application source; sections in Context read?
 4. Plan platform inventory lists every `platforms/<slug>`?

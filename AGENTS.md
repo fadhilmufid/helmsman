@@ -1,5 +1,18 @@
 # Agent Instructions
 
+## HARD STOP — Helmsman re-entry (every session)
+
+**As long as `helmsman/` exists in the repo, agents MUST run this block at the start of every session and before every non-trivial task** — including after greenfield bootstrap is complete. Prior chat context does not replace a fresh read.
+
+1. **Discover `{pack}`** — workspace is `{root}` → `{pack}` = `{root}/helmsman/`; workspace is `{pack}` → use this folder.
+2. **Read `{pack}/AGENTS.md` (this file) and `{pack}/instructions/RULES.md` in full.**
+3. **Run Gate A (§2 checklist)** — re-read instruction templates and scan `{pack}/project/` (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`, active `plans/`, `tasks/`, newest `histories/`, in-scope `documents/` and `design/`).
+4. **Follow gates A–F for this session** — do not edit `{root}/platforms/`, `{root}/deploy/`, or app source until Gate A is satisfied.
+
+**Exception:** instruction-pack maintenance only (`{pack}/instructions/`, pack `AGENTS.md`, tracked `{pack}/project/*/README.md`).
+
+---
+
 **Agents: read this file first.** Then [`instructions/RULES.md`](instructions/RULES.md) — the integrated rulebook. Users: see [`README.md`](README.md).
 
 **Read-only gate** — do not edit during normal project work. Rule templates: [`instructions/`](instructions/). Project config: [`project/`](project/).
@@ -119,6 +132,8 @@ If user says *"use your recommendations"* — apply mode-guide defaults, record 
 | Purpose and scope | MVP only if user explicitly asks; else production-ready |
 | Feature docs | `project/documents/` per [`DOCUMENT.md`](instructions/DOCUMENT.md) |
 | Data / API / CRUD | [`CODE.md`](instructions/CODE.md) §8, §11 |
+| Visual theme (web UI) | User preference, or **default:** neutral grayscale light per [`DESIGN.md`](instructions/DESIGN.md) §3 — record in `project/DESIGN.md` |
+| Responsive strategy (web UI) | mobile-first / desktop-first / balanced — per [`DESIGN.md`](instructions/DESIGN.md) §10; record in `project/DESIGN.md` |
 
 ### Greenfield only
 
@@ -181,7 +196,7 @@ Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`instructions/GREE
 
 ## 7. Agent checklist
 
-**Before:** Gate A read complete? B clarify? C docs/design? D plan? E **exhaustive standalone** task drafted (every file as a step)?
+**Before:** HARD STOP re-entry run this session? Gate A read complete? B clarify? C docs/design? D plan? E **exhaustive standalone** task drafted (every file as a step)?
 
 **During:** Gate F production quality ([`RULES.md`](instructions/RULES.md) §5)? **CODE.md §1–2 on every touched source file?** Paths from `project/INFRASTRUCTURE.md`? Service platforms before apps (greenfield)?
 

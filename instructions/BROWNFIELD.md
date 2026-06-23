@@ -15,6 +15,7 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 | Rule | Detail |
 |------|--------|
 | **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §1.5 — read-first, documents/design, plan, exhaustive task, then code |
+| **Every session** | Re-run AGENTS HARD STOP + Gate A before edits when `helmsman/` exists — not only at bootstrap |
 | **Helmsman pack** | If `helmsman/` exists at `{root}`, it is `{pack}` — use in place; never copy to `{root}` — per AGENTS §0 |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |
@@ -118,7 +119,7 @@ when documenting architecture or onboarding.
 
 ### Align (only when user requests)
 
-Gradually apply [`CODE.md`](CODE.md) and [`DESIGN.md`](DESIGN.md) conventions on **new or touched** code — **§1–2 comment discipline applies in any language** (§0), even when legacy files lack it; plus API `code` field, UUID PKs, mobile-first UI. Re-read CODE.md at each coding task start per [`RULES.md`](RULES.md) §8. Never silent mass refactors.
+Gradually apply [`CODE.md`](CODE.md) and [`DESIGN.md`](DESIGN.md) conventions on **new or touched** code — **§1–2 comment discipline applies in any language** (§0), even when legacy files lack it; plus API `code` field, UUID PKs, responsive strategy per `project/DESIGN.md`. Re-read CODE.md at each coding task start per [`RULES.md`](RULES.md) §8. Never silent mass refactors.
 
 ### Do not
 
