@@ -204,3 +204,14 @@ Per [`instructions/RULES.md`](instructions/RULES.md) §6 and [`instructions/GREE
 **After:** E2E cycles run? CODE + DESIGN on touched code? HISTORY links plan + task + E2E results?
 
 **Greenfield DoD:** [`GREENFIELD.md`](instructions/GREENFIELD.md) §5. **Brownfield onboarding:** [`BROWNFIELD.md`](instructions/BROWNFIELD.md) §5.
+
+---
+
+## Cursor Cloud specific instructions
+
+This repository (the Helmsman instruction pack) is **documentation-only**. It contains Markdown guidance plus `LICENSE`; there is **no application code, no dependencies, no package manager, no automated tests, no build system, and no services to run**. There is nothing to install, so the update script is a no-op.
+
+- **Lint / test / build / run:** none exist. Do not invent build or server commands for this repo.
+- **Sanity check (the closest thing to a "run"):** validate the internal Markdown link graph, since agents navigate by these cross-references. Relative links resolve from each file's own directory.
+- **Expected "broken" links:** references into `project/` (e.g. `project/INFRASTRUCTURE.md`, `project/DESIGN.md`, `project/AGENTS.md`, `project/design/`, `project/documents/`) point at per-project workspace files that agents generate at runtime and that are gitignored. They will not exist in a fresh clone — this is by design, not a bug.
+- **When cloned into an app as `helmsman/`:** the actual application lives in the parent repo (`{root}/platforms/`, `{root}/deploy/`); set up that app per its own docs, not this pack.
