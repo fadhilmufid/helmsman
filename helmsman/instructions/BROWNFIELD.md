@@ -17,7 +17,7 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 | **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §1.5 — read-first, documents/design, plan, exhaustive task, then code |
 | **Every session** | Re-run AGENTS HARD STOP + Gate A before edits when `helmsman/` exists — not only at bootstrap |
 | **Task execution** | When `project/tasks/` has `in_progress` task — re-open file each work block; [`TASK.md`](TASK.md) §1.9 |
-| **Helmsman pack** | If `helmsman/` exists at `{root}`, it is `{pack}` — use in place; never copy to `{root}` — per AGENTS §0 |
+| **Helmsman pack** | If `helmsman/` exists at `{root}`, it is `{pack}` — use in place; never copy pack contents to `{root}` except **required** `{root}/AGENTS.md` from template — per AGENTS §0 |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |
 | **Adapt to conventions** | Follow existing folder layout, stack, and patterns unless the user asks to change them |
@@ -51,6 +51,7 @@ Run discovery **before** meaningful code or config edits when `project/*` is mis
 ### 1.1 Scan order (adapt to repo)
 
 0. **Park user request** — if the user asked for something during fresh adoption, record it verbatim in the onboarding task for execution **after** §5 DoD
+0b. **`{root}/AGENTS.md`** — confirm or create from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md); merge Helmsman sections if file exists (per AGENTS HARD STOP step 2)
 1. **Root manifests** — `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`, `docker-compose.yml`, `Makefile`, app `README`, CI configs (`.github/workflows/`, etc.) — at `{root}`, not inside `helmsman/`
 2. **`helmsman/` pack** — if present, this is `{pack}` (`AGENTS.md`, `instructions/`, `project/`) — read for agent rules; do not treat as app source; do not copy to `{root}`
 3. **Application layout** — entrypoints, apps/packages, API routes, frontend roots, shared libraries
@@ -92,6 +93,7 @@ Write or **merge** into local config files (gitignored). Do not overwrite existi
 
 | File | Brownfield content |
 |------|-------------------|
+| `{root}/AGENTS.md` | **Required** — copy or merge from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) (What is / How to use / Do not) |
 | `project/OVERVIEW.md` | Inferred purpose, slug (or repo name), scope notes, known gaps |
 | `project/INFRASTRUCTURE.md` | **Actual** paths: apps, docker, deploy, db, migrations, ports, env file locations |
 | `project/AGENTS.md` | Discovered dev, lint, test, and CI commands — verify they run |
@@ -168,6 +170,7 @@ Onboarding is complete when **all** pass:
 
 | # | Gate |
 |---|------|
+| 0 | `{root}/AGENTS.md` exists with Helmsman sections (from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md)) |
 | 1 | `project/INFRASTRUCTURE.md` reflects the **actual** repo layout and infra — note when discovered infra is **not** production-ready (missing health, backup, env examples) as a documented gap |
 | 2 | `project/AGENTS.md` lists dev/lint/test commands that were verified |
 | 3 | `project/OVERVIEW.md` states purpose, slug, and notable gaps or risks |

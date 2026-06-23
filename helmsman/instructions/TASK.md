@@ -547,6 +547,7 @@ HARD RULES:
 3. One numbered step per deliverable file below — each with How to do it (3–8 sub-steps) + Step checklist.
 4. Scan order: BROWNFIELD §1.1 (root manifests → app layout → data → deploy → dev workflow → UI → other-references).
 5. Deliverables (minimum):
+   - {root}/AGENTS.md (copy or merge from templates/root-AGENTS.md)
    - project/OVERVIEW.md
    - project/INFRASTRUCTURE.md
    - project/AGENTS.md (verify dev/lint/test commands)

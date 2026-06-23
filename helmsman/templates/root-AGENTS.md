@@ -1,5 +1,7 @@
 # Agent instructions
 
+**Required at `{root}` when `helmsman/` is installed** — copy this file to your app repository root as `AGENTS.md`, or merge these sections into an existing root `AGENTS.md`.
+
 ## What is Helmsman
 
 Helmsman is a reusable instruction pack installed at `helmsman/` in this repository. It defines how coding agents work here: session re-entry, gates A–F, blueprint plans, exhaustive tasks, code rules, and a `helmsman/project/` workspace for plans, tasks, histories, and project config.
@@ -15,7 +17,8 @@ Every session, before non-trivial work:
 3. **Run Gate A** per the pack — re-read instruction templates and scan `helmsman/project/` (`OVERVIEW`, `INFRASTRUCTURE`, active `plans/`, `tasks/`, in-scope `documents/` and `design/`).
 4. **Read templates from `helmsman/instructions/`** as gates require (`PLAN.md`, `TASK.md`, `CODE.md`, `GREENFIELD.md` or `BROWNFIELD.md`, etc.).
 5. **Write to `helmsman/project/`** — plans, tasks, histories, and project config. Do not write these to the repo root.
-6. **Brownfield + blank `helmsman/project/`** — scan the existing repo and populate `helmsman/project/` from code before other app work ([`helmsman/instructions/BROWNFIELD.md`](helmsman/instructions/BROWNFIELD.md) §0.1).
+6. **Ensure `{root}/AGENTS.md`** — required when `helmsman/` is installed; copy or merge from [`helmsman/templates/root-AGENTS.md`](helmsman/templates/root-AGENTS.md) if missing (see pack HARD STOP step 2).
+7. **Brownfield + blank `helmsman/project/`** — scan the existing repo and populate `helmsman/project/` from code before other app work ([`helmsman/instructions/BROWNFIELD.md`](helmsman/instructions/BROWNFIELD.md) §0.1).
 
 App-specific dev, lint, test, and PR commands — when they exist — are in [`helmsman/project/AGENTS.md`](helmsman/project/AGENTS.md).
 

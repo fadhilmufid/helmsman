@@ -48,7 +48,7 @@ When this instruction repo lives at `{root}/helmsman/` (folder name **`helmsman`
 | Agent workspace | `helmsman/project/` | Plans, tasks, histories, config |
 | App runtime | `{root}/platforms/`, `{root}/deploy/` | Greenfield scaffold — **not** inside `{pack}` |
 
-**Do:** read and write inside `{pack}`; build app at `{root}`; optional `{root}/AGENTS.md` Helmsman guide per [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) (What is / How to use / Do not).
+**Do:** read and write inside `{pack}`; build app at `{root}`; **required** `{root}/AGENTS.md` Helmsman guide per [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) — copy if missing, merge Helmsman sections if file exists (What is / How to use / Do not).
 
 **Don't:**
 
@@ -67,7 +67,7 @@ Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) 
 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
-| **A — Read-first** | Read every file in AGENTS §2 checklist (full read) — **every session**, not bootstrap-only; run AGENTS HARD STOP re-entry first when `helmsman/` exists | Any `platforms/`, `deploy/`, app source, Dockerfiles |
+| **A — Read-first** | Read every file in AGENTS §2 checklist (full read) — **every session**, not bootstrap-only; run AGENTS HARD STOP re-entry first when `helmsman/` exists; **`{root}/AGENTS.md`** with Helmsman sections (copy or merge from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) if missing) | Any `platforms/`, `deploy/`, app source, Dockerfiles |
 | **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`. **Brownfield fresh adoption:** complete repo discovery + core `project/*` + `project/documents/repo/` per [`BROWNFIELD.md`](BROWNFIELD.md) §0.1–§2 — blocks all implementation (including parked user request) until done | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
@@ -157,6 +157,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 | You need… | Read |
 |-----------|------|
 | Pack isolation (`helmsman/` use in place) | [`../AGENTS.md`](../AGENTS.md) §0, [`RULES.md`](RULES.md) §1.1 |
+| Root Helmsman guide (`{root}/AGENTS.md`) | [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) — required when pack installed |
 | Mode, clarify, gate order | [`../AGENTS.md`](../AGENTS.md) |
 | Integrated rules (this file) | [`RULES.md`](RULES.md) |
 | Bootstrap blueprint | [`PLAN.md`](PLAN.md) → `project/plans/` |

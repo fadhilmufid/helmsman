@@ -94,7 +94,7 @@ Migrations do **not** live in the service platform folder.
 - Create `platforms/migration/` unless user asks
 - Commit `.tar` files, backup dumps, or `.env`
 - Copy or hoist `{pack}` (`helmsman/`) contents to `{root}` — see [`AGENTS.md`](../AGENTS.md) §0
-- Scaffold `instructions/`, `project/`, or `AGENTS.md` at `{root}`
+- Scaffold `instructions/`, `project/`, or the **full** pack `AGENTS.md` at `{root}` — **required** thin `{root}/AGENTS.md` from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) is the only allowed exception
 - Put app code inside `{pack}`
 
 ---
@@ -192,6 +192,7 @@ Startup sequence (typical): db healthy → migrations complete → backend apps 
 ### Phase A — Plan (no application code yet)
 
 1. **Confirm clarify complete** — decisions recorded in `project/*`
+1b. **Create `{root}/AGENTS.md`** from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) — merge Helmsman sections if file already exists (required per AGENTS §0)
 2. **Write `project/OVERVIEW.md`**, **`project/INFRASTRUCTURE.md`**, **`project/AGENTS.md`**, **`project/DESIGN.md`** (index only)
 2b. **Create `project/design/`** required files per [`DESIGN.md`](DESIGN.md) §1 **before** platform code (when web UI is in scope)
 3. **Create `project/documents/{feature}/`** per [`DOCUMENT.md`](DOCUMENT.md) **before** platform code
@@ -280,6 +281,7 @@ Not complete until **all** pass in the **built project** (paths from `project/IN
 | 13 | `project/plans/` and `project/tasks/` marked complete; E2E results recorded |
 | 14 | `project/histories/` bootstrap entry links plan, task, E2E |
 | 15 | `{root}/README.md` (app readme) has setup instructions — not `{pack}/README.md` |
+| 16 | `{root}/AGENTS.md` exists with Helmsman sections (from [`templates/root-AGENTS.md`](../templates/root-AGENTS.md)) |
 
 ### Testing standard
 

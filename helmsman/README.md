@@ -21,9 +21,9 @@ Developers using **Cursor** (or similar tools) who want consistent **agent** beh
 ## How to use it
 
 1. Inside your app repo (`{root}`): `git clone <this-repo-url> helmsman` — folder name **`helmsman`**.
-2. Create or update **`{root}/AGENTS.md`** — copy [`templates/root-AGENTS.md`](templates/root-AGENTS.md) or the [repo-root template](../AGENTS.md); merge the **Helmsman** sections if you already have a root `AGENTS.md`. Agent-only template sections: What is Helmsman, How to use Helmsman, Do not.
+2. **Required:** create or update **`{root}/AGENTS.md`** — copy [`templates/root-AGENTS.md`](templates/root-AGENTS.md) or the [repo-root template](../AGENTS.md); merge the **Helmsman** sections if you already have a root `AGENTS.md`. Agents auto-create from the template if missing. Agent-only template sections: What is Helmsman, How to use Helmsman, Do not.
 3. Agents read **[`helmsman/AGENTS.md`](AGENTS.md)** for the full workflow (gates, plans, tasks, code). **Every session:** re-read this file and run Gate A when the pack is present.
-4. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. **Allowed at `{root}`:** thin `AGENTS.md` pointer only. **Forbidden:** copy full pack `AGENTS.md`, `instructions/`, or `project/` to `{root}`.
+4. Agents **use `helmsman/` in place** — read `helmsman/instructions/`, write to `helmsman/project/`. **Required at `{root}`:** `AGENTS.md` from [`templates/root-AGENTS.md`](templates/root-AGENTS.md) (Helmsman sections only). **Forbidden:** copy full pack `AGENTS.md`, `instructions/`, or `project/` to `{root}`.
 5. Optionally drop reference material into [`other-references/`](other-references/) inside `helmsman/`.
 
 **Do not** flatten or hoist the pack to `{root}`. Clone as `helmsman/` and leave it there.

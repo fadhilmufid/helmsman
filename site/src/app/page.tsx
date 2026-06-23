@@ -74,13 +74,14 @@ const steps: { n: string; title: string; body: ReactNode }[] = [
     title: "Add root AGENTS.md",
     body: (
       <>
-        Add an <span className="font-medium">agent-only</span> file at your repo
-        root — What is Helmsman, How to use Helmsman, Do not. Copy from{" "}
+        <span className="font-medium">Required</span> — an agent-only file at your repo
+        root (What is Helmsman, How to use Helmsman, Do not). Copy from{" "}
         <code className="font-mono text-zinc-800">AGENTS.md</code> or{" "}
         <code className="font-mono text-zinc-800">
           helmsman/templates/root-AGENTS.md
         </code>
-        . If you already have a root file, merge the Helmsman sections.
+        ; agents create it from the template if missing. Merge Helmsman sections if
+        you already have a root file.
       </>
     ),
   },
@@ -284,11 +285,11 @@ export default function Home() {
         {/* Examples */}
         <Section id="examples" eyebrow="Examples" title="Sample root AGENTS.md">
           <p className="mb-6 max-w-2xl text-sm leading-relaxed text-zinc-600">
-            Place this agent-only guide at your app repository root. It explains
-            what Helmsman is and points agents to the full pack — not app dev/test
-            commands (those live in{" "}
+            <span className="font-medium">Required</span> at your app repository root
+            when Helmsman is installed. It explains what Helmsman is and points
+            agents to the full pack — not app dev/test commands (those live in{" "}
             <code className="font-mono text-zinc-800">helmsman/project/AGENTS.md</code>{" "}
-            after bootstrap).
+            after bootstrap). Agents copy or merge from the template if missing.
           </p>
           <pre className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-900 p-5 font-mono text-sm leading-relaxed text-zinc-100 shadow-sm">
             {ROOT_AGENTS_SAMPLE}

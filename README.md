@@ -21,9 +21,9 @@ Inside your app repo (`{root}`), folder name must be **`helmsman`**:
 git clone https://github.com/fadhilmufid/helmsman.git helmsman
 ```
 
-### 2. Create or update root `AGENTS.md`
+### 2. Create or update root `AGENTS.md` (required)
 
-At **`{root}/AGENTS.md`** (your app repository root, not inside `helmsman/`):
+At **`{root}/AGENTS.md`** (your app repository root, not inside `helmsman/`). Agents will **copy or merge** from the template if this file is missing.
 
 - **No existing `AGENTS.md`** — copy the template from [`AGENTS.md`](AGENTS.md) in this repo, or from [`helmsman/templates/root-AGENTS.md`](helmsman/templates/root-AGENTS.md) inside the clone.
 - **Already have `AGENTS.md`** — merge the **Helmsman** sections from that template into your existing file; keep your other rules.
@@ -32,7 +32,7 @@ Agent-only template sections: What is Helmsman, How to use Helmsman, Do not.
 
 ### 3. Point your agent at Helmsman
 
-Ensure your agent tool loads `{root}/AGENTS.md` when applicable, and that agents follow **[`helmsman/AGENTS.md`](helmsman/AGENTS.md)** for the full workflow (gates, plans, tasks, code rules).
+Ensure your agent tool loads **`{root}/AGENTS.md`** (required when `helmsman/` is installed), and that agents follow **[`helmsman/AGENTS.md`](helmsman/AGENTS.md)** for the full workflow (gates, plans, tasks, code rules).
 
 App layout (greenfield vs brownfield) is defined in the pack after you choose a mode — see [`helmsman/instructions/GREENFIELD.md`](helmsman/instructions/GREENFIELD.md) or [`BROWNFIELD.md`](helmsman/instructions/BROWNFIELD.md).
 

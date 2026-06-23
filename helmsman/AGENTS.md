@@ -5,11 +5,12 @@
 **As long as `helmsman/` exists in the repo, agents MUST run this block at the start of every session and before every non-trivial task** — including after greenfield bootstrap is complete. Prior chat context does not replace a fresh read.
 
 1. **Discover `{pack}`** — workspace is `{root}` → `{pack}` = `{root}/helmsman/`; workspace is `{pack}` → use this folder.
-2. **Read `{pack}/AGENTS.md` (this file) and `{pack}/instructions/RULES.md` in full.**
-3. **Run Gate A (§2 checklist)** — re-read instruction templates and scan `{pack}/project/` (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`, active `plans/`, `tasks/`, newest `histories/`, in-scope `documents/` and `design/`).
-4. **If fresh brownfield adoption** ([`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) §0.1) → run **mandatory onboarding**; park other requests until BROWNFIELD §5 DoD passes.
-5. **If** an active task has `Status: in_progress`, run [`instructions/TASK.md`](instructions/TASK.md) §1.9 — **Agent execution checklist** in that file before any app edit.
-6. **Follow gates A–F for this session** — do not edit `{root}/platforms/`, `{root}/deploy/`, or app source until Gate A is satisfied.
+2. **Ensure `{root}/AGENTS.md`** — required when `{pack}` exists. If missing, copy [`templates/root-AGENTS.md`](templates/root-AGENTS.md) to `{root}/AGENTS.md`. If present without Helmsman sections (What is / How to use / Do not), merge from that template. **Hard STOP** until satisfied — before onboarding, bootstrap, or feature work.
+3. **Read `{pack}/AGENTS.md` (this file) and `{pack}/instructions/RULES.md` in full.**
+4. **Run Gate A (§2 checklist)** — re-read instruction templates and scan `{pack}/project/` (`OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`, active `plans/`, `tasks/`, newest `histories/`, in-scope `documents/` and `design/`).
+5. **If fresh brownfield adoption** ([`instructions/BROWNFIELD.md`](instructions/BROWNFIELD.md) §0.1) → run **mandatory onboarding**; park other requests until BROWNFIELD §5 DoD passes.
+6. **If** an active task has `Status: in_progress`, run [`instructions/TASK.md`](instructions/TASK.md) §1.9 — **Agent execution checklist** in that file before any app edit.
+7. **Follow gates A–F for this session** — do not edit `{root}/platforms/`, `{root}/deploy/`, or app source until Gate A is satisfied.
 
 **Exception:** instruction-pack maintenance only (`{pack}/instructions/`, pack `AGENTS.md`, tracked `{pack}/project/*/README.md`).
 
@@ -34,7 +35,7 @@ When this repo is cloned into an app as **`helmsman/`**, agents **use it in plac
 
 ```
 {root}/
-├── AGENTS.md          ← optional root Helmsman guide (templates/root-AGENTS.md: What is / How to use / Do not)
+├── AGENTS.md          ← required root Helmsman guide (templates/root-AGENTS.md: What is / How to use / Do not)
 ├── helmsman/          ← {pack} — this instruction repo (use in place)
 │   ├── AGENTS.md
 │   ├── README.md
@@ -52,12 +53,12 @@ When this repo is cloned into an app as **`helmsman/`**, agents **use it in plac
 - Read `{pack}/AGENTS.md` — this file when inside `helmsman/`
 - Read templates from `{pack}/instructions/`
 - Write plans, tasks, histories, and project config to `{pack}/project/`
-- **Optional:** `{root}/AGENTS.md` as an **agent-only Helmsman guide** — use [`templates/root-AGENTS.md`](templates/root-AGENTS.md) (What is Helmsman, How to use Helmsman, Do not); do not copy this full pack file to `{root}`
+- **Required:** `{root}/AGENTS.md` — agent-only Helmsman guide from [`templates/root-AGENTS.md`](templates/root-AGENTS.md) (What is Helmsman, How to use Helmsman, Do not). Copy if missing; merge Helmsman sections if the file exists. **Only** allowed `{root}` file from the pack (not the full pack `AGENTS.md`).
 
 **Don't (never copy to `{root}`):**
 
 - Do **not** create `{root}/instructions/`, `{root}/project/`, or `{root}/other-references/`
-- Do **not** copy the **full** pack `AGENTS.md`, `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}`
+- Do **not** copy the **full** pack `AGENTS.md` (this file), `{pack}/README.md`, `{pack}/LICENSE`, or `{pack}/.gitignore` to `{root}` — use the **thin** [`templates/root-AGENTS.md`](templates/root-AGENTS.md) at `{root}/AGENTS.md` instead
 - Do **not** move, duplicate, symlink, or flatten `helmsman/` — it stays one folder under `{root}`
 - Do **not** put app code (`platforms/`, `deploy/`, application source) inside `{pack}`
 
@@ -95,7 +96,7 @@ Sequential — detail in [`instructions/RULES.md`](instructions/RULES.md) §2.
 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
-| **A — Read-first** | AGENTS §2 checklist — full read | `platforms/`, `deploy/`, app source, Dockerfiles |
+| **A — Read-first** | AGENTS §2 checklist — full read; **`{root}/AGENTS.md`** with Helmsman sections (copy or merge from [`templates/root-AGENTS.md`](templates/root-AGENTS.md) if missing) | `platforms/`, `deploy/`, app source, Dockerfiles |
 | **B — Clarify and record** | §3; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`. **Brownfield fresh adoption:** repo discovery + core `project/*` + `project/documents/repo/` per [`BROWNFIELD.md`](instructions/BROWNFIELD.md) §0.1–§2 — blocks implementation (including parked user request) until done | Implementation |
 | **C — Documents and design** | `project/documents/`; `project/design/` when web UI | Scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/` per [`instructions/PLAN.md`](instructions/PLAN.md) | TASK, implementation |
@@ -111,16 +112,17 @@ Sequential — detail in [`instructions/RULES.md`](instructions/RULES.md) §2.
 Read each file **in full** before Gate B.
 
 1. [`instructions/RULES.md`](instructions/RULES.md) — integrated map
-2. [`instructions/README.md`](instructions/README.md) — index
-3. Mode guide: [`GREENFIELD.md`](instructions/GREENFIELD.md) or [`BROWNFIELD.md`](instructions/BROWNFIELD.md)
-4. [`PLAN.md`](instructions/PLAN.md), [`TASK.md`](instructions/TASK.md), [`INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`CODE.md`](instructions/CODE.md), [`DESIGN.md`](instructions/DESIGN.md), [`HISTORY.md`](instructions/HISTORY.md), [`DOCUMENT.md`](instructions/DOCUMENT.md)
-5. [`other-references/`](other-references/) when non-empty
-6. `project/OVERVIEW` → `INFRASTRUCTURE` → `AGENTS` → `DESIGN` when they exist
-7. `project/plans/` — active plans; `project/tasks/` — active tasks
-8. `project/histories/` — newest first
-9. `project/documents/{feature}/` — feature in scope
-10. `project/design/` — when web UI in scope
-11. **Fresh brownfield adoption** → mandatory onboarding ([`BROWNFIELD.md`](instructions/BROWNFIELD.md) §0.1–§1.3) before any other app task; park user request until BROWNFIELD §5 DoD passes
+2. **`{root}/AGENTS.md`** — required; read after ensuring Helmsman sections exist (HARD STOP step 2)
+3. [`instructions/README.md`](instructions/README.md) — index
+4. Mode guide: [`GREENFIELD.md`](instructions/GREENFIELD.md) or [`BROWNFIELD.md`](instructions/BROWNFIELD.md)
+5. [`PLAN.md`](instructions/PLAN.md), [`TASK.md`](instructions/TASK.md), [`INFRASTRUCTURE.md`](instructions/INFRASTRUCTURE.md), [`CODE.md`](instructions/CODE.md), [`DESIGN.md`](instructions/DESIGN.md), [`HISTORY.md`](instructions/HISTORY.md), [`DOCUMENT.md`](instructions/DOCUMENT.md)
+6. [`other-references/`](other-references/) when non-empty
+7. `project/OVERVIEW` → `INFRASTRUCTURE` → `AGENTS` → `DESIGN` when they exist
+8. `project/plans/` — active plans; `project/tasks/` — active tasks
+9. `project/histories/` — newest first
+10. `project/documents/{feature}/` — feature in scope
+11. `project/design/` — when web UI in scope
+12. **Fresh brownfield adoption** → mandatory onboarding ([`BROWNFIELD.md`](instructions/BROWNFIELD.md) §0.1–§1.3) before any other app task; park user request until BROWNFIELD §5 DoD passes
 
 ---
 
