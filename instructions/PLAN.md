@@ -163,5 +163,5 @@ Expand this plan to **every** file-level step — no step-count ceiling, no pare
 1. Gate C passed before drafting plan?
 2. Platform inventory complete (service + application platforms)?
 3. E2E matrix includes compose up/down and deploy image cycle (when applicable)?
-4. **One exhaustive standalone** TASK file created from this plan — every deliverable as a step; Plan ref on each step?
+4. **One exhaustive standalone** TASK file created from this plan — every deliverable as a step with **How to do it** + **Step checklist**; Plan ref on each step?
 5. HISTORY links this plan when work completes?

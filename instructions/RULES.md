@@ -71,7 +71,7 @@ Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) 
 | **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
-| **E — Task before code** | **One standalone exhaustive** `project/tasks/...` — every deliverable as a step; no parent/child split; re-read [`CODE.md`](CODE.md) when touching app source | Application edits |
+| **E — Task before code** | **One standalone exhaustive** `project/tasks/...` — every deliverable as a step with **How to do it** + **Step checklist**; no parent/child split; re-read [`CODE.md`](CODE.md) when touching app source; **re-read active task file every work block** while `in_progress` ([`TASK.md`](TASK.md) §1.9) | Application edits |
 | **F — Quality + E2E** | Production bar + E2E verification (§6) before marking complete | Task/bootstrap complete |
 
 **Non-trivial** = touches app source, `platforms/`, `deploy/`, db, docker, or multi-file config. Trivial typo-only edits skip PLAN and TASK per [`TASK.md`](TASK.md).
@@ -131,7 +131,7 @@ Migrations live inside the backend app by default — not in the service platfor
 
 ## 6. E2E verification (Gate F)
 
-Required when compose or deploy exists. Record results in task Verification and `project/histories/`.
+Required when compose or deploy exists. Record results in task **Task completion checklist** and `project/histories/`.
 
 ### Local cycle
 
@@ -195,8 +195,10 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 2. Gates B–D complete (clarify, docs/design, plan) before TASK `in_progress`?
 3. **CODE.md re-read at task start** when touching application source; sections in Context read?
 4. Plan platform inventory lists every `platforms/<slug>`?
-5. TASK is **standalone exhaustive** — full scope in one file; Files expected to change matches steps?
+5. TASK is **standalone exhaustive** — full scope in one file; How to do it + Step checklist on every step; Files expected to change matches steps?
 6. CODE §1–2 applied on every touched source file?
 7. Service platforms created before app scaffold (greenfield)?
-8. Gate F E2E local + deploy cycles run when infra in scope?
-9. HISTORY entry links plan, task, E2E, and CODE compliance when code touched?
+8. Active task file re-read this work block; step Step checklists complete (§1.9)?
+9. Gate F E2E local + deploy cycles run when infra in scope?
+10. Task completion checklist complete before `Status: complete`?
+11. HISTORY entry links plan, task, E2E, and CODE compliance when code touched?

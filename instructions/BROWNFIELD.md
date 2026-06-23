@@ -16,6 +16,7 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 |------|--------|
 | **Execution gates** | Follow [`AGENTS.md`](../AGENTS.md) §1.5 — read-first, documents/design, plan, exhaustive task, then code |
 | **Every session** | Re-run AGENTS HARD STOP + Gate A before edits when `helmsman/` exists — not only at bootstrap |
+| **Task execution** | When `project/tasks/` has `in_progress` task — re-open file each work block; [`TASK.md`](TASK.md) §1.9 |
 | **Helmsman pack** | If `helmsman/` exists at `{root}`, it is `{pack}` — use in place; never copy to `{root}` — per AGENTS §0 |
 | **Discover first** | Scan the repo before large edits; record findings in `project/*` |
 | **Document actual paths** | `project/INFRASTRUCTURE.md` reflects **what exists** — not a forced `platforms/` layout |

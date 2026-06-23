@@ -32,7 +32,7 @@ Forward-looking **change plan** for a single user request — distinct from othe
 
 ## 1.5 Task step format (required)
 
-Each step must be **change-oriented**:
+Each step must be **change-oriented** and **procedural** — not only what to change, but how to do it:
 
 ```markdown
 1. [ ] **{path}** — {what to change and why}
@@ -41,12 +41,26 @@ Each step must be **change-oriented**:
    - Code ref: instructions/CODE.md §1-2 (always on app source); §8 if API; §11 if CRUD; §9 if auth
    - Before: {current behavior or "new file"}
    - After: {target behavior}
+   - Done when: {explicit completion criteria tying Before/After/Verify}
+   - How to do it:
+     1. {open/create file; add imports; wire dependency}
+     2. {implement core change per spec}
+     3. {register route/export; update parent file if needed}
+   - Step checklist:
+     - [ ] Spec section for this deliverable read
+     - [ ] CODE §1–2 block + inline journal (when app source)
+     - [ ] Change matches spec/design
+     - [ ] Verify command below passes
    - Verify: {command or check}
 ```
 
-**Good (greenfield):** `platforms/api/internal/handlers/todo.go` — add handler; verify per `project/AGENTS.md`
+| Field | Required | Detail |
+|-------|----------|--------|
+| **How to do it** | Yes | 3–8 numbered sub-steps: files to open, what to add/change, commands, dependencies on prior steps |
+| **Step checklist** | Yes | 3–6 checkboxes — tick **in the task file** before marking the step `[x]` |
+| **Done when** | Yes | One line — when Before/After/Verify are satisfied |
 
-**Good (brownfield):** `backend/src/routes/orders.ts` — add route; verify per `project/AGENTS.md`
+**Forbidden:** steps with only a one-line summary and no **How to do it** sub-steps; marking `[x]` without all **Step checklist** items checked in the task file.
 
 **Bad:** "Implement delete API"
 
@@ -66,6 +80,9 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
 | Marking application-source step complete | Touched file passes CODE §1–2 (block comment + inline journal) |
 | `Status: in_progress` | **Files expected to change** table matches implementation steps 1:1 (§1.8); exhaustive scope covered |
 | Any application code edit | Gates A–D complete; user confirmed for bootstrap/new apps |
+| Any application code edit while `in_progress` | Active task file re-opened; **Agent execution checklist** run this work block (§1.9) |
+| Marking implementation step `[x]` | That step's **Step checklist** all checked; **Verify** passed |
+| `Status: complete` | Every implementation step `[x]`; **Task completion checklist** all checked (§4) |
 
 **User confirm required** for greenfield bootstrap and any request that creates new apps — not only when scope is "large or ambiguous."
 
@@ -81,6 +98,8 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
 | **Code ref required** | Every step that touches application source links `instructions/CODE.md` sections |
 | **Bootstrap minimum** | Greenfield bootstrap must list **every** planned file/route/page/component/platform slug as its own step in **this task file** |
 | **Entity coverage** | Each DB model/migration, API route, page, and shared component → own step |
+| **How to do it required** | Every step includes numbered procedural sub-steps (§1.5) |
+| **Step checklist required** | Every step includes checkboxes ticked before marking `[x]` |
 
 **Bad:**
 
@@ -98,6 +117,17 @@ Mirror [`AGENTS.md`](../AGENTS.md) §1.5 and [`RULES.md`](RULES.md) §2.
    - Code ref: instructions/CODE.md §1-2, §8
    - Before: new file
    - After: paginated list + multipart upload handler
+   - Done when: both methods registered, responses match spec, Verify passes
+   - How to do it:
+     1. Create `route.ts`; add block comment per CODE §1
+     2. Implement GET: parse page/limit query, call service, return `{ code, data }` envelope
+     3. Implement POST: parse multipart, validate MIME/size per spec, store via service
+     4. Wire exports; ensure parent router imports this file (see step N)
+   - Step checklist:
+     - [ ] Spec section for list + upload read
+     - [ ] CODE §1–2 block + inline journal on handlers
+     - [ ] Response shapes match api-specification-document.md
+     - [ ] Verify command below passes
    - Verify: curl + integration test per project/AGENTS.md
 ```
 
@@ -122,6 +152,22 @@ Group steps by phase: Clarify → Docs → Design → **Service platforms** → 
 - One `project/tasks/{timestamp}_{slug}.md` per user request — update in-progress file instead of duplicating
 - Never `parent`, `child`, or `-phase-` task filenames
 - Huge scope → more steps in the **same file**, not a new task file
+
+## 1.9 Task-driven execution (hard STOP)
+
+**While `Status: in_progress`**, agents follow this loop — prior chat context does not replace the task file.
+
+1. **Re-open** the active `project/tasks/{timestamp}_{slug}.md` at the **start of every work block** (every agent session / before any app edit)
+2. **Run** the **Agent execution checklist** section in that file (§4 template)
+3. **Execute only** the next unchecked implementation step — in order unless Decisions document reordering
+4. **Read** that step's Plan ref, Spec ref, and Code ref before editing
+5. **Follow** **How to do it** sub-steps; tick **Step checklist** in the task file
+6. **Run Verify**; only then mark the implementation step `[x]` in the task file
+7. **Save** the task file before the next step or end of session
+
+**Forbidden while `in_progress`:** application edits with no active task file re-read this work block; skipping unchecked steps; marking task `complete` with unchecked implementation steps or incomplete **Task completion checklist**.
+
+Detail: §1.6 execution gates table.
 
 ## 2. When to Create a Task File
 
@@ -198,9 +244,21 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 {1–3 sentences: strategy, which paths/apps are touched}
 
+## Agent execution checklist
+
+**Hard rule — re-read and tick this section at the start of every work block while `Status: in_progress`.**
+
+- [ ] Active task file: `project/tasks/{timestamp}_{slug}.md` (this file)
+- [ ] `Status:` is `in_progress` (not `planning`)
+- [ ] Context read + CODE.md re-read sections noted for this session
+- [ ] Next unchecked implementation step: #{number} — **{path}**
+- [ ] That step's Plan ref, Spec ref, Code ref read this session
+- [ ] After work: step #{number} Step checklist complete; step marked `[x]`
+- [ ] Task file saved before next step or session end
+
 ## Implementation steps
 
-**Exhaustive — minimum one step per file.** Group by phase inside this single task file. Enumerate every deliverable before `in_progress`.
+**Exhaustive — minimum one step per file.** Every step must include **How to do it**, **Step checklist**, and **Done when** (§1.5) before `Status: in_progress`. Group by phase inside this single task file.
 
 ### Phase: {name}
 
@@ -210,15 +268,39 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
    - Code ref: instructions/CODE.md §... (required when path is application source)
    - Before: ...
    - After: ...
+   - Done when: ...
+   - How to do it:
+     1. ...
+     2. ...
+   - Step checklist:
+     - [ ] ...
+     - [ ] ...
    - Verify: ...
 
 ### Phase: E2E verify
 
 1. [ ] **deploy/docker-compose.yml** — local cycle
    - Plan ref: project/plans/...#e2e-local
+   - Done when: compose up → health → smoke → compose down passes
+   - How to do it:
+     1. Run `docker compose -f deploy/docker-compose.yml up -d --build`
+     2. Wait for healthchecks; run smoke tests per plan E2E matrix
+     3. Run `docker compose down`
+   - Step checklist:
+     - [ ] All services healthy
+     - [ ] Smoke tests pass
+     - [ ] Clean teardown
    - Verify: compose up → health → smoke → compose down
 2. [ ] **deploy/platforms/** — deploy cycle (greenfield bootstrap)
    - Plan ref: project/plans/...#e2e-deploy
+   - Done when: build → save → load → compose up → smoke passes
+   - How to do it:
+     1. Build every platform image per project/INFRASTRUCTURE.md
+     2. Save/load per GREENFIELD §3
+     3. Compose up and smoke test
+   - Step checklist:
+     - [ ] All images built and exported
+     - [ ] Loaded compose smoke passes
    - Verify: build all images → save → load → compose up → smoke
 
 ## Files expected to change
@@ -232,8 +314,10 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 
 - {If blocked: question, why it matters, **Recommended:** default}
 
-## Verification
+## Task completion checklist
 
+- [ ] Every implementation step marked `[x]` with Step checklist complete
+- [ ] Agent execution checklist re-run at start of final work block
 - [ ] CODE.md re-read at task start; sections listed in Context read
 - [ ] Every step has Code ref on application-source steps
 - [ ] Every touched source file: block comment + Var/Logic inline journal per CODE §1–2
@@ -285,8 +369,8 @@ Use **paths and app slugs** from `project/INFRASTRUCTURE.md`. Add `docker`, `dep
 3. **Draft exhaustive task** (`Status: planning`) — enumerate **every** deliverable; match Files expected to change
 4. **Clarify** — Open questions → Clarification log
 5. **Confirm** — greenfield bootstrap / new apps / large scope
-6. **Execute** (`Status: in_progress`) — after Gates A–D; one step at a time in order
-7. **Complete** — Gate F E2E + verification; HISTORY links plan + task
+6. **Execute** (`Status: in_progress`) — §1.9 loop: re-open task → Agent execution checklist → next step → How to do it → Step checklist → Verify → mark `[x]` → repeat
+7. **Complete** — Gate F E2E + Task completion checklist; HISTORY links plan + task
 
 ### Get timestamp
 
@@ -310,7 +394,9 @@ date +%Y%m%d_%H%M%S
 - Write **exhaustive** standalone tasks — as many detailed steps as the scope requires
 - Derive every step from `project/plans/`, `project/documents/`, `project/design/`, and **`instructions/CODE.md`**
 - Include **Code ref** on every application-source implementation step
+- Include **How to do it** and **Step checklist** on every implementation step (§1.5)
 - Include explicit E2E verify steps in final phase
+- Re-open active task file and run **Agent execution checklist** each work block while `in_progress` (§1.9)
 
 ### Don't
 
@@ -327,6 +413,8 @@ date +%Y%m%d_%H%M%S
 - Don't put feature specs in TASK — use `project/documents/`
 - Don't put change logs in TASK — use `project/histories/` after completion
 - Don't rewrite completed task files — append new TASK or HISTORY entries
+- Don't mark implementation steps complete without **Step checklist** ticked in task file
+- Don't implement from memory without re-opening active task file each work block (§1.9)
 
 ## 7. Agent Checklist
 
@@ -338,4 +426,6 @@ date +%Y%m%d_%H%M%S
 6. Every app-source step has Plan ref + Spec ref + Code ref?
 7. CODE §1–2 on every touched source file?
 8. E2E local + deploy cycles complete (Gate F)?
-9. HISTORY links plan + task + E2E + CODE compliance?
+9. Active task file re-opened this work block; step Step checklists complete (§1.9)?
+10. Task completion checklist all checked before `Status: complete`?
+11. HISTORY links plan + task + E2E + CODE compliance?

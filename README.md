@@ -6,11 +6,13 @@ Reusable **agent guidance** — one **integrated system**. In an app: clone as `
 
 A structured instruction set that helps **agents**:
 
-- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding
+- **Blueprint** work with `project/plans/` then **exhaustive standalone** `project/tasks/` before coding — each step includes **How to do it** + **Step checklist**; re-open active task each work block while `in_progress` ([`instructions/TASK.md`](instructions/TASK.md) §1.9)
 - **Build** greenfield apps with `platforms/` (postgresql, minio, web, api, …) and E2E Docker verify
 - **Understand** existing repos through discovery and local documentation
 - **Document** features, changes, and project config in a local `project/` workspace
 - **Write code** per [`instructions/CODE.md`](instructions/CODE.md) — all languages with comments; agents **re-read CODE.md at every coding task**
+- **Re-enter helmsman every session** — HARD STOP + Gate A when the pack is present ([`AGENTS.md`](AGENTS.md))
+- **Default UI theme** when user silent — neutral grayscale light per [`instructions/DESIGN.md`](instructions/DESIGN.md) §3; responsive strategy per §10
 
 ## Who it's for
 

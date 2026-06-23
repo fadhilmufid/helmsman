@@ -11,9 +11,9 @@ The **index** (philosophy, library choice, links) lives in `project/DESIGN.md` (
 | File | Purpose |
 |------|---------|
 | `color-palette-and-tokens.md` | Colors, CSS variables, semantic roles — use pack default from [`DESIGN.md`](../../instructions/DESIGN.md) §3 when user silent on theme |
-| `typography-system.md` | Fonts, type scale, hierarchy |
-| `spacing-layout-and-grid.md` | Spacing scale, grid, containers |
-| `elevation-and-shadow-system.md` | Shadows, elevation levels |
+| `typography-system.md` | Fonts, type scale, hierarchy — Inter/system-ui default per [`DESIGN.md`](../../instructions/DESIGN.md) §3 when user silent |
+| `spacing-layout-and-grid.md` | Spacing scale, grid, containers — 4px scale default per [`DESIGN.md`](../../instructions/DESIGN.md) §7 when user silent |
+| `elevation-and-shadow-system.md` | Shadows, elevation levels — border-first elevation per [`DESIGN.md`](../../instructions/DESIGN.md) §3 when user silent |
 | `component-library-and-theming.md` | Library choice, theme mapping |
 | `buttons-and-actions.md` | Button variants and states |
 | `forms-and-inputs.md` | Inputs, validation display |
