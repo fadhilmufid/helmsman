@@ -1,5 +1,9 @@
 # Helmsman
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/fadhilmufid/helmsman)](https://github.com/fadhilmufid/helmsman/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 This repository contains two things:
 
 | Path | What it is |
@@ -37,6 +41,10 @@ npm run dev      # http://localhost:3000
 ```
 
 Other scripts: `npm run build`, `npm run start`, `npm run lint`.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to report issues and submit pull requests.
 
 ## License
 
