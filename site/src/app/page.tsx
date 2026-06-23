@@ -2,10 +2,27 @@ import type { ReactNode } from "react";
 
 const GITHUB_URL = "https://github.com/fadhilmufid/helmsman";
 
+const ROOT_AGENTS_SAMPLE = `# Agent instructions
+
+## What is Helmsman
+Helmsman is a reusable instruction pack at helmsman/ …
+This file is a thin pointer. Full workflow: helmsman/AGENTS.md
+
+## How to use Helmsman
+1. Read helmsman/AGENTS.md in full — HARD STOP, gates A–F
+2. Read helmsman/instructions/RULES.md — integrated rulebook
+3. Run Gate A — scan helmsman/project/
+…
+
+## Do not
+- Copy helmsman/instructions/, helmsman/project/, or full helmsman/AGENTS.md to root
+- Flatten or move helmsman/ — use it in place
+…`;
+
 const features: { title: string; body: string }[] = [
   {
     title: "Blueprint before code",
-    body: "Plans then exhaustive, standalone task files — every step carries How to do it plus a checklist before a single line is written.",
+    body: "Plans then exhaustive task files — Application map first, then file-level steps with How to do it and a checklist before a single line is written.",
   },
   {
     title: "Build greenfield apps",
@@ -13,7 +30,7 @@ const features: { title: string; body: string }[] = [
   },
   {
     title: "Understand existing repos",
-    body: "Brownfield discovery maps an unfamiliar codebase into a local project workspace before any change.",
+    body: "On first use, mandatory onboarding scans the codebase and populates project/ knowledge from your code before any feature work.",
   },
   {
     title: "Document everything",
@@ -54,34 +71,42 @@ const steps: { n: string; title: string; body: ReactNode }[] = [
   },
   {
     n: "2",
-    title: "Point your agent at it",
+    title: "Add root AGENTS.md",
     body: (
       <>
-        Configure Cursor (or any agent) to read{" "}
-        <code className="font-mono text-zinc-800">helmsman/AGENTS.md</code> — not
-        a root-level copy.
+        Add an <span className="font-medium">agent-only</span> file at your repo
+        root — What is Helmsman, How to use Helmsman, Do not. Copy from{" "}
+        <code className="font-mono text-zinc-800">AGENTS.md</code> or{" "}
+        <code className="font-mono text-zinc-800">
+          helmsman/templates/root-AGENTS.md
+        </code>
+        . If you already have a root file, merge the Helmsman sections.
       </>
     ),
   },
   {
     n: "3",
-    title: "Use it in place",
+    title: "Follow the pack entry",
     body: (
       <>
-        Agents read <code className="font-mono text-zinc-800">helmsman/instructions/</code>{" "}
-        and write plans, tasks and config to{" "}
-        <code className="font-mono text-zinc-800">helmsman/project/</code>.
+        Agents read{" "}
+        <code className="font-mono text-zinc-800">helmsman/AGENTS.md</code> and{" "}
+        <code className="font-mono text-zinc-800">
+          helmsman/instructions/RULES.md
+        </code>
+        , then follow gates A–F before implementation.
       </>
     ),
   },
   {
     n: "4",
-    title: "Build alongside it",
+    title: "Use it in place",
     body: (
       <>
-        Your app code (<code className="font-mono text-zinc-800">platforms/</code>,{" "}
-        <code className="font-mono text-zinc-800">deploy/</code>) is created as a
-        sibling of the pack.
+        Read <code className="font-mono text-zinc-800">helmsman/instructions/</code>
+        ; write plans, tasks, and config to{" "}
+        <code className="font-mono text-zinc-800">helmsman/project/</code>. Do not
+        hoist the pack to the repo root.
       </>
     ),
   },
@@ -136,6 +161,9 @@ export default function Home() {
             </a>
             <a className="transition hover:text-zinc-900" href="#gates">
               Gates
+            </a>
+            <a className="transition hover:text-zinc-900" href="#examples">
+              Examples
             </a>
             <a className="transition hover:text-zinc-900" href="#start">
               Get started
@@ -213,9 +241,9 @@ export default function Home() {
             <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-7">
               <h3 className="text-lg font-semibold text-zinc-900">Brownfield</h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-600">
-                An existing codebase. Helmsman runs discovery to understand the repo,
-                records it in a local project workspace, and adapts to the conventions
-                already in place.
+                An existing codebase. On first use Helmsman scans the repo and builds
+                `project/` knowledge from your code — OVERVIEW, infrastructure map,
+                design index, and repo docs — before taking on feature work.
               </p>
             </div>
           </div>
@@ -251,6 +279,20 @@ export default function Home() {
               </tbody>
             </table>
           </div>
+        </Section>
+
+        {/* Examples */}
+        <Section id="examples" eyebrow="Examples" title="Sample root AGENTS.md">
+          <p className="mb-6 max-w-2xl text-sm leading-relaxed text-zinc-600">
+            Place this agent-only guide at your app repository root. It explains
+            what Helmsman is and points agents to the full pack — not app dev/test
+            commands (those live in{" "}
+            <code className="font-mono text-zinc-800">helmsman/project/AGENTS.md</code>{" "}
+            after bootstrap).
+          </p>
+          <pre className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-900 p-5 font-mono text-sm leading-relaxed text-zinc-100 shadow-sm">
+            {ROOT_AGENTS_SAMPLE}
+          </pre>
         </Section>
 
         {/* Get started */}

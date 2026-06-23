@@ -53,6 +53,18 @@ project/
 | Doc files | Lowercase kebab-case, **full names only — never abbreviate** |
 | Location | `project/documents/{feature-slug}/` |
 
+### Codebase-wide slug `repo` (brownfield onboarding)
+
+For **whole-repo knowledge** on fresh Helmsman adoption — not a product feature:
+
+```
+project/documents/repo/
+├── technical-documentation.md
+└── system-design-document.md
+```
+
+Required when [`BROWNFIELD.md`](BROWNFIELD.md) §0.1 applies and the app is non-trivial. Content must be **inferred from `{root}` code** during discovery — do not invent architecture the repo does not have.
+
 ### Allowed document filenames (full names)
 
 Use these when applicable — add others with full descriptive names when useful:

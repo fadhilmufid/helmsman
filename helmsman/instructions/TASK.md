@@ -283,7 +283,9 @@ Detail: §1.6 execution gates table.
 
 ## 2. When to Create a Task File
 
-**Required** after Gate D plan exists for any non-trivial request that will touch:
+**Brownfield fresh adoption (required):** When [`BROWNFIELD.md`](BROWNFIELD.md) §0.1 signals are true, create `project/tasks/{timestamp}_brownfield-onboarding.md` **before** any other app task — including the user's parked request. Onboarding **does not** require a Gate D plan; it **is** Gate B. Follow §5.2 for drafting.
+
+**Required** after Gate D plan exists for any other non-trivial request that will touch:
 
 - Application source (paths from `project/INFRASTRUCTURE.md`)
 - Deploy, build, or container config (when applicable)
@@ -327,6 +329,7 @@ Includes greenfield bootstrap, brownfield onboarding, new features, refactors, a
 - **Status:** planning | blocked | in_progress | complete | cancelled
 - **Plan ref:** project/plans/{timestamp}_{slug}.md
 - **User request:** {verbatim or summary}
+- **Parked request:** {verbatim user message to execute after onboarding — brownfield onboarding only; omit or "none"}
 - **Scope:** {apps/paths from project/INFRASTRUCTURE.md} | docker | deploy | docs | document | task | multi
 - **Paths in scope:** `{path}/`, ... (from `project/INFRASTRUCTURE.md`)
 
@@ -530,6 +533,30 @@ HARD RULES:
 ```
 
 After drafting, self-check against §1.4 (no shorthand), §1.4a (map complete), and §1.7 (one step per file).
+
+## 5.2 Brownfield onboarding drafting prompt (literal block)
+
+**When fresh adoption** ([`BROWNFIELD.md`](BROWNFIELD.md) §0.1), draft `project/tasks/{timestamp}_brownfield-onboarding.md` with this prompt:
+
+```markdown
+You are drafting brownfield onboarding task project/tasks/{timestamp}_brownfield-onboarding.md.
+
+HARD RULES:
+1. Record Parked request if the user asked for something else — execute after onboarding.
+2. Write ## Application map — repo units, paths, data flow (from code scan, not invented).
+3. One numbered step per deliverable file below — each with How to do it (3–8 sub-steps) + Step checklist.
+4. Scan order: BROWNFIELD §1.1 (root manifests → app layout → data → deploy → dev workflow → UI → other-references).
+5. Deliverables (minimum):
+   - project/OVERVIEW.md
+   - project/INFRASTRUCTURE.md
+   - project/AGENTS.md (verify dev/lint/test commands)
+   - project/DESIGN.md + project/design/ (from existing UI or N/A)
+   - project/documents/repo/technical-documentation.md
+   - project/documents/repo/system-design-document.md
+   - project/histories/{timestamp}_brownfield-onboarding.md
+6. Stay Status: planning until all steps written; in_progress only after Gates A + BROWNFIELD §0.1 scope clear.
+7. FORBIDDEN: starting the parked user feature; application source edits during onboarding except verify commands.
+```
 
 ## 6. Do's and Don'ts
 

@@ -46,6 +46,7 @@ flowchart LR
 
 ```
 {root}/                    ← app repository
+├── AGENTS.md              ← optional root Helmsman guide (templates/root-AGENTS.md)
 ├── helmsman/              ← {pack} — use in place (never copy to {root})
 │   ├── AGENTS.md
 │   ├── instructions/

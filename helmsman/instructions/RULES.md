@@ -48,7 +48,7 @@ When this instruction repo lives at `{root}/helmsman/` (folder name **`helmsman`
 | Agent workspace | `helmsman/project/` | Plans, tasks, histories, config |
 | App runtime | `{root}/platforms/`, `{root}/deploy/` | Greenfield scaffold — **not** inside `{pack}` |
 
-**Do:** read and write inside `{pack}`; build app at `{root}`; optional thin `{root}/AGENTS.md` pointer per [`templates/root-AGENTS.md`](../templates/root-AGENTS.md).
+**Do:** read and write inside `{pack}`; build app at `{root}`; optional `{root}/AGENTS.md` Helmsman guide per [`templates/root-AGENTS.md`](../templates/root-AGENTS.md) (What is / How to use / Do not).
 
 **Don't:**
 
@@ -68,7 +68,7 @@ Sequential — do not skip or reorder. Detail in [`../AGENTS.md`](../AGENTS.md) 
 | Gate | Requirement | Blocks |
 |------|-------------|--------|
 | **A — Read-first** | Read every file in AGENTS §2 checklist (full read) — **every session**, not bootstrap-only; run AGENTS HARD STOP re-entry first when `helmsman/` exists | Any `platforms/`, `deploy/`, app source, Dockerfiles |
-| **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN` | Implementation edits |
+| **B — Clarify and record** | Resolve open decisions; write `project/OVERVIEW`, `INFRASTRUCTURE`, `AGENTS`, `DESIGN`. **Brownfield fresh adoption:** complete repo discovery + core `project/*` + `project/documents/repo/` per [`BROWNFIELD.md`](BROWNFIELD.md) §0.1–§2 — blocks all implementation (including parked user request) until done | Implementation edits |
 | **C — Documents and design** | `project/documents/{feature}/`; `project/design/` + `DESIGN.md` index when web UI in scope | Application scaffold, `platforms/`, `deploy/` |
 | **D — Blueprint plan** | `project/plans/{timestamp}_{slug}.md` per [`PLAN.md`](PLAN.md) — required for every **non-trivial** task | TASK file, implementation |
 | **E — Task before code** | **One standalone exhaustive** `project/tasks/...` with **Application map** ([`TASK.md`](TASK.md) §1.4a), file-level steps (**How to do it** + **Step checklist**; no shorthand §1.4); follow §5.1; Plan + Spec + Code refs; no parent/child split; re-read [`CODE.md`](CODE.md) + active task each work block (§1.9) | Application edits |
@@ -163,6 +163,7 @@ TASK final phase: **explicit steps** per check — not one vague "verify everyth
 | File-level exhaustive steps | [`TASK.md`](TASK.md) → one standalone `project/tasks/` file |
 | New app, `platforms/`, Docker, deploy | [`GREENFIELD.md`](GREENFIELD.md) |
 | Existing repo, discovery | [`BROWNFIELD.md`](BROWNFIELD.md) |
+| Fresh Helmsman in existing repo | [`BROWNFIELD.md`](BROWNFIELD.md) §0.1 — mandatory onboarding |
 | Doc architecture, four concerns | [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) |
 | Feature specs | [`DOCUMENT.md`](DOCUMENT.md) |
 | UI design system | [`DESIGN.md`](DESIGN.md) |

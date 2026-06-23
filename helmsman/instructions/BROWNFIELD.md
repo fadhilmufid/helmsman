@@ -25,14 +25,32 @@ Brownfield mode: **understand → document in `project/*` → plan tasks → cha
 | **Plan before change** | Non-trivial work uses [`PLAN.md`](PLAN.md) (`project/plans/`, Gate D) and [`TASK.md`](TASK.md) (`project/tasks/`, Gate E); feature specs use [`DOCUMENT.md`](DOCUMENT.md) |
 | **Production on touched work** | New or changed code, UI, and infra meet production bar per [`RULES.md`](RULES.md) §5 — adapt legacy patterns, don't ship stubs on surfaces you touch |
 
+### 0.1 Fresh adoption (mandatory first-run)
+
+When Helmsman is **newly cloned** into an **existing** app and `project/*` is still blank, agents **must onboard before any other app work** — even if the user already asked for a feature.
+
+| Signal | Meaning |
+|--------|---------|
+| Missing `project/OVERVIEW.md` **or** `project/INFRASTRUCTURE.md` | Core workspace not built |
+| Only tracked `project/*/README.md` files exist under `project/` | Fresh Helmsman clone |
+| Substantial app source at `{root}` (manifests, `src/`, `apps/`, etc.) | Brownfield — not greenfield |
+| No `project/histories/*_brownfield-onboarding.md` | Onboarding not yet recorded |
+
+When **all** signals match → **mandatory first-run onboarding** per §1.3 before any other non-trivial app task.
+
+**HARD STOP — park the user's request:** Record their verbatim request in the onboarding task (`User request` + `Parked request` fields). Tell the user onboarding runs first. Do **not** start the user's feature plan, task, or application edits until §5 DoD passes.
+
+**Skip only when:** the user explicitly says skip onboarding, or work is pack-only (`{pack}/instructions/`, pack `AGENTS.md`, tracked `project/*/README.md`).
+
 ---
 
 ## 1. Discovery workflow
 
-Run discovery **before** meaningful code or config edits when `project/*` is missing or stale. Discovery satisfies AGENTS Gate A — it does **not** replace Gates C–E (documents/design, blueprint plan, exhaustive task) before code.
+Run discovery **before** meaningful code or config edits when `project/*` is missing or stale — **required** on fresh adoption (§0.1). Discovery satisfies AGENTS Gate A — it does **not** replace Gates C–E (documents/design, blueprint plan, exhaustive task) before code, except that first-run onboarding **is** Gate B (and partial Gate C for repo-level docs).
 
 ### 1.1 Scan order (adapt to repo)
 
+0. **Park user request** — if the user asked for something during fresh adoption, record it verbatim in the onboarding task for execution **after** §5 DoD
 1. **Root manifests** — `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`, `docker-compose.yml`, `Makefile`, app `README`, CI configs (`.github/workflows/`, etc.) — at `{root}`, not inside `helmsman/`
 2. **`helmsman/` pack** — if present, this is `{pack}` (`AGENTS.md`, `instructions/`, `project/`) — read for agent rules; do not treat as app source; do not copy to `{root}`
 3. **Application layout** — entrypoints, apps/packages, API routes, frontend roots, shared libraries
@@ -52,13 +70,19 @@ Draft findings in the active task file or notes before editing. Capture:
 - How to run locally and in CI
 - Gaps, risks, and unknowns
 
-### 1.3 Optional onboarding task
+### 1.3 Required onboarding task
 
-For first-time adoption, create:
+On **fresh adoption** (§0.1), create **before** any other app task:
 
 `project/tasks/{timestamp}_brownfield-onboarding.md`
 
-with `Status: planning` → discovery steps → populate `project/*` → verify commands → `Status: complete`.
+| Field | Content |
+|-------|---------|
+| `User request` | Onboarding scope |
+| `Parked request` | Verbatim user message if they asked for something else — execute after onboarding |
+| `Status` | `planning` → discovery + populate `project/*` → verify commands → `complete` |
+
+Follow [`TASK.md`](TASK.md) §5.2 for exhaustive step drafting. Onboarding may proceed **without** a Gate D plan — it **is** Gate B for brownfield fresh adoption.
 
 ---
 
@@ -72,6 +96,12 @@ Write or **merge** into local config files (gitignored). Do not overwrite existi
 | `project/INFRASTRUCTURE.md` | **Actual** paths: apps, docker, deploy, db, migrations, ports, env file locations |
 | `project/AGENTS.md` | Discovered dev, lint, test, and CI commands — verify they run |
 | `project/DESIGN.md` | Design index — existing UI library, theme, breakpoints; links to `project/design/` — or note that UI is N/A |
+| `project/documents/repo/technical-documentation.md` | Whole-repo implementation overview — inferred from code, not invented |
+| `project/documents/repo/system-design-document.md` | Whole-repo architecture, components, integration — inferred from code |
+
+### `project/documents/repo/` (codebase-wide)
+
+Use feature slug **`repo`** for **codebase knowledge** captured during onboarding — not a product feature. Required on fresh adoption when the app is non-trivial. Content must reflect **what exists in `{root}`** after the §1.1 scan.
 
 ### `project/INFRASTRUCTURE.md` in brownfield
 
@@ -93,6 +123,8 @@ When the repo has a web UI, discovery also populates **`project/design/`** from 
 ## 3. Document before change
 
 **Hard gate:** Non-trivial work requires `project/plans/` (Gate D), `project/tasks/` (Gate E), and `project/documents/{feature}/` when building features — per AGENTS §1.5 and [`RULES.md`](RULES.md).
+
+**First-run onboarding exception:** Fresh adoption (§0.1) satisfies **Gate B** and **partial Gate C** via core `project/*` + `project/documents/repo/`. Feature-specific `project/documents/{feature}/` is still required later for each user feature request.
 
 | Need | Use |
 |------|-----|
@@ -140,8 +172,9 @@ Onboarding is complete when **all** pass:
 | 2 | `project/AGENTS.md` lists dev/lint/test commands that were verified |
 | 3 | `project/OVERVIEW.md` states purpose, slug, and notable gaps or risks |
 | 4 | `project/DESIGN.md` index exists; `project/design/` populated from existing UI or N/A is explicitly noted |
-| 5 | Onboarding task (if used) is `Status: complete` |
-| 6 | `project/histories/{timestamp}_brownfield-onboarding.md` appended — links task file |
+| 5 | `project/documents/repo/` has `technical-documentation.md` and `system-design-document.md` when app is non-trivial |
+| 6 | Onboarding task is `Status: complete` |
+| 7 | `project/histories/{timestamp}_brownfield-onboarding.md` appended — links task file |
 
 After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 
@@ -154,6 +187,7 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 - Resolve brownfield mode per AGENTS §1 before assuming greenfield layout
 - Pass AGENTS §1.5 execution gates before non-trivial application edits
 - Run discovery when `project/*` is empty or contradicts the repo
+- On fresh adoption (§0.1), complete mandatory onboarding before the user's parked request
 - Record actual paths in `project/INFRASTRUCTURE.md`
 - Create `project/plans/`, one exhaustive standalone `project/tasks/` file, and `project/documents/{feature}/` before non-trivial edits
 - Build at full production quality per [`RULES.md`](RULES.md) §5 — not bare minimum
@@ -164,6 +198,7 @@ After onboarding, follow [`AGENTS.md`](../AGENTS.md) for ongoing tasks.
 - Assume `platforms/`, `deploy/`, or any path from GREENFIELD without verification
 - Overwrite populated `project/*` files without user confirmation
 - Bootstrap a new app layout when the user only asked to work in the existing codebase
+- Start the user's feature plan, task, or application edits while fresh-adoption signals (§0.1) are still true
 
 ---
 
