@@ -1,0 +1,21 @@
+# other-references — user-provided reference material (see other-references/readme.md)
+other-references/**
+!other-references/readme.md
+
+# project — local workspace; only generated-folder readme templates tracked
+project/**
+!project/histories/
+!project/documents/
+!project/tasks/
+!project/design/
+!project/plans/
+project/histories/**
+!project/histories/readme.md
+project/documents/**
+!project/documents/readme.md
+project/tasks/**
+!project/tasks/readme.md
+project/design/**
+!project/design/readme.md
+project/plans/**
+!project/plans/readme.md

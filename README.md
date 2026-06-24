@@ -1,92 +1,122 @@
-# Helmsman
+# Helmsman 🧭
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/fadhilmufid/helmsman)](https://github.com/fadhilmufid/helmsman/issues)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-This repository contains two things:
+**Helmsman** is a playbook for AI coding assistants. Drop it into any software project and your agent gets clear instructions: plan before coding, follow shared rules, write things down, and check work before calling it done.
 
-| Path | What it is |
-|------|------------|
-| [`helmsman/`](helmsman/) | The **Helmsman instruction pack** — reusable agent guidance (AGENTS.md, instructions, project workspace). Clone it into your own app as `helmsman/`. |
-| [`site/`](site/) | The **landing page** — a Next.js app that explains what Helmsman is. |
+The name comes from the person who steers a ship. Here, Helmsman keeps your agent pointed in the right direction.
 
-## Use in your project
+## What is in this repo?
 
-### 1. Clone the pack
+| Path | In plain terms | Technical detail |
+|------|----------------|------------------|
+| [`helmsman-agent/`](helmsman-agent/) | The instruction pack you add to your own app | Agent guidance (`helmsman-agent.md`, `instructions/`, `project/` workspace). Place at `{root}/helmsman-agent/`. |
+| [`helmsman-website/`](helmsman-website/) | The public website, and the **tester app** when you try Helmsman in this repo | Next.js landing page (App Router, TypeScript, Tailwind CSS v4) |
 
-Inside your app repo (`{root}`), folder name must be **`helmsman`**:
+## Use in your project 🚀
+
+### 1. Clone the repository 📦
 
 ```bash
-git clone https://github.com/fadhilmufid/helmsman.git helmsman
+git clone https://github.com/fadhilmufid/helmsman.git
 ```
 
-### 2. Create or update root `AGENTS.md` (required)
+Copy the **`helmsman-agent/`** folder from the clone into your app repository root (`{root}/helmsman-agent/`).
 
-At **`{root}/AGENTS.md`** (your app repository root, not inside `helmsman/`). Agents will **copy or merge** from the template if this file is missing.
+### 2. Create or update root `AGENTS.md` 📌
 
-- **No existing `AGENTS.md`** — copy the template from [`AGENTS.md`](AGENTS.md) in this repo, or from [`helmsman/templates/root-AGENTS.md`](helmsman/templates/root-AGENTS.md) inside the clone.
-- **Already have `AGENTS.md`** — merge the **Helmsman** sections from that template into your existing file; keep your other rules.
+At **`{root}/AGENTS.md`** (your app repository root, not inside `helmsman-agent/`). This is a short pointer file that tells your AI where the full playbook lives.
 
-Agent-only template sections: What is Helmsman, How to use Helmsman, Do not.
+- **No existing `AGENTS.md`:** copy from [`helmsman-agent/templates/root-agents.md`](helmsman-agent/templates/root-agents.md) inside the pack (or [`AGENTS.md`](AGENTS.md) from a full monorepo clone).
+- **Already have `AGENTS.md`:** merge the **Helmsman** sections from that template into your existing file; keep your other rules.
 
-### 3. Point your agent at Helmsman
+Template sections: What is Helmsman, How to use Helmsman, Do not.
 
-Ensure your agent tool loads **`{root}/AGENTS.md`** (required when `helmsman/` is installed), and that agents follow **[`helmsman/AGENTS.md`](helmsman/AGENTS.md)** for the full workflow (gates, plans, tasks, code rules).
+### 3. Point your agent at Helmsman 🤖
 
-App layout (greenfield vs brownfield) is defined in the pack after you choose a mode — see [`helmsman/instructions/GREENFIELD.md`](helmsman/instructions/GREENFIELD.md) or [`BROWNFIELD.md`](helmsman/instructions/BROWNFIELD.md).
+Ensure your agent tool loads **`{root}/AGENTS.md`** (required when `helmsman-agent/` is installed), and that agents follow **[`helmsman-agent/helmsman-agent.md`](helmsman-agent/helmsman-agent.md)** for the full workflow (gates A–F, plans, tasks, code rules).
 
-More detail: [`helmsman/README.md`](helmsman/README.md).
+**Greenfield** (new app) vs **brownfield** (existing code) is chosen inside the pack:
 
-## helmsman/ — the instruction pack
+- New app: [`helmsman-agent/instructions/greenfield.md`](helmsman-agent/instructions/greenfield.md)
+- Existing repo: [`helmsman-agent/instructions/brownfield.md`](helmsman-agent/instructions/brownfield.md)
 
-A structured instruction set that gives coding agents consistent, production-grade
-behavior across projects: blueprint work, build greenfield apps, understand existing
-repos, document features, and write code by a single set of rules.
+More detail: [`helmsman-agent/readme.md`](helmsman-agent/readme.md).
 
-Agents start at [`helmsman/AGENTS.md`](helmsman/AGENTS.md), then
-[`helmsman/instructions/RULES.md`](helmsman/instructions/RULES.md).
+### 4. Keep the pack in its folder 📂
 
-**Brownfield first use:** if `helmsman/project/` is blank in an existing app, agents scan the repo and build `project/` knowledge from code before other work — see [`helmsman/instructions/BROWNFIELD.md`](helmsman/instructions/BROWNFIELD.md) §0.1.
+Leave instructions in `helmsman-agent/instructions/` and project notes in `helmsman-agent/project/`. Do not move or flatten the pack to your repo root.
 
-## site/ — the landing page
+## Try it in this repo 🧪
 
-A [Next.js](https://nextjs.org) app (App Router, TypeScript, Tailwind CSS v4) that
-presents Helmsman to visitors.
+Want to test Helmsman before adding it to your own project? **This monorepo is a ready-made sandbox.**
+
+- [`helmsman-agent/`](helmsman-agent/) and root [`AGENTS.md`](AGENTS.md) are already here. No copying required.
+- Use [`helmsman-website/`](helmsman-website/) as the app your agent edits (brownfield-style changes to an existing Next.js app).
+- In Cursor, load the pack for rules first, then scope edits to the website folder. Example prompt:
+
+```
+Follow @helmsman-agent/ for the Helmsman workflow.
+Then edit @helmsman-website/, e.g. update the hero copy on the landing page.
+```
+
+Preview changes locally:
 
 ```bash
-cd site
+cd helmsman-website
+npm install
+npm run dev      # http://localhost:3000
+```
+
+When you are ready to use Helmsman on a real project, follow **Use in your project** above (clone the repo and copy the `helmsman-agent/` folder into your app).
+
+## helmsman-agent/ · the instruction pack 📚
+
+**In plain terms:** a structured set of Markdown files that teach coding agents the same habits on every project: plan, document, follow one rulebook, and verify before finishing.
+
+**How agents use it:** start at [`helmsman-agent/helmsman-agent.md`](helmsman-agent/helmsman-agent.md), then [`helmsman-agent/instructions/rules.md`](helmsman-agent/instructions/rules.md).
+
+**Brownfield first use:** if `helmsman-agent/project/` is empty in an existing app, agents scan the repo and build `project/` knowledge from your code before other work. See [`helmsman-agent/instructions/brownfield.md`](helmsman-agent/instructions/brownfield.md) §0.1.
+
+## helmsman-website/ · the landing page 🌐
+
+The friendly overview site for visitors who want to understand Helmsman without reading the full pack.
+
+```bash
+cd helmsman-website
 npm install
 npm run dev      # http://localhost:3000
 ```
 
 Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
-## Developing this repository
+## Developing this repository 🛠️
 
 This GitHub repo holds the instruction pack and landing page. Treat them separately.
 
-### `helmsman/` (instruction pack)
+### `helmsman-agent/` (instruction pack)
 
-- Documentation only: Markdown plus `LICENSE`. Nothing to install, build, run, or unit-test.
-- Sanity check is internal Markdown link validity. Links into `helmsman/project/` (e.g.
-  `INFRASTRUCTURE.md`, `DESIGN.md`, `project/design/`, `project/documents/`) are **expected to be
-  missing** in a fresh clone — they are gitignored, per-project files agents generate at runtime.
+- Documentation only: Markdown plus `license`. Nothing to install, build, run, or unit-test.
+- Sanity check is internal Markdown link validity. Links into `helmsman-agent/project/` (e.g.
+  `infrastructure.md`, `design.md`, `project/design/`, `project/documents/`) are **expected to be
+  missing** in a fresh clone. Those files are gitignored; agents generate them at runtime.
 
-### `site/` (Next.js landing page)
+### `helmsman-website/` (Next.js landing page)
 
 - Stack: Next.js 16 (App Router) + React 19 + Tailwind CSS v4 + TypeScript. Package manager: npm.
-- All commands run **inside `site/`**:
+- All commands run **inside `helmsman-website/`**:
   `npm run dev` (port 3000), `npm run build`, `npm run start`, `npm run lint`.
 - `npm install` for the site is handled by the startup update script; if you add dependencies,
-  re-run `npm install` in `site/`.
+  re-run `npm install` in `helmsman-website/`.
 - Fonts are loaded via `next/font/google` at build time, so the first dev build needs network
   access; subsequent builds are cached.
 
-## Contributing
+## Contributing 🤝
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to report issues and submit pull requests.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
