@@ -67,8 +67,8 @@ For UI changes, also run `npm run dev` and verify at http://localhost:3000.
 ## Style notes
 
 - **helmsman-agent/:** keep instructions precise and actionable; follow patterns in
-  existing files like [`helmsman-agent/helmsman-agent.md`](helmsman-agent/helmsman-agent.md) and
-  [`helmsman-agent/instructions/rules.md`](helmsman-agent/instructions/rules.md).
+  existing files like [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) and
+  [`helmsman-agent/instructions/RULES.md`](helmsman-agent/instructions/RULES.md).
 - **helmsman-website/:** follow existing TypeScript and Tailwind conventions in
   [`helmsman-website/src/`](helmsman-website/src/).
 

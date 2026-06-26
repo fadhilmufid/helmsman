@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
+/*
+ * Helmsman design tokens — refined light, neutral grayscale.
+ * Primary accent is near-black; emerald is the only semantic accent.
+ */
 :root {
-  --background: #fafafa;
+  --background: #fbfbfa;
   --foreground: #18181b;
+
+  --surface: #ffffff;
+  --surface-muted: #f4f4f5;
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --text-subtle: #a1a1aa;
+
+  --accent: #18181b;
+  --accent-hover: #27272a;
+  --on-accent: #fafafa;
+
+  --live: #10b981;
+
+  --radius: 0.75rem;
+  --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04), 0 1px 3px rgba(24, 24, 27, 0.06);
+  --shadow-md: 0 4px 12px -2px rgba(24, 24, 27, 0.08), 0 2px 6px -2px rgba(24, 24, 27, 0.06);
+  --shadow-lg: 0 18px 40px -12px rgba(24, 24, 27, 0.18);
 }
 
 @theme inline {
@@ -10,6 +35,24 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-muted);
+  --color-ink-4: var(--text-subtle);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-live: var(--live);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -17,10 +60,93 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Safety net: no single element should be able to scroll the page sideways. */
+  overflow-x: hidden;
 }
 
-/* Subtle chart-grid backdrop for the hero. */
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Visible focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Utilities ─────────────────────────────────────────────── */
+
+/* Headline gradient: near-black to soft gray for depth without color. */
+.text-gradient {
+  background: linear-gradient(180deg, #18181b 0%, #3f3f46 60%, #52525b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Dotted grid backdrop (used in hero). */
 .bg-grid {
   background-image: radial-gradient(circle, #d4d4d8 1px, transparent 1px);
   background-size: 22px 22px;
+}
+
+/* Faint square grid (used on dark panels). */
+.bg-grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Soft radial glow behind the hero. */
+.hero-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(24, 24, 27, 0.06) 0%, transparent 70%),
+    radial-gradient(40% 40% at 85% 10%, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+}
+
+/* Fade the edges of a decorative layer so it blends into the page. */
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+/* Hairline gradient divider. */
+.rule-fade {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-strong), transparent);
+}
+
+/* Subtle marquee for the tool strip. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+/* Respect reduced-motion: disable transforms/animations site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .animate-marquee {
+    animation: none;
+  }
 }
