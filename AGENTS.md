@@ -1,38 +1,76 @@
 # Agent instructions
 
-**Required at `{root}` when the `helmsman-agent/` folder exists.** Copy this file to your app repository root as `AGENTS.md`, or merge these sections into an existing root `AGENTS.md`.
+*Already have an `AGENTS.md`? Copy only the block between the markers below into it. Starting fresh? This whole file is
+your root `AGENTS.md` — generated from [`helmsman-agent/templates/root-AGENTS.md`](helmsman-agent/templates/root-AGENTS.md);
+keep the two in sync.*
+
+<!-- ═══════════════ HELMSMAN:START — copy everything below into your existing AGENTS.md ═══════════════ -->
+
+> **This repository uses Helmsman.** Before any non-trivial work, read the pack at
+> [`helmsman-agent/`](helmsman-agent/) — starting with [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md).
+> Prior chat memory never substitutes for a fresh read.
 
 ## What is Helmsman
 
-Helmsman is a **folder of Markdown instructions** at `helmsman-agent/` in this repository (`HELMSMAN-AGENT.md`, `instructions/`, `project/`) — no runtime, no build step. It defines how coding agents work here: session re-entry, gates A–F, blueprint plans, exhaustive tasks, code rules, and a `helmsman-agent/project/` workspace for plans, tasks, histories, and project config.
+A **folder of Markdown instructions** at `helmsman-agent/` — no runtime, no build step. It defines how coding agents
+work in this repo: session re-entry, execution gates A–F, blueprint plans, exhaustive tasks, shared code rules, and a
+`helmsman-agent/project/` workspace for plans, tasks, histories, and project config. The full workflow lives in
+[`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md); the rulebook is
+[`helmsman-agent/instructions/RULES.md`](helmsman-agent/instructions/RULES.md).
 
-This file is a thin pointer at the repository root. The full workflow lives in [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md).
+## Start every session here
 
-## How to use Helmsman
+Run this before any non-trivial task — every session, including after greenfield bootstrap.
 
-Every session, before non-trivial work:
+1. **Ensure this `AGENTS.md` exists** at the repo root with the Helmsman sections (it does). If missing or partial, copy
+   or merge from [`helmsman-agent/templates/root-AGENTS.md`](helmsman-agent/templates/root-AGENTS.md).
+2. **Read the pack in order** — [`HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) in full, then Phases 1–3 of its
+   §1.4 (every file in [`helmsman-agent/instructions/`](helmsman-agent/instructions/), in gate-flow order).
+3. **Pick a mode** — new app → [`GREENFIELD.md`](helmsman-agent/instructions/GREENFIELD.md); existing code →
+   [`BROWNFIELD.md`](helmsman-agent/instructions/BROWNFIELD.md).
+4. **Scan the workspace** — `helmsman-agent/project/` (config `PROJECT-*`, active `plans/` and `tasks/`, newest
+   `histories/`, in-scope `documents/` and `design/`), per §1.4 Phase 4.
+5. **Then work the gates A–F** below. Write all plans, tasks, histories, and config **into `helmsman-agent/project/`** —
+   never the repo root.
 
-1. **Read [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) in full** (pack entry, HARD STOP re-entry, mode selection, gates A–F).
-2. **Read [`helmsman-agent/instructions/RULES.md`](helmsman-agent/instructions/RULES.md)** (integrated rulebook after the pack entry).
-3. **Read all instructions** — Phases 1–3 per [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) §1.4 (hard STOP; gate-flow order; every file in `helmsman-agent/instructions/` in full).
-4. **Scan `helmsman-agent/project/`** — Phase 4 per [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) §1.4 (config, plans, tasks, histories, documents, design in scope).
-5. **Write to `helmsman-agent/project/`** for plans, tasks, histories, and project config. Do not write these to the repo root.
-6. **Ensure `{root}/AGENTS.md` exists** when the `helmsman-agent/` folder exists. Copy or merge from [`helmsman-agent/templates/root-AGENTS.md`](helmsman-agent/templates/root-AGENTS.md) if missing (see pack HARD STOP step 2).
-7. **Brownfield with a blank `helmsman-agent/project/`:** scan the existing repo and populate `helmsman-agent/project/` from code before other app work ([`helmsman-agent/instructions/BROWNFIELD.md`](helmsman-agent/instructions/BROWNFIELD.md) §0.1).
+> First-time brownfield adoption (existing app, empty `helmsman-agent/project/`): run the mandatory onboarding in
+> [`BROWNFIELD.md`](helmsman-agent/instructions/BROWNFIELD.md) §0.1 before any other app work.
 
-When they exist, app-specific dev, lint, test, and PR commands are in [`helmsman-agent/project/PROJECT-AGENTS.md`](helmsman-agent/project/PROJECT-AGENTS.md).
+## Gates A–F — no application code until they pass, in order
 
-## Hard rules (when `helmsman-agent/` exists)
+| Gate | Requirement (one line) |
+|------|------------------------|
+| **A — Read first** | Pack + instructions read; this `AGENTS.md` present; `project/` scanned |
+| **B — Clarify** | Resolve open decisions; write `project/PROJECT-OVERVIEW.md` + other `PROJECT-*` config |
+| **C — Documents & design** | `project/documents/`; `project/design/` when there is a web UI |
+| **D — Plan** | Blueprint plan in `project/plans/` |
+| **E — Task** | One exhaustive, standalone task file in `project/tasks/`; re-read [`CODE.md`](helmsman-agent/instructions/CODE.md) for each coding block |
+| **F — Verify** | Production bar + end-to-end verification before marking complete |
 
-**No application code changes** (`platforms/`, `deploy/`, app source) until all of the following:
+Full table and blocking detail: [`RULES.md`](helmsman-agent/instructions/RULES.md) §2.
+**Exception:** pack maintenance (`helmsman-agent/instructions/`, `HELMSMAN-AGENT.md`, tracked `project/*/README.md`).
 
-1. **Re-read instructions** — complete [`HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) §1.4 Phases 1–3 every session and before every non-trivial task (gate-flow order through every `instructions/` file). When touching application source, re-read `instructions/CODE.md` per the active task.
-2. **Update `helmsman-agent/project/`** — keep workspace current per gates: `PROJECT-*` config, active `project/tasks/` (step checklists), `project/plans/`, specs/design in scope, and `project/histories/` after completed work. Do not edit app code without a Gate E task when the work is non-trivial.
+## Hard rules
 
-Prior chat context does not replace a fresh read. Detail: [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) §1.4–§1.5 and [`helmsman-agent/instructions/RULES.md`](helmsman-agent/instructions/RULES.md) §2.
+- **No application code** (`platforms/`, `deploy/`, app source) until Gate A passes and a Gate E task exists for
+  non-trivial work.
+- **Re-read every session** — complete §1.4 Phases 1–3 fresh; re-read [`CODE.md`](helmsman-agent/instructions/CODE.md)
+  before touching any source. Chat context does not count.
+- **Workspace is the source of truth** — keep `PROJECT-*` config, active `project/tasks/`, `project/plans/`, in-scope
+  specs/design, and `project/histories/` current as you pass each gate.
 
 ## Do not
 
-- Copy `helmsman-agent/instructions/`, `helmsman-agent/project/`, or the full `helmsman-agent/HELMSMAN-AGENT.md` to the repo root.
-- Move, flatten, duplicate, or symlink the `helmsman-agent/` folder. Use it in place under `{root}`.
-- Edit application source until instructions are re-read, `helmsman-agent/project/` is updated per gates, and the pack gates allow it (see [`helmsman-agent/HELMSMAN-AGENT.md`](helmsman-agent/HELMSMAN-AGENT.md) §1.4–§1.5).
+- Copy `helmsman-agent/instructions/`, `helmsman-agent/project/`, or the full `HELMSMAN-AGENT.md` to the repo root. This
+  thin `AGENTS.md` is the only pack-derived file allowed there.
+- Move, flatten, duplicate, or symlink `helmsman-agent/`. Use it in place under the repo root.
+- Put application code (`platforms/`, `deploy/`, source) inside `helmsman-agent/`.
+
+## Where things live
+
+- **Dev / lint / test / PR commands:** [`helmsman-agent/project/PROJECT-AGENTS.md`](helmsman-agent/project/PROJECT-AGENTS.md) (when present).
+- **Plans, tasks, histories, project config:** `helmsman-agent/project/`.
+- **Glossary** (`{root}`, `{pack}`, gates, "Application map") and index: [`helmsman-agent/instructions/README.md`](helmsman-agent/instructions/README.md).
+
+<!-- ═══════════════ HELMSMAN:END ═══════════════ -->
+

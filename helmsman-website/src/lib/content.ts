@@ -183,7 +183,7 @@ export const STEPS: Step[] = [
   {
     n: "2",
     title: "Add a short guide at the root",
-    body: "Create AGENTS.md at the top of your repo so the AI knows where Helmsman lives. Copy it from helmsman-agent/templates/root-AGENTS.md, or merge the Helmsman sections into your existing one.",
+    body: "Create AGENTS.md at the top of your repo so the AI knows where Helmsman lives. No AGENTS.md yet? Copy helmsman-agent/templates/root-AGENTS.md as-is. Already have one? Paste just the marked HELMSMAN block into it.",
   },
   {
     n: "3",
@@ -235,20 +235,26 @@ export const FAQS: Faq[] = [
 
 export const ROOT_AGENTS_SAMPLE = `# Agent instructions
 
-## What is Helmsman
-Helmsman is a reusable instruction pack at helmsman-agent/ …
-This file is a thin pointer. Full workflow: helmsman-agent/HELMSMAN-AGENT.md
+<!-- HELMSMAN:START — copy everything below into your existing AGENTS.md -->
 
-## How to use Helmsman
-1. Read helmsman-agent/HELMSMAN-AGENT.md in full (HARD STOP, gates A–F)
-2. Read helmsman-agent/instructions/RULES.md (integrated rulebook)
-3. Run Gate A: scan helmsman-agent/project/
-…
+> This repository uses Helmsman. Before any non-trivial work, read the
+> pack at helmsman-agent/ — start with helmsman-agent/HELMSMAN-AGENT.md.
+
+## What is Helmsman
+A folder of Markdown instructions at helmsman-agent/ — no runtime, no
+build step. Full workflow: helmsman-agent/HELMSMAN-AGENT.md
+
+## Start every session here
+1. Read HELMSMAN-AGENT.md in full (re-entry, gates A–F)
+2. Pick a mode — GREENFIELD.md or BROWNFIELD.md
+3. Scan helmsman-agent/project/ (plans, tasks, histories, config)
+4. Work the gates A–F — no app code until Gate A passes
 
 ## Do not
-- Copy helmsman-agent/instructions/ or project/ to root
-- Flatten or move helmsman-agent/. Use it in place.
-…`;
+- Copy helmsman-agent/instructions/ or project/ to the repo root
+- Move, flatten, or symlink helmsman-agent/. Use it in place.
+
+<!-- HELMSMAN:END -->`;
 
 export const TERMINAL_SAMPLE = `$ git clone ${GITHUB_URL}
 $ cp -r helmsman/helmsman-agent your-project/
